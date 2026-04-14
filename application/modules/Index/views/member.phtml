@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="telephone=no" name="format-detection" />
+    <link type="text/css" rel="stylesheet" href="/static/index/css/layer.css"/>
+    <link href='/static/index/css/common.css?t=1540432563' rel="stylesheet" type="text/css" >
+
+	<link type="text/css" rel="stylesheet" href="/static/index/css/family.css?t=1543197377"/>
+		
+    <title>家族成员</title>
+</head>
+<body class="member">
+	<div class="user-list">
+		<ul>
+            <?php foreach ($list as $v): ?>
+                <li>
+                    <div class="thumb">
+                        <img src="<?= $v['userinfo']['thumb'] ?>">
+                    </div>
+                    <div class="info">
+                        <p class="info-title">
+                            <?= $v['userinfo']['nickname'] ?>
+                            <?php if ($v['userinfo']['sexType'] = 1): ?>
+                                <img src="/static/index/img/man.png" class="sex">
+                            <?php else: ?>
+                                <img src="/static/index/img/woman.png" class="sex">
+                            <?php endif; ?>
+                            <!--<img src="{$levellist[$v['userinfo']['level']]['thumb']}" class="level">-->
+                        </p>
+                        <p class="info-des2"><span>粉丝数：<?= $v['userinfo']['fansnum'] ?></span>
+                            <if condition="$type eq 1"><span>抽成：<i
+                                            class="divide_family"><?= $v['userinfo']['divide_family'] ?></i>%</span>
+                            </if>
+                        </p>
+                    </div>
+                    <if condition="$type eq 1">
+                        <div class="action">
+                            <span class="ok" data-touid="<?= $v['userinfo']['uid'] ?>"
+                                  data-divide="<?= $v['userinfo']['divide_family'] ?>">设置</span>
+                            <span class="no" data-touid="<?= $v['userinfo']['uid'] ?>"
+                                  data-name="<?= $v['userinfo']['nickname'] ?>">踢出</span>
+                        </div>
+                    </if>
+                </li>
+            <?php endforeach; ?>
+		</ul>
+	</div>
+    <?php if (empty($list)) { ?>
+    <empty name="list">
+        <div class="li_empty">
+            <p class="title">您的家族还没有成员</p>
+            <p class="des">～赶快去招募主播加入吧～</p>
+        </div>
+    </empty>
+    <?php } ?>
+	<script>
+        var uid='<?=$_GET['uid']?>';
+        var token='<?=$_GET['token']?>';
+        var familyid='<?=$familyid;?>';
+	</script>
+    <script src="/static/index/js/jquery.js"></script>
+    <script src="/static/index/js/layer.js"></script>
+	<script src="/static/index/js/family.js?t=1"></script>
+	
+</body>
+</html>

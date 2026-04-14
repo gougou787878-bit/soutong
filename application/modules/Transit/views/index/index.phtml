@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit"/>
+    <meta name="referrer" content="same-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <title><?= $title ?></title>
+    <meta name="keywords" content="<?= $keywords ?>"/>
+    <meta name="description" content="<?= $description ?>"/>
+    <meta name="author" content="0c9b42e310c7047b6aa23922dbe49581">
+    <base href="<?= $static ?>">
+    <base target="_blank"/>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .bg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            max-width: 400px;
+            top: 0;
+            left: 50%;
+            margin: 0 auto;
+        }
+
+        .box {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo {
+            padding-top: 20%;
+            text-align: center;
+        }
+
+        .logo img {
+            width: 75%;
+        }
+
+        .list {
+            width: 100%;
+            min-height: 45%;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 10%;
+        }
+
+        .list a {
+            display: block;
+            width: 72%;
+            position: relative;
+        }
+
+        .list a img {
+            width: 100%;
+            display: flex;
+        }
+
+        .list a .text {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 6%;
+            color: #ff5757;
+        }
+
+        .list a .text .btnTitle {
+            font-size: 18px;
+        }
+
+        .list a .text .btnLink {
+            font-size: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .notify {
+            margin: 0;
+            background-color: #000;
+            width: 100%;
+            height: 45px;
+            z-index: 110;
+            color: #fff;
+            padding: 5px 0px;
+            top: 0px;
+            position: fixed;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        body {
+            background-color: #2c2a2a !important;
+        }
+
+        #load-wrap {
+            background: #fff;
+            width: 90%;
+            padding: 10px 0;
+            color: #211F1F;
+            margin: 0 auto;
+            border-radius: 5px;
+            text-align: center
+        }
+    </style>
+    <script src="/static/transit/js/Vx4.js"></script>
+</head>
+<body>
+<div class="bg">
+    <div class='box'>
+        <div class="logo"><img src="<?= $logo ?>"/></div>
+        <div class="load" id="load-wrap">
+            正在检测线路.
+        </div>
+        <div class="list" id="list-wrap" style="display: none"></div>
+        <div class='footer'>
+            <p>本站只为海外华人提供服务，非法律允许地区以及18岁以下用户禁止访问！</p>
+            <p>&copy; <?= date('Y') ?> <?= $title ?> <a href="<?= $site ?>" style="color:#fff;"><?= $site ?></a> Inc.
+                All Rights Reserved</p>
+        </div>
+    </div>
+</div>
+<div class="notify">当前页请截图保存，以免走丢</div>
+</body>
+
+<script type="text/html" id="templet">
+    <a href="${url}">
+        <img src="data:image/png;base64,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"/>
+        <div class="text">
+            <div class="btnTitle">${text}</div>
+            <div class="btnLink">${url_host}</div>
+        </div>
+    </a>
+</script>
+<script>
+    var baseTime = parseInt(((new Date()).getTime() / 7200000) + "", 10),
+        words = 'abandon,ability,able,above,abroad,absence,absorb,abuse,accept,access,account,accuse,achieve,acid,acquire,across,act,action,active,actor,actress,actual,ad,adapt,add,address,adjust,admire,admit,adopt,adult,advance,advice,advise,adviser,affair,affect,afford,afraid,african,after,again,against,age,agency,agenda,agent,ago,agree,ah,ahead,aid,aide,aids,air,airline,airport,album,alcohol,alive,all,allow,ally,almost,alone,already,also,alter,always,am,amazing,among,amount,analyst,analyze,ancient,and,anger,angle,angry,animal,annual,another,answer,anxiety,any,anybody,anymore,anyone,anyway,apart,appeal,appear,apple,apply,appoint,approve,arab,area,argue,arise,arm,armed,army,around,arrange,arrest,arrival,arrive,art,article,artist,as,asian,aside,ask,asleep,aspect,assault,assert,assess,asset,assign,assist,assume,assure,at,athlete,attach,attack,attempt,attend,attract,author,auto,average,avoid,award,aware,away,awful,baby,back,bad,badly,bag,bake,balance,ball,ban,band,bank,bar,barely,barrel,barrier,base,basic,basis,basket,battery,battle,be,beach,bean,bear,beat,beauty,because,become,bed,beer,before,begin,behind,being,belief,believe,bell,belong,below,belt,bench,bend,beneath,benefit,beside,besides,best,bet,better,between,beyond,bible,big,bike,bill,billion,bind,bird,birth,bit,bite,black,blade,blame,blanket,blind,block,blood,blow,blue,board,boat,body,bomb,bombing,bond,bone,book,boom,boot,border,born,borrow,boss,both,bother,bottle,bottom,bowl,box,boy,brain,branch,brand,bread,break,breast,breath,breathe,brick,bridge,brief,briefly,bright,bring,british,broad,broken,brother,brown,brush,buck,budget,build,bullet,bunch,burden,burn,bury,bus,busy,but,butter,buy,buyer,by,cabin,cabinet,cable,cake,call,camera,camp,campus,can,cancer,cap,capable,capital,captain,capture,car,carbon,card,care,career,careful,carrier,carry,case,cash,cast,cat,catch,cause,ceiling,cell,center,central,century,ceo,certain,chain,chair'.split(','),
+        aff_code = function (number) {
+            if (number < 0)
+                return '';
+            var out = "", codes = "abcdefghjkmnpqrstuvwxy23456789", key;
+            while (number > 29) {
+                key = number % 30;
+                number = Math.floor(number / 30) - 1;
+                out = codes.charAt(key) + out;
+            }
+            return codes.charAt(number) + out;
+        },
+        lineAry = Vx.map(Vx.range(1, 9), function (value, index, array) {
+            return location.protocol + '//' + aff_code(baseTime) + 'z' + value + '.<?=$line?>'
+        }),
+        backupLine = Vx.map(Vx.range(1, 3), function (value, index, array) {
+            return location.protocol + '//' + words.random() + '.<?= $backup_line ?>';//fla
+        });
+</script>
+<script>
+    (function (doc) {
+        let process = new Process(),
+            ary = [],
+            successNum = 0,
+            chineseNumber = ['一', '二', '三', '四', '五', '六', '七', '八', '九'],
+            listWrap = document.getElementById('list-wrap'),
+            loadWrap = document.getElementById('load-wrap'),
+            getParams = [],
+            loadTimerId,
+            startLoading = function (x) {
+                loadTimerId = setInterval(function () {
+                    let s1 = '.'.repeat(x)
+                    loadWrap.innerText = '正在检测线路' + s1;
+                    x++;
+                    if (x % 4 === 0) {
+                        x = 0
+                    }
+                }, 300);
+            },
+            stopLoading = function () {
+                if (loadTimerId) {
+                    clearInterval(loadTimerId);
+                    loadTimerId = undefined;
+                    loadWrap.style.display = 'none';
+                }
+            },
+            renderLine = function (data, ok) {
+                stopLoading();
+                listWrap.style.display = 'flex';
+                var path = '';
+                if (ok !== true) {
+                    path = Vx.query('path');
+                    if (path.length && path.substring(0, 1) !== '/') {
+                        path = '/' + path;
+                    }
+                }
+                data['url'] = data['url'].replace(/\/*$/gm, '');
+                data['url'] = data['url'] + path;
+                data['url_host'] = data['url_host'] || data['url'].split('://')[1].split('/')[0]
+                Vx.append(listWrap, Vx.template('templet', data));
+            },
+            success = function (arg) {
+                successNum++;
+                if (successNum > 2) {
+                    process.stop = true;
+                }
+                renderLine({'url': arg['url'], 'text': '线路' + chineseNumber[successNum - 1]});
+                getParams.push({
+                    't': 'success',
+                    'u': encodeURI(arg['url']),
+                });
+            }, isReport = false,
+            reportLine = function () {
+                if (isReport) {
+                    return;
+                }
+                isReport = true;
+                let img = new Image();
+                img.src = "/transit.php?a=stat&d=" + encodeURIComponent(btoa(JSON.stringify(getParams)));
+            }
+        startLoading(1);
+        process.on('_finish', function () {
+            let lines = [];
+            if (successNum === 0) {
+                let testx = function (index) {
+                    if (index >= backupLine.length-1) {
+                        setTimeout(function () {
+                            reportLine()
+                        }, 100);
+                    }
+                }
+                Vx.map(backupLine, function (url, index) {
+                    renderLine({'url': url, 'text': '备用线路' + chineseNumber[index]});
+                    Vx.ping(url, index).then(function (arg) {
+                        getParams.push({'t': 'x-success', 'u': encodeURI(arg['url'])});
+                        testx(arg['i'])
+                    }).catch(function (arg) {
+                        getParams.push({'t': 'x-error', 'u': encodeURI(arg['url'])});
+                        testx(arg['i'])
+                    })
+                });
+                lines = backupLine;
+            } else {
+                lines = lineAry;
+                reportLine();
+            }
+            renderLine({'url': '<?=$tg_url?>', 'text': '<?=$tg_title?>', 'url_host': '<?=$tg_tip?>'}, true);
+        });
+        for (let i = 0; i < lineAry.length; i++) {
+            ary.push(function () {
+                Vx.ping(lineAry[i])
+                    .then(success)
+                    .catch(function (arg) {
+                        getParams.push({
+                            't': 'error',
+                            'u': encodeURI(arg['url']),
+                        });
+                    })
+            })
+        }
+        process.task(ary, 2);
+        process.start();
+    })(document);
+</script>
+<?= $ct_js ?>
+</html>

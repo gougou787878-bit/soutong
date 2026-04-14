@@ -1,0 +1,486 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理
+                    <span style="color: red" class="layui-inline" id="total-id"></span>
+                </div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入ID" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[aff]" placeholder="请输入"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">删除</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_delete]', merge_array(['' => '全部'], MemberMagicModel::DELETE_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], MemberMagicModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">支付方式</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[pay_type]', merge_array(['' => '全部'], MemberMagicModel::PAY_TYPE_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">创建日期</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('created_at') ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">更新日期</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('updated_at') ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="retrySelect" data-pk="id">重试</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户aff：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户aff" name="aff"
+                           value="{{=d.aff }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">切片封面：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="切片封面" name="cover"
+                           value="{{=d.cover }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面高度：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="封面高度" name="cover_height"
+                           value="{{=d.cover_height }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面宽度：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="封面宽度" name="cover_width"
+                           value="{{=d.cover_width }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="创建时间" name="created_at"
+                           value="{{=d.created_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">时长：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="时长" name="duration"
+                           value="{{=d.duration }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否删除：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="是否删除" name="is_delete"
+                           value="{{=d.is_delete }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">AI魔法调用参数：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="AI魔法调用参数" name="magic_param"
+                           value="{{=d.magic_param }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">重试次数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="重试次数" name="re_ct"
+                           value="{{=d.re_ct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">处理异常描述：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="处理异常描述" name="reason"
+                           value="{{=d.reason }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">远程视频地址：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="远程视频地址" name="remote_video"
+                           value="{{=d.remote_video }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="状态" name="status"
+                           value="{{=d.status }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">远程任务ID：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="远程任务ID" name="task_id"
+                           value="{{=d.task_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户上传头像：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户上传头像" name="thumb"
+                           value="{{=d.thumb }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片高度：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="图片高度" name="thumb_h"
+                           value="{{=d.thumb_h }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片宽度：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="图片宽度" name="thumb_w"
+                           value="{{=d.thumb_w }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">更新时间：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="更新时间" name="updated_at"
+                           value="{{=d.updated_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">处理完成视频：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="处理完成视频" name="video"
+                           value="{{=d.video }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/html" id="photolist">
+    <div style="line-height: normal">
+        <img style="display: inline-block;max-width: 52px;margin-bottom: 3px;max-height: 52px" onclick="clickShowImage(this)" src="{{=d.thumb}}"><br>
+        {{d.thumb_wh_str}}
+    </div>
+</script>
+
+<script type="text/html" id="video1">
+    <div style="line-height: normal">
+        <div style="text-align: left;;height: 25px">
+            {{# if(d.remote_video) { }}
+                <a href="javascript:;" onclick="previewVideo('{{=d.remote_video}}')">播放</a>&nbsp;&nbsp;&nbsp;
+            {{# } }}
+        </div>
+    </div>
+</script>
+<script type="text/html" id="video2">
+    <div style="line-height: normal">
+        {{# if(d.status == 2) { }}
+            <img style="display: inline-block;max-width: 52px;margin-bottom: 3px;max-height: 52px" onclick="clickShowImage(this)" src="{{=d.cover}}"><br>
+            尺寸:&nbsp;{{d.cover_wh_str}}<br>
+            时长:&nbsp;{{d.duration}}<br>
+            <div style="text-align: left;;height: 25px">
+                <a href="javascript:;" onclick="previewVideo('{{=d.video}}')">播放</a>&nbsp;&nbsp;&nbsp;
+            </div>
+        {{# } }}
+    </div>
+</script>
+<script type="text/html" id="attr2">
+    创：{{d.created_at}}<br>
+    更：{{d.updated_at}}<br>
+</script>
+
+<script type="text/html" id="attr4">
+    支付类型: {{=d.pay_type_str}}
+    <br>
+    金币数: {{=d.coins}}
+</script>
+
+<script type="text/html" id="search-total">
+    <p style="font-size: medium;margin-left: 10px;">
+        统计数据： 【记录数: {{=d.totalCount}}】、【解锁金币数: {{=d.totalCoins}}】
+    </p>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'aff', title: '用户aff'}
+            , {field: 'cover', title: '头像', templet:'#photolist',minWidth:100}
+            , {field: 'magic_param', title: 'AI魔法调用参数'}
+            , {field: 'task_id', title: '远程任务ID'}
+            , {field: 'video1', title: '远程地址',templet:'#video1',minWidth:100}
+            , {field: 'video2', title: '结果',templet:'#video2',minWidth:100}
+            , {field: 'pay_info', title: '支付信息', width: 200, templet: '#attr4'}
+            , {field: 'delete_str', title: '删除'}
+            , {field: 'status_str', title: '状态'}
+            , {field: 'reason', title: '异常'}
+            , {field: 're_ct', title: '重试次数'}
+            , {field: 'created_at', title: '时间',templet:'#attr2',minWidth:100}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            search: function (ajax, laytpl, where) {
+                ajax.get("<?php echo url_backend('total')?>&" + xx.queryEncode(where)).then(function (json) {
+                    if (json.code == '0') {
+                        let data = json.data, $ = layui.$;
+                        $('#total-id').html(laytpl($('#search-total').html()).render(data));
+                    }
+                });
+            },
+            'toolbar': {
+                retrySelect: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    layer.confirm('确认要重试吗', function (index2) {
+                        ajax.post("<?php echo url_backend('retry')?>", {"ids": pkValAry.join(',')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,function () {
+                                        table.reload("gridTab");
+                                    });
+                                }
+                            })
+                    });
+                },
+            },
+        }
+    });
+
+    layui.use(['form', 'jquery', 'laytpl'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let laytpl = layui.laytpl;
+        let data = form.val('order-search');
+        //console.log('order-search'+xx.queryEncode(data))
+        $.ajax({
+            url: "<?php echo url_backend('total')?>&" + xx.queryEncode(data),
+            dataType: 'json',
+            success: function (json) {
+                //console.log(json.code)
+                if (json.code == '0') {
+                    let response = json.data;
+                    $('#total-id').html(laytpl($('#search-total').html()).render(response));
+                }
+            }
+        });
+    })
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

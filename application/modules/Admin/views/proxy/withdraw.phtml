@@ -1,0 +1,248 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5 style="color: orangered">提现列表&nbsp;&nbsp;&nbsp;&nbsp;总提现:<?php echo $total; ?>,主播金币:<?php echo $totalgold; ?>,代理提现:<?php echo $totalproxy ?>,mv提现:<?php echo $totalmv ?>,游戏提现:<?php echo $totalgame ?></h5>
+                <div class="ibox-tools">
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <form action="d.php" method="get">
+                        <input type="hidden" name="mod" value="proxy">
+                        <input type="hidden" name="code" value="withdraw">
+                        <div class="col-sm-2" style="width: auto">
+                            <div class="input-group">
+                                <select name="statu" class="input-sm form-control input-s-sm inline">
+                                    <option value="99"  >状态</option>
+                                    <option value="0" <?php if ($statu == 0){ ?> selected <?php } ?>>待审核</option>
+                                    <option value="1" <?php if ($statu == 1){ ?> selected <?php } ?>>审核中</option>
+                                    <option value="2" <?php if ($statu == 2){ ?> selected <?php } ?>>已完成</option>
+                                    <option value="3" <?php if ($statu == 3){ ?> selected <?php } ?>>已解冻</option>
+                                    <option value="4" <?php if ($statu == 4){ ?> selected <?php } ?>>提现失败</option>
+                                    <option value="5" <?php if ($statu == 5){ ?> selected <?php } ?>>冻结中</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2" style="width: auto">
+                            <div class="input-group">
+                                <select name="from" class="input-sm form-control input-s-sm inline">
+                                    <option value="0">提现来源</option>
+                                    <option value="1" <?php if ($from == 1){ ?> selected <?php } ?>>主播金币</option>
+                                    <option value="2" <?php if ($from == 2){ ?> selected <?php } ?>>用户代理</option>
+                                    <option value="3" <?php if ($from == 3){ ?> selected <?php } ?>>mv金币</option>
+                                    <option value="4" <?php if ($from == 4){ ?> selected <?php } ?>>游戏提现</option>
+                                    <option value="5" <?php if ($from == 5){ ?> selected <?php } ?>>社区提现</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <input class="input-sm form-control input-s-sm inline" value="<?= $uuid ?>" placeholder="uuid" name="uuid">
+                        </div><div class="col-sm-2">
+                            <input class="input-sm form-control input-s-sm inline" value="<?= $cash_id ?>" placeholder="提现单号" name="cash_id">
+                        </div>
+                        <div class="col-sm-2">
+                            <input class="input-sm form-control input-s-sm inline" style="width: 200px" value="<?= $start ?>" readonly placeholder="开始时间" id="start" name="start">
+                        </div>
+                        <div class="col-sm-2">
+                            <input class="input-sm form-control input-s-sm inline" style="width: 200px" value="<?= $end ?>" readonly placeholder="结束时间" id="end" name="end">
+                        </div>
+                        <div class="col-sm-1"><button type="submit" class="btn btn-sm btn-primary"> 搜索</button></div>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>uuid</th>
+                            <th>昵称</th>
+                            <th>来源</th>
+                            <th>账号</th>
+                            <th>姓名</th>
+                            <th>提现金额(元)</th>
+                            <th>金币</th>
+                            <th>状态</th>
+                            <th>提现单号</th>
+                            <th>desc</th>
+                            <th>申请</th>
+                            <th>更新</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php if ($topic): ?>
+                        <?php foreach ($topic as $v): ?>
+                        <tr>
+                            <td><?= $v['id'] ?></td>
+                            <td><a onclick="userInfo('<?= $v['uuid'] ?>')"><?= $v['uuid'] ?></a></td>
+                            <td> <?php if ($v['with_member']): ?>
+                                    <?= $v['with_member']['nickname']?>
+                                <?php else: ?>
+                                    <a style="color:red;">
+                                        用户不存在
+                                    </a>
+                                   <?php endif; ?>
+                            </td>
+
+                            <td><?= $v['withdraw_from'] ?></td>
+                            <td><?= $v['account'] ?></td>
+                            <td><?= $v['name'] ?></td>
+                            <td><?= $v['amount'] ?></td>
+                            <td><?= $v['coins'] ?></td>
+                            <td><span  <?php if($v['status'] ==0){ ?>
+                                    style="color: green"
+                                <?php }elseif($v['status'] ==2){ ?>
+                                    style="color: orangered"
+                                        <?php } ?>
+                                ><?= $v['status_name'] ?></span></td>
+                            <td style="color: #FF5722;font-weight: bold"><?= $v['cash_id'] ?></td>
+                            <td style="color:red;font-weight: bold"><?= $v['descp'].'|'.$v['order_desc'] ?></td>
+                            <td><?= $v['created_at'] ?></td>
+                            <td><?= $v['updated_at']  ?></td>
+                            <td><?= $v['ip']  ?></td>
+                            <td><?= $v['address']  ?></td>
+                            <td>
+                            <?php if ($v['status'] == 0){?>
+                                <a class="btn btn-xs btn-primary" onclick="verify(<?= $v['id'] ?>)">通过</a>
+                                <a class="btn btn-xs btn-primary" onclick="verifyUSDT(<?= $v['id'] ?>)">usdt处理</a>
+                                <a class="btn btn-xs btn-danger" onclick="coldCoins(<?= $v['id'] ?>)">拒绝</a>
+                            <?php } ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <tr>
+                            <td colspan="16">暂无数据</td>
+                        </tr>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?= $page_arr['html'] ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.laydate.render({
+        elem: '#start',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd HH:mm:ss', //日期格式
+        istime: true, //是否开启时间选择
+        type: 'datetime'
+    });
+    layui.laydate.render({
+        elem: '#end',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd HH:mm:ss', //日期格式
+        istime: true, //是否开启时间选择
+        type: 'datetime'
+    });
+    function verify(id) {
+        $.ajax({
+            url: 'd.php?mod=proxy&code=verify&id='+id,
+            type: 'GET',
+            success: function (res) {
+                if(res.status == -1){
+                    layer.msg(res.data, {icon: 5})
+                }else if(res.status == 1){
+                    $("#nopass"+id).hide();
+                    layer.msg("操作成功", {icon: 1})
+                }else {
+                    layer.msg("未知错误", {icon: 5})
+                }
+            }
+        })
+    }
+    function verifyUSDT(id) {
+        $.ajax({
+            url: 'd.php?mod=proxy&code=usdt&id='+id,
+            type: 'GET',
+            success: function (res) {
+                if(res.status == -1){
+                    layer.msg(res.data, {icon: 5})
+                }else if(res.status == 1){
+                    $("#nopass"+id).hide();
+                    layer.msg("操作成功", {icon: 1})
+                }else {
+                    layer.msg("未知错误", {icon: 5})
+                }
+            }
+        })
+    }
+
+    function forbid(id) {
+        $.ajax({
+            url: 'd.php?mod=proxy&code=forbid&id='+id,
+            type: 'GET',
+            success: function (res) {
+                if(res.status == -1){
+                    layer.msg(res.data, {icon: 5})
+                }else if(res.status == 1){
+                    $("#nopass"+id).hide();
+                    layer.msg("操作成功", {icon: 1})
+                }else {
+                    layer.msg("未知错误", {icon: 5})
+                }
+            }
+        })
+    }
+
+    function coldCoins(id) {
+        $.ajax({
+                url: 'd.php?mod=proxy&code=coldCoins&id='+id,
+                type: 'GET',
+                success: function (res) {
+                    if(res.status == -1){
+                        layer.msg(res.data, {icon: 5})
+                    }else if(res.status == 1){
+                        $("#nopass"+id).hide();
+                        layer.msg("操作成功", {icon: 1})
+                    }else {
+                        layer.msg("未知错误", {icon: 5})
+                    }
+                }
+        })
+    }
+
+    function postAjax2(code, params, call) {
+        var data = {
+            mod: 'proxy',
+            code: code,
+            FORMHASH: '{$this->formhash}',
+            data: params
+        }
+        $.ajax({
+            url: 'd.php',
+            type: 'POST',
+            data: data,
+            success: function (res) {
+                call(res)
+            }
+        })
+    }
+    function userInfo(uuid) {
+        var url = "d.php?mod=proxy&code=userinfo&uuid="+uuid;
+        layerOpen(url, '收益详情')
+    }
+    function reload(msg) {
+        parent.layer.msg(msg, {icon: 1, time: 2000}, function () {
+            window.location.reload()
+        })
+    }
+    function layerOpen(url, title) {
+        layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['1000px', '800px'],
+            content: url
+        })
+    }
+</script>
+</html>

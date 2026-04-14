@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蓝蓝俱乐部 iOS轻量版安装教程</title>
+    <style>
+        *{margin:0;padding:0;border:0;box-sizing:border-box}.alert-layer{position:fixed;top:0;bottom:0;right:0;left:0;z-index:9;background-color:rgba(0,0,0,0.5);align-items:center;justify-content:center}.alert-close{position:absolute;top:0;bottom:0;right:0;left:0;z-index:1}.alert-body{position:relative;height:100vh;width:100vw;z-index:2;border-radius:10px;background-color:white;padding:20px 20px 15px;display:flex;flex-direction:column}.alert-title{color:#323232;font-size:18px;font-weight:bold;margin-bottom:20px;text-align:center}.alert-scroll-body{display:flex;flex:1;position:relative}.alert-scroll{position:absolute;top:0;bottom:0;right:0;left:0;overflow-y:scroll}.alert-scroll p{color:#323232;font-size:14px;line-height:24px;margin-bottom:5px}.alert-scroll img{width:100%;height:auto;object-fit:cover;margin-bottom:10px}.alert-scroll .redText{color:#ff3342;font-weight:bold}.alert-scroll .boldText{font-weight:bold}.alert-btn{display:flex;align-items:center;justify-content:center;margin-top:5px}.alert-btn a{width:60vw;height:40px;border-radius:20px;background-color:#ff3342;color:white;font-size:18px;font-weight:bold;display:flex;align-items:center;justify-content:center;text-decoration:none}
+    </style>
+</head>
+
+<body>
+
+
+<div class="alert-body">
+    <p class="alert-title">safari打开蓝蓝俱乐部轻量版安装指引</p>
+    <div class="alert-btn">
+        <a href="<?php echo "?m=index&a=mobileconfig&aff_code={$aff_code}" ?>">立即安装</a>
+    </div>
+    <div class="alert-scroll-body">
+        <div class="alert-scroll">
+            <p>
+                1、安装轻量版所需描述文件。此描述文件已通
+                过苹果官方认证，安全可靠。
+            </p>
+            <img src="/default/soft1.png" alt="">
+            <p>
+                2、点击允许后，首先在桌面主屏幕找到<span class="redText">“设置”</span>
+                进入设置点击<span class="boldText">“已下载描述文件”</span>
+            </p>
+            <img src="/default/soft2.png" alt="">
+            <p>
+                3、最后按照提示一路点击右上角的<span class="boldText">“安装”</span>或
+                <span class="boldText">“下一步”</span>即可完成安装
+            </p>
+            <img src="/default/soft3.png" alt="">
+            <p>
+                如果您设置了锁屏密码，安装时需要输入锁屏
+                密码后才能继续
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

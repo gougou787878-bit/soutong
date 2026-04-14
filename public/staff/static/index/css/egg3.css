@@ -1,0 +1,401 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: url('../img/egg/bg.jpg');
+    background-size: 100%;
+}
+
+html {
+    background-color: transparent;
+}
+
+#flex-container {
+    display: flex;
+    flex-direction: row;
+}
+
+#flex-container > .flex-item {
+    flex: auto;
+    flex-direction: column;
+}
+
+ul {
+    list-style: none;
+}
+
+.clearfix {
+    clear: both;
+}
+hr {
+    width: 90%;
+    margin: 0 auto;
+    background-color: #bdbdbd;
+    height: 1px;
+    border: none;
+    margin-bottom: 2rem;
+}
+.top {
+    width: 100%;
+    position: relative;
+}
+
+.top img {
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    z-index: 2;
+    position: relative;
+    top: -2.5rem;
+    width: 96%;
+    margin: 0 auto;
+}
+
+.content img {
+    width: 80%;
+    margin-left: 5%;
+}
+
+.content .text {
+    border: .2rem solid #d93c0c;
+    background: #fff;
+    padding: .6rem .3rem;
+    line-height: 2rem;
+    border-radius: 1.2rem;
+    position: relative;
+    color: #333333;
+}
+
+.content .text span {
+    color: #e7410e;
+}
+
+.line {
+    width: 90%;
+    height: 1px;
+    color: #000;
+    margin: 2rem auto;
+}
+
+.award-box .mn {
+    position: absolute;
+    width: 30%;
+    left: -2rem;
+    top: -5rem;
+}
+.award-box .bg {
+    margin-left: 20%;
+}
+
+.egg-box {
+    background-image: url('../img/egg/egg/egg-bg.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    margin: 0 auto;
+}
+
+.egg-box ul {
+    padding: 30% 0 2rem 0;
+    list-style: none;
+}
+
+.egg-box ul li {
+    width: 33%;
+    float: left;
+    text-align: center;
+    position: relative;
+}
+.egg-box ul .egg-txt {
+    width: 40%;
+}
+
+.egg-box ul p {
+    color: rgb(255 234 0);
+}
+
+.egg-box ul .egg {
+    width: 100%;
+    margin-top: .6rem;
+}
+.egg-box ul span {
+    position: absolute;
+    bottom: .4rem;
+    color: #8e2100;
+    font-size: .9rem;
+    left: 50%;
+    box-sizing: border-box;
+    transform: translate(-50%, 0%);
+    width: 100%;
+}
+
+.mine {
+    width: 96%;
+    background-color: #ff7a51;
+    color: #fff;
+    padding: 1rem;
+    margin: 0 auto;
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    vertical-align: middle;
+    margin-top: 1rem;
+}
+
+.mine img {
+    height: 1.2rem;
+}
+
+.rank-box {
+    margin-top: 2rem;
+}
+.rank-box ul li {
+    padding: .6rem .2rem;
+    border-bottom: 1px solid #ffd4c7;
+    display: flex;
+}
+.rank-box ul li:last-child {
+    border-bottom: none;
+}
+.rank-box .text img {
+    width: 35%;
+    vertical-align: middle;
+    margin-left: .2rem;
+}
+
+.rank-box .text span {
+    color: #000;
+    flex: 1;
+    vertical-align: middle;
+    text-align: center;
+    margin: auto;
+}
+
+.rank-box .text span:first-child {
+    text-align: left;
+}
+
+
+.rank-box .text span:last-child {
+    color: #e7410e;
+}
+.rank-box .text span img {
+    margin-right: .3rem;
+}
+
+.myprize {
+    text-align: center;
+}
+
+.myprize a {
+    background-color: #ffea00;
+    padding: 1rem 3rem;
+    border-radius: 3rem;
+    color: #fd5623;
+    text-decoration: none;
+    font-size: 1.4rem;
+}
+
+.footer {
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+
+    position: relative;
+}
+.footer p {
+    color: rgba(255,255,255,0.5);
+    font-size: .8rem;
+    z-index: 2;
+    position: relative;
+}
+.footer img {
+    position: absolute;
+    top: -570%;
+    width: 40%;
+    right: 0%;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    z-index: 999;
+    opacity: 0.5;
+}
+
+.dialog {
+    display: none;
+}
+.dialog img {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 90%;
+    margin:auto;
+    left:0;
+    right:0;
+}
+
+.list {
+    position: relative;
+    color: #fff;
+}
+
+.list ul li {
+    padding: .6rem .2rem;
+    border-bottom: 1px solid #4e4242;
+    display: flex;
+}
+
+.list ul li img {
+    width: 35%;
+    vertical-align: middle;
+    margin-left: .2rem;
+    margin-right: .5rem;
+}
+
+.list ul li span {
+    flex: 1;
+    vertical-align: middle;
+    text-align: right;
+    margin: auto;
+    font-size: .9rem;
+    margin-right: .5rem;
+}
+.list ul li span:first-child {
+    text-align: left;
+    margin-left: .5rem;
+}
+
+.layui-layer-title {
+    padding: 20px 0 40px;
+}
+#container {
+    padding-bottom: 7rem;
+}
+.do-draw {
+    background-image: url('../img/egg/egg-box.png');
+    background-size: 100% 100%;
+    height: 320px;
+    width: 100%;
+    margin-top: 25rem;
+}
+.do-draw ul {
+    padding: 9rem 2rem 0 2rem;
+}
+.do-draw ul li {
+    float: left;
+    width: 33.33%;
+    text-align: center;
+    position: relative;
+}
+.do-draw ul li .egg-txt {
+    width: 45%;
+}
+
+.do-draw ul li p {
+    color: #ffec84;
+}
+.do-draw ul li span {
+    position: absolute;
+    left: 2rem;
+    bottom: .2rem;
+    color: #fff;
+}
+.do-draw ul li .egg {
+    width: 100%;
+}
+.my-coin-box {
+    width: 100%;
+}
+
+.my-coin {
+    width: 90%;
+    border-radius: 2rem;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, .3);
+    padding: .8rem;
+    text-align: center;
+    font-size: 1.6rem;
+    margin-top: 2rem;
+    color: #fff;
+}
+.my-coin img {
+    width: 1.8rem;
+    margin-right: .5rem;
+}
+
+.bangdan {
+    margin: 1rem 0;
+    background-image: url('../img/egg/bangdan.png');
+    background-size: 100% 100%;
+    height: 350px;
+    width: 100%;
+    padding: 9rem 5rem;
+}
+.bangdan ul li {
+    height: 8rem;
+    line-height: 8rem;
+}
+.bangdan ul li .red {
+    color: #d63909;
+}
+.bangdan ul li .rank-egg {
+    float: right;
+}
+.bangdan ul li .rank-egg img {
+    width: 3rem;
+}
+.bangdan ul li span {
+    margin-right: 1rem;
+}
+.bangdan .avatar {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+}
+
+.guize {
+    margin-top: 1rem;
+    background-image: url('../img/egg/guize.png');
+    background-size: 100% 100%;
+    width: 100%;
+    padding: 8rem 5rem 3rem 5rem;
+}
+.guize .red {
+    color: #d63909;
+}
+.guize p {
+    margin-top: .8rem;
+    font-size: 1.4rem;
+}
+.guize .bg {
+    background-color: rgb(255, 231, 191);
+    margin-top: 1rem;
+    padding: .5rem;
+    line-height: 1.5rem;
+}
+
+.my-prize {
+    position: fixed;
+    bottom: 2rem;
+    background-color: #f84e3f !important;
+    display: block;
+    right: 0;
+    color: #fff;
+    padding: 1rem;
+    border-top-left-radius: 2rem;
+    border-bottom-left-radius: 2rem;
+    text-align: center;
+}
+.my-prize img {
+    width: 1.6rem;
+}

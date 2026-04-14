@@ -1,0 +1,92 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form class="form-horizontal" id="productEdit">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">开启关闭</label>
+
+                    <div class="col-sm-3">
+                        <select name="maintain_switch">
+                                <option value="0">关闭</option>
+                                <option value="1" <?php if($config['maintain_switch']): ?>selected <?php endif;?>>开启</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">同步消息</label>
+
+                    <div class="col-sm-3">
+                        不同步&nbsp;<input type="radio" name="is_sync" value="0" title="不同步" checked>
+                        &nbsp; &nbsp; &nbsp; &nbsp;
+                        同步系统公告通知&nbsp;<input type="radio" name="is_sync" value="1" title="同步系统公告通知"><span style="color: orangered">反复执行此操作会同步多条信息，ios内容不会同步</span>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">内容</label>
+                    <div class="col-sm-3">
+                        <textarea name="maintain_tips" rows="30" style="width: 500px" ><?= $config['maintain_tips']?></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">ios内容</label>
+                    <div class="col-sm-3">
+                        <textarea name="maintain_tips_ios" rows="30" style="width: 500px" ><?= $config['maintain_tips_ios']??''?></textarea>
+                    </div>
+                </div>
+                <div class="form-group" style="margin: auto">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-3">
+                     <button class="btn btn-sm btn-white" type="button" onclick="handleEdit()">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+
+function getAjax(url, call) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (res) {
+            if (res.status == 1) {
+                call(res.data)
+            } else {
+                layer.msg(res.data, {icon: 5})
+            }
+        }
+    })
+}
+function reload(msg) {
+    parent.layer.msg(msg, {icon: 1,time:2000},function () {
+        window.location.reload()
+    });
+}
+
+function handleEdit() {
+    var data = new FormData($('#productEdit')[0]);
+    $.ajax({
+        url: 'd.php?mod=index&code=doEditConfig',
+        data: data,
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function (res) {
+            var icon = 1;
+            if (res.status != 1) {
+                icon = 5;
+            }
+            layer.msg(res.data, {icon: icon,time:2000},function () {
+                reload(res.data, 5)
+            })
+        }
+    })
+}
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

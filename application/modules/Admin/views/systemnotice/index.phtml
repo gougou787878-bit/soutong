@@ -1,0 +1,265 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[status]', SystemNoticeModel::STAT) ?>
+
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[type]', SystemNoticeModel::TYPE) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">uuid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uuid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <span style="color: green;font-weight: bold">off 代表知道 处理,on 代理 默认 待处理</span><br/>
+                            <span style="color: #db6824;font-weight: bold">处理|清除是按用户批量(处理|清除)记录</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <!--<button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>-->
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                      <!--  <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>-->
+                        <!--<a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>-->
+                      <a title="处理是按用户批量设置处理状态" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="clearCached" data-pk="{{d.uuid}}" data-flag="status">处理</a>
+                      <a title="清除是按用户批量删除记录" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="clearCached" data-pk="{{d.uuid}}" data-flag="clear">清除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="类型" name="type"
+                           value="{{=d.type }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0 默认 1 标记：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="0 默认 1 标记" name="status"
+                           value="{{=d.status }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">uuid：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="uuid" name="uuid"
+                           value="{{=d.uuid }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">信息：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="信息" name="description"
+                           value="{{=d.description }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">date_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="date_at" name="date_at"
+                           value="{{=d.date_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.type }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0 默认 1 标记：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.status }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">uuid：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.uuid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">信息：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.description }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">date_at：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.date_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {field: 'id', width: 80, title: 'id', sort: true}
+            , {field: 'type', width: 100, title: '类型', type: "enum", value:<?php echo json_encode(SystemNoticeModel::TYPE) ?>}
+            , {field: 'uuid', title: 'uuid',width: 280,templet:function (d) {
+                    if(d.status){
+                        return  d.uuid;
+                    }
+                    return  "<span style='color: red;font-weight: bold'>"+d.uuid+"</span>"
+                }}
+            , {field: 'status', title: '状态', type: "switch", "value": "0|1", edit: true,width: 100}
+            , {field: 'description', title: '提示',templet:function (d) {
+                    if(d.status){
+                        return  "<span style='color: green'>"+d.description+"</span>"
+                    }
+                    return  "<span style='color: red;font-weight: bold'>"+d.description+"</span>"
+                }}
+            , {field: 'date_at', title: '时间',width: 200,templet:function (d) {
+                    if(d.status){
+                        return  d.date_at
+                    }
+                    return  "<span style='color: red;font-weight: bold'>"+d.date_at+"</span>"
+                }}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        'event': {
+            'operate': {
+                "clearCached": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    let $this = $(this),
+                        data = {"uuid": $this.data('pk'),"flag":$this.data('flag')};
+                    ajax.post('<?php echo url_backend('clearCached')?>', data)
+                        .then(function (json) {
+                            Util.msgOk('操作成功');
+                        })
+                },
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

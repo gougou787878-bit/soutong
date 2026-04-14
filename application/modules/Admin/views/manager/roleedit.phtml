@@ -1,0 +1,88 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+
+<link rel="stylesheet" href="/static/admin/zTree_v3/css/demo.css" type="text/css">
+<link rel="stylesheet" href="/static/admin/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="/static/admin/zTree_v3/js/jquery.ztree.core.js"></script>
+<script type="text/javascript" src="/static/admin/zTree_v3/js/jquery.ztree.excheck.js"></script>
+
+<form method="post" action="d.php?mod=manager&code=editRole">
+    <table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+        <tbody>
+        <tr class="header">
+            <td colspan="2">编辑角色</td>
+        </tr>
+        <tr>
+            <input type="hidden" name="role_id" value="<?=$data['role_id'];?>">
+            <td bgcolor="#F8F8F8">角色名:</td>
+            <td bgcolor="#FFFFFF"><input type="text" name="role_name" value="<?=$data['role_name'];?>"></td>
+        </tr>
+        <tr>
+            <td bgcolor="#F8F8F8">权限列表:</td>
+            <td>
+                <div class="zTreeDemoBackground left">
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <input type="hidden" id="role_action_ids" name="role_action_ids" value="<?=$data['role_action_ids'];?>">
+    <center><input type="button" class="button" id="submit-button" value=" 提 交 "></center>
+</form>
+<br>
+<SCRIPT type="text/javascript">
+
+    var setting = {
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+
+    var zNodes = <?=$action_list;?>;
+
+    var code;
+
+    function setCheck() {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            py = $("#py").attr("checked")? "p":"",
+            sy = $("#sy").attr("checked")? "s":"",
+            pn = $("#pn").attr("checked")? "p":"",
+            sn = $("#sn").attr("checked")? "s":"",
+            type = { "Y":py + sy, "N":pn + sn};
+        zTree.setting.check.chkboxType = type;
+        showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "' + type.N + '" };');
+    }
+    function showCode(str) {
+        if (!code) code = $("#code");
+        code.empty();
+        code.append("<li>"+str+"</li>");
+    }
+
+    $(document).ready(function(){
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        setCheck();
+        $("#py").bind("change", setCheck);
+        $("#sy").bind("change", setCheck);
+        $("#pn").bind("change", setCheck);
+        $("#sn").bind("change", setCheck);
+
+        $(document).on('click','#submit-button',function () {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            var checked = zTree.getCheckedNodes(true);
+            var checked_id = [];
+            $(checked).each(function (i,n) {
+                checked_id.push(n.id);
+            });
+            $('#role_action_ids').val(checked_id);
+
+            $('form').submit();
+        })
+    });
+</SCRIPT>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

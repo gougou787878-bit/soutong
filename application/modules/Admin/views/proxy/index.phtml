@@ -1,0 +1,97 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+    <tbody>
+    <tr class="header">
+        <form action="d.php" method="get">
+            <input type="hidden" name="mod" value="proxy">
+            <input type="hidden" name="code" value="index">
+            <td class="altbg2">
+                <div class="col-sm-2">
+                    Aff <input type="text" class="input-sm form-control input-s-sm inline" name="aff" size="45"
+                           placeholder="aff" value=" <?= $aff ?>">
+                </div>
+                <div class="col-sm-2">
+                    <input class="button lf btn-sm btn-primary" type="submit" name="setting_submit" id="setting_submit" value="搜索">
+                </div>
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>id</td>
+        <td>aff</td>
+        <td>一级业绩总额（元）</td>
+        <td>二级业绩总额（元）</td>
+        <td>三级业绩总额（元）</td>
+        <td>四级业绩总额（元）</td>
+        <td>总业绩（元）</td>
+        <td>提现总金额（元）</td>
+        <td>提现次数</td>
+        <td>更新时间</td>
+        <td>创建时间</td>
+        <td>操作</td>
+    </tr>
+    <?php if ($topic): ?>
+    <?php foreach ($topic as $v): ?>
+    <tr>
+        <td><?= $v['id'] ?></td>
+        <td><?= $v['aff'] ?></td>
+        <td><?= $v['level_1'] ?></td>
+        <td><?= $v['level_2'] ?></td>
+        <td><?= $v['level_3'] ?></td>
+        <td><?= $v['level_4'] ?></td>
+        <td><?= $v['sum'] ?></td>
+        <td><?= $v['amount'] ?></td>
+        <td><?= $v['withdraw_times'] ?></td>
+        <td><?= $v['updated_at'] ?></td>
+        <td><?= $v['created_at'] ?></td>
+        <td><a class="btn btn-sm btn-primary" onclick="detail(<?= $v['aff'] ?>)">详情记录</a></td>
+    </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="16">暂无数据</td>
+        </tr>
+    <?php endif; ?>
+</table>
+<?= $page['html']?>
+<br>
+<br>
+<br>
+</body>
+<script>
+    layui.laydate.render({
+        elem: '#start',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd', //日期格式
+        istime: true, //是否开启时间选择
+        type: 'date'
+    });
+    layui.laydate.render({
+        elem: '#end',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd', //日期格式
+        istime: true, //是否开启时间选择
+        type: 'date'
+    });
+    function detail(aff) {
+        var url = "d.php?mod=proxy&code=detail&aff="+aff;
+        layerOpen(url, '代理详情')
+    }
+
+    function layerOpen(url, title) {
+        layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['1000px', '800px'],
+            content: url
+        })
+    }
+
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

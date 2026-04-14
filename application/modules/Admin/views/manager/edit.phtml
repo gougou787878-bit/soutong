@@ -1,0 +1,46 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+
+<form method="post" action="d.php?mod=manager&code=editManager">
+    <table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+        <tbody>
+        <tr class="header">
+            <td colspan="2">编辑管理员</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="color: #2aabd2;font-weight: bold">PS: 后台会判断密码长度,不足32位视为新设密码</td>
+        </tr>
+        <tr>
+            <input type="hidden" name="uid" value="<?=$data['uid'];?>">
+            <td bgcolor="#F8F8F8">用户名:</td>
+            <td bgcolor="#FFFFFF"><input type="text" name="username" value="<?=$data['username'];?>"></td>
+        </tr>
+        <tr>
+            <td bgcolor="#F8F8F8">密码:</td>
+            <td bgcolor="#FFFFFF"><input type="text" name="password" value="<?=$data['password'];?>"></td>
+        </tr>
+        <tr>
+            <td bgcolor="#F8F8F8">角色:</td>
+            <td bgcolor="#FFFFFF">
+                <select name="role_id">
+                    <?php foreach ($role_list as $v) :?>
+                        <?php if($data['role_id']==$v['role_id']):?>
+                            <option value="<?=$v['role_id'];?>" selected><?=$v['role_name'];?></option>
+                        <?php else :?>
+                            <option value="<?=$v['role_id'];?>"><?=$v['role_name'];?></option>
+                        <?php endif;?>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <center><input type="submit" class="button" value=" 提 交 "></center>
+</form>
+<br>
+<style>
+    input:not(.button) {
+        width: 50%;
+    }
+</style>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

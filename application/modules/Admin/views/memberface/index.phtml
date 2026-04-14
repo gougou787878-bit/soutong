@@ -1,0 +1,266 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">Aff</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[aff]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">远程ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[task_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否删除</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_delete]', merge_array(['' => '全部'], MemberFaceModel::DELETE_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], MemberFaceModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="retrySelect" data-pk="id">重试</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">Aff：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="Aff" name="aff"
+                           value="{{=d.aff }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">素材ID：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="素材ID" name="material_id"
+                           value="{{=d.material_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户底板：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('ground', 'ground') ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户上传头像：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('thumb', 'thumb') ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">处理之后图片：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('face_thumb', 'face_thumb') ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否删除：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('is_delete', MemberFaceModel::DELETE_TIPS,['data-value' => '{{=d.is_delete}}']) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('status', MemberFaceModel::STATUS_TIPS,['data-value' => '{{=d.status}}']) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">处理异常描述：</label>
+                <div class="layui-input-block">
+                    <input placeholder="处理异常描述" name="reason"
+                           value="{{=d.reason }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/html" id="a1">
+    <div style="display: inline-block;flex-direction: row;align-items:center;">
+        <img style="width: 50px;height:50px;" title="用户底板"  alt="用户底板" src="{{d.ground}}" onclick="show_img('{{d.ground}}')">
+    </div>
+</script>
+
+<script type="text/html" id="a2">
+    <div style="display: inline-block;flex-direction: row;align-items:center;">
+        <img style="width: 50px;height:50px;" title="用户上传头像"  alt="用户上传头像" src="{{d.thumb}}" onclick="show_img('{{d.thumb}}')">
+    </div>
+</script>
+
+<script type="text/html" id="a3">
+    <div style="display: inline-block;flex-direction: row;align-items:center;">
+        <img style="width: 50px;height:50px;" title="处理之后图片"  alt="处理之后图片" src="{{d.face_thumb}}" onclick="show_img('{{d.face_thumb}}')">
+    </div>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'aff', title: 'Aff'}
+            , {field: 'task_id', title: '远程ID'}
+            , {field: 'material_id', title: '素材ID'}
+            , {field: 'ground', title: '用户底板',templet:'#a1',width:200}
+            , {field: 'thumb', title: '用户上传头像',templet:'#a2',width:200}
+            , {field: 'face_thumb', title: '处理之后图片',templet:'#a3',width:200}
+            , {field: 'type_str', title: '类型'}
+            , {field: 'coins', title: '金币数'}
+            , {field: 'is_delete', title: '是否删除', type: "switch", 'edit': true, text: "已删除|未删除", value: "1|0"}
+            , {field: 'status_str', title: '状态'}
+            , {field: 'reason', title: '处理异常描述'}
+            , {field: 'created_at', title: '创建时间'}
+            , {field: 'updated_at', title: '修改时间'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            'toolbar': {
+                batchUpdate: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn(undefined, function (layerIndex) {
+                        let data = form.val('order-search');
+                        console.log('order-search'+xx.queryEncode(data))
+                        Util.formSubmit("<?php echo url_backend('batchUpdate')?>&"+xx.queryEncode(data), form, ajax, 'batchUpdate', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                retrySelect: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    layer.confirm('确认要重试吗', function (index2) {
+                        ajax.post("<?php echo url_backend('retry')?>", {"ids": pkValAry.join(',')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,function () {
+                                        table.reload("gridTab");
+                                    });
+                                }
+                            })
+                    });
+                },
+            },
+        },
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

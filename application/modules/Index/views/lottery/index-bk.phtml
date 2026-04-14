@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <!-- cache control -->
+        <meta http-equiv="Pragma" content="no-cache,no-store,must-revalidate" />
+        <meta http-equiv="Cache-Control" content="Cache-Control: no-store, no-cache, max-age=0, must-revalidate, proxy-revalidate" />
+        <meta http-equiv="Expires" content="0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/lottery/css/style.css">
+        <script src="/lottery/js/jquery-3.6.3.min.js"></script>
+        <script src="/lottery/js/jquery.tmpl.min.js"></script>
+        <script src="/lottery/js/adaptation.js"></script>
+        <script src="/lottery/js/carousel.js" defer></script>
+        <script src="/lottery/js/popups.js" defer></script>
+        <script src="/lottery/js/turntable.js" defer></script>
+        <script src="/lottery/js/sweetalert2.js"></script>
+        <title>双旦活动-搜同</title>
+        <meta name="keywords" content="妹团-H5">
+        <meta name="description" content="妹团-H5">
+    </head>
+
+    <!--  -->
+    <script id="template" type="text/x-jQuery-tmpl">
+        <div class="container">
+            <div class="wrap-body" id="blur">
+                <div class="round-area">
+                    <div class="title-header">
+                        <img src="/lottery/images/i-1.png" class="icon-header" alt>
+                        <div class="icon-txt" id="scroll-list">
+                            <ul>
+                                {{each(i, e) hots}}
+                                    <div>恭喜 “{{= e.nick_name}}抽奖活动中获得 {{= e.hint}}”</div>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="txt-img">
+                        <img src="/lottery/images/i-2.png" alt >
+                    </div>
+                    <div class="profile-info">
+                        活动时间：<?php echo $between_time; ?>
+                    </div>
+                    <div class="content-1">
+                        <img src="/lottery/images/i-6.png?v=2" alt id="spin">
+                        <div class="round-icon">
+                            <img src="/lottery/images/i-7.png" class="pointer" alt>
+                        </div>
+                    </div>
+                    <div class="leg">
+                        <img src="/lottery/images/i-8.png" alt>
+                        <div class="txt">
+                            你有 <span class="number">{{= chance}}</span> 次抽奖机会
+                        </div>
+                    </div>
+<!--                    <div class="content-2 act-1">-->
+<!--                        <img src="/lottery/images/i-9.png" alt>-->
+<!--                    </div>-->
+                    <div class="content-3">
+                        <img src="/lottery/images/i-10.png" alt>
+                    </div>
+                </div>
+
+                <div class="contact-us">
+                    中奖记录
+                </div>
+
+                <div class="box-1">
+                    <div class="box-header-1">
+                        累计抽奖：
+                    </div>
+                    <div class="list-1">
+                        {{each(i, e) rewards}}
+                            <div class="box-list-1">
+                                <div class="title-1">
+                                    满{{= e.times}}次
+                                </div>
+                                <div class="img-1">
+                                    <img src="{{= e.icon}}" alt>
+                                </div>
+                                <div class="footer-1">
+                                    {{= e.reward}}
+                                </div>
+                                {{if e.state == 0}}
+                                    <div class="box-btn-a">领取</div>
+                                {{/if}}
+                                {{if e.state == 1}}
+                                    <div class="box-btn-b receive" onclick="receive({{= e.id}})">领取</div>
+                                {{/if}}
+                                {{if e.state == 2}}
+                                    <div class="box-btn-a">已领取</div>
+                                {{/if}}
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+
+                <div class="box-2">
+                    <div class="box-header-2">
+                        活动规则:
+                    </div>
+                    <div class="list-2">
+                        <p>1.本活动中奖概率100%，只要抽取就能中奖；</p>
+                        <p>2.所有用户都可以参加，中奖奖品权益立即生效；</p>
+                        <p>3.活动期间充值金币均可参加抽奖活动，满100送1次抽奖，满200送2次抽奖，以此类推；</p>
+                        <p>4.满足抽奖次数，也可以领取相应的奖品；</p>
+                        <p>5.如发现作弊等违规行为，官方有权取消所得奖品，最终解释权归官方所有。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="myPopup">
+                <div class="contact-msg">
+                    <div class="contact_">
+                        <div class="header">
+                            <h3>温馨提示</h3>
+                        </div>
+                        <div class="body-txt" id="warn-content">
+
+                        </div>
+                        <div class="f-img ok">
+                            <img src="/lottery/images/i-3.png" alt>
+                            <span>我知道了</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="myPopupList">
+                <div class="contact-msg">
+                    <div class="contacts">
+                        <div class="header">
+                            <div class="txt-list-popup">抽奖记录</div>
+                            <img src="/lottery/images/close.png" class="close-icon" alt>
+                        </div>
+                        <div class="body-text" id="warn-content">
+                            <div class="lists">
+                                <div class="list">
+                                    <div class="avatar">
+                                        <strong>活动类型</strong>
+                                    </div>
+                                    <div class="name">
+                                        <strong>
+                                            奖品
+                                        </strong>
+                                    </div>
+                                    <div class="desc">
+                                        <strong>
+                                            时间
+                                        </strong>
+                                    </div>
+                                </div>
+
+                                {{each(i, e) historys}}
+                                    <div class="list">
+                                        <div class="avatar">
+                                            <span>{{= e.type}}</span>
+                                        </div>
+                                        <div class="name">
+                                            <span>{{= e.bi}}</span>
+                                        </div>
+                                        <div class="desc">
+                                            <span>{{= e.date}}</span>
+                                        </div>
+                                    </div>
+                                {{/each}}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        let data = {};
+        $(document).ready(function () {
+            // 1. 初始数据
+            data = {
+                //用户信息
+                code: '<?php echo $code; ?>',
+
+                // 中奖名单
+                hots: <?php echo $top_list; ?>,
+
+                // 活动日期
+                datatime: '',
+
+                // 抽奖次数
+                chance: '<?php echo $lottery_times; ?>',
+
+                // 奖品列表
+                awards: [
+                    {
+                        text: "30金币",
+                        rotate: 3640                // 控制抽中奖励弧度
+                    },
+                    {
+                        text: "40金币",
+                        rotate: 3690
+                    },
+                    {
+                        text: "暗网月卡",
+                        rotate: 3740
+                    },
+                    {
+                        text: "200金币",
+                        rotate: 3790
+                    },
+                    {
+                        text: "王者通卡",
+                        rotate: 3830
+                    },
+                    {
+                        text: "500金币",
+                        rotate: 3870
+                    },
+                    {
+                        text: "至尊通卡",
+                        rotate: 3920
+                    },
+                    {
+                        text: "1000金币",
+                        rotate: 3960
+                    },
+                ],
+
+                // 累计奖励
+                rewards: <?php echo $award_list; ?>,
+
+                // 抽奖历史
+                historys: <?php echo $user_award; ?>,
+
+            };
+
+            // 2. 初始加载
+            const reLoad = (e = null) => {
+                // 获取数据
+                const tempdata = {...data, ...(e??{})}
+
+                // 获取模板
+                let template = $("#template").html();
+
+                // 模板编译
+                let temphtml = $.tmpl(template, tempdata);
+
+                // 页面渲染
+                $("body").html(temphtml);
+            }
+
+            // 3. 开始加载
+            reLoad();
+
+            // 4. 抽奖操作
+            $(document).on('click', '.pointer', (event) => {
+                if (data.chance == 0){
+                    Swal.fire({
+                        title: "温馨提示",
+                        html: "抽奖次数不足，请前往商城充值获取抽奖次数",
+                        confirmButtonText: "确认",
+                    });
+                    return;
+                }
+                $.ajax({
+                    url: '/index.php?m=lottery&a=draw',
+                    data: {'code': data.code},
+                    type: 'POST',
+                    success: function (res) {
+                        if (res.code == 0) {
+                            onPointerStart(data.awards, res.data.index).then((e)=>{
+                                $('.number').html(res.data.chance);
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "温馨提示",
+                                html: res.data,
+                                confirmButtonText: "确认",
+                            });
+                        }
+                    }
+                })
+            });
+
+            // 5. 重置抽奖
+            $(document).on('click', '.ok', (event) => onPointerOver().then((e)=>{
+                // 刷新页面、数据更新 ~ 示例
+                // 注意：如果没必要模板刷新(全局), 请通过jQuery指定更新(局部)
+                // reLoad();
+                location.reload();
+            }));
+
+            // 5. 领取奖励
+            // $(document).on('click', '.receive', (event) => {
+            //     $.ajax({
+            //         url: '/index.php?m=lottery&a=receive',
+            //         data: {'code': data.code, 'id': 1},
+            //         type: 'POST',
+            //         success: function (res) {
+            //             if (res.code == 0) {
+            //
+            //             } else {
+            //                 alert(res.data);
+            //             }
+            //         }
+            //     })
+            // });
+        });
+
+        function receive(id){
+            $.ajax({
+                url: '/index.php?m=lottery&a=receive',
+                data: {'code': data.code, 'id': id},
+                type: 'POST',
+                success: function (res) {
+                    if (res.code == 0) {
+                        Swal.fire({
+                            title: "温馨提示",
+                            html: "领取成功",
+                            confirmButtonText: "确认"
+                        }).then(function (){
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "温馨提示",
+                            html: res.data,
+                            confirmButtonText: "确认",
+                        });
+                    }
+                }
+            })
+        }
+
+    </script>
+
+
+</html>

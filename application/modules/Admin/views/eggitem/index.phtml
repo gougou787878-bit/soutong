@@ -1,0 +1,268 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[item_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[item_status]', merge_array(['' => '全部'], EggItemModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">活动</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[lottery_id]' , $lotteryAry) ; ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">中间展示</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_show]', merge_array(['' => '全部'], EggItemModel::SHOW_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">能否中奖</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_win]', merge_array(['' => '全部'], EggItemModel::WIN_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="item_id">删除所选
+                            </button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.item_id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">活动</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('lottery_id', $lotteryAry, ['data-value' => '{{=d.lottery_id}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品标题：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="奖品标题" name="item_title"
+                           value="{{=d.item_title }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品名称：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="奖品名称" name="item_name"
+                           value="{{=d.item_name }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品概率：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="奖品概率" name="item_rate"
+                           value="{{=d.item_rate }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+<!--        <div class="layui-form-item">-->
+<!--            <div class="layui-inline">-->
+<!--                <label class="layui-form-label">奖品图片：</label>-->
+<!--                <div class="layui-input-inline">-->
+<!--                    --><?php //echo Layui::uploadPos('item_icon_url', 'item_icon') ?>
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="排序" name="item_sort"
+                           value="{{=d.item_sort }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('item_status', EggItemModel::STATUS_TIPS,  ['data-value' => '{{=d.item_status}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">中奖展示</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('is_show', EggItemModel::SHOW_TIPS,  ['data-value' => '{{=d.is_show}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">能否中奖</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('is_win', EggItemModel::WIN_TIPS,  ['data-value' => '{{=d.is_win}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品类型：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('giveaway_type', EggItemModel::GIVEAWAY_TYPE,  ['data-value' => '{{=d.giveaway_type}}']) ?>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">转盘位置：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="转盘位置" name="giveaway_id"
+                           value="{{=d.giveaway_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">赠品数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="赠品数量" name="giveaway_num"
+                           value="{{=d.giveaway_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.item_id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'item_id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'item_id', title: 'id'}
+            , {field: 'lottery_name', title: '活动'}
+            , {field: 'item_title', title: '奖品标题'}
+            , {field: 'item_name', title: '奖品名称'}
+            , {field: 'item_rate', title: '奖品概率'}
+            // , {
+            //     field: 'item_icon', title: '奖品图片', width: 130, templet: function (d) {
+            //         return '<img src="' + d.item_icon_url + '" style="width: 100px;height: 80px;" onclick="show_img(\'' + d.item_icon_url + '\')">';
+            //     }
+            // }
+            , {field: 'item_sort', title: '排序'}
+            , {field: 'item_status', title: '状态', type: "switch", "value": "1|0", edit: true, width: 90}
+            , {field: 'is_show', title: '中奖展示', type: "switch", "value": "1|0", edit: true, width: 90}
+            , {field: 'is_win', title: '能否中奖', type: "switch", "value": "1|0", edit: true, width: 90}
+            , {field: 'giveaway_type_str', title: '奖品类型'}
+            , {field: 'giveaway_id', title: '奖品位置'}
+            , {field: 'giveaway_num', title: '奖品数量'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

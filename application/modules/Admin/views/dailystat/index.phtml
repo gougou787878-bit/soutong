@@ -1,0 +1,521 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header" style="color: coral">每日数据管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">day</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[day]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ip 访问</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[ip]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">day：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="day" name="day"
+                           value="{{=d.day }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">ip 访问：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="ip 访问" name="ip"
+                           value="{{=d.ip }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">独立ip 用户：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="独立ip 用户" name="uv"
+                           value="{{=d.uv }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">点击量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="点击量" name="pv"
+                           value="{{=d.pv }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">活跃：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="活跃" name="activity"
+                           value="{{=d.activity }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计总用户：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="累计总用户" name="total_user"
+                           value="{{=d.total_user }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">新增：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="新增" name="user"
+                           value="{{=d.user }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道新增：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="渠道新增" name="build_user"
+                           value="{{=d.build_user }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">安卓新增：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="安卓新增" name="and_user"
+                           value="{{=d.and_user }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">订单额度：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="订单额度" name="total"
+                           value="{{=d.total }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">充值：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="充值" name="charge"
+                           value="{{=d.charge }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">vip充值：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="vip充值" name="vip_charge"
+                           value="{{=d.vip_charge }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">安卓充值：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="安卓充值" name="and_charge"
+                           value="{{=d.and_charge }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道充值：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="渠道充值" name="build_charge"
+                           value="{{=d.build_charge }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计成交：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="累计成交" name="total_charge"
+                           value="{{=d.total_charge }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">day：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.day }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">ip 访问：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.ip }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">独立ip 用户：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.uv }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">点击量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.pv }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">活跃：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.activity }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计总用户：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.total_user }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">新增：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.user }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道新增：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.build_user }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">安卓新增：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.and_user }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">订单额度：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.total }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">充值：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.charge }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">vip充值：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.vip_charge }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">安卓充值：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.and_charge }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道充值：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.build_charge }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计成交：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.total_charge }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<style>
+    .st{
+        color: #242bff;
+    }
+</style>
+<script type="text/html" id="attr-id">
+
+    推广独立IP(affOpenIP)：<span class="st">{{d.ip}}</span>
+    <hr>
+    邀请用户访问(affOpen)：<span class="st">{{d.tui_user}}</span>
+    <hr>
+    官网点击(pv)：<span class="st">{{d.pv}}</span>
+</script>
+<script type="text/html" id="attr-user">
+    新增：<span class="st">{{d.user}}</span> 活跃：<span class="st">{{d.activity}}</span>
+    <hr>
+    安卓：<span class="st">{{d.and_user}} ({{d.and_per}}%)</span> pwa：<span class="st">{{d.user-d.and_user}} </span>
+    <hr>
+    渠道：<span class="st">{{d.build_user}} ({{d.build_per}}%)</span> 官方：<span class="st">{{d.user-d.build_user}}</span>
+</script>
+<script type="text/html" id="attr-order">
+    订单：<span class="st">{{d.charge}}</span> 总额：{{d.order_amount}} 数量：{{d.order_number}}
+    <hr>
+    安卓：<span class="st">{{d.and_charge}} ({{d.and_per}}%)</span> pwa：<span class="st">{{d.pwa_charge}}</span>
+    <hr>
+    VIP：<span class="st">{{d.vip_charge}} ({{d.vip_charge_per}}%)</span> 金币充值：<span class="st">{{d.gold_charge}}</span> 游戏充值：<span class="st">{{d.game_charge}}</span>
+    <hr>
+    直播消费：<span class="st">{{d.live_total}}</span>
+</script>
+<script type="text/html" id="attr-total">
+    用户：<span class="st">{{d.total_user}}</span>
+    <hr>
+    充值：<span class="st">{{d.total_charge}}</span>
+</script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: undefined,
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            //{field: 'id', title: 'id',sort:true,width:80}
+            //, {field: 'day', title: '日期',sort:true,width: 180}
+            //, {field: 'ip', title: '渠道ip',width:80}
+            //, {field: 'uv', title: 'uv'}
+            //,{field: 'id', title: '官网', width: 220, templet: '#attr-id'}
+            //,{field: 'id', title: '用户', width: 300, templet: '#attr-user'}
+            //,{field: 'id', title: '交易',  templet: '#attr-order'}
+            //,{field: 'id', title: '累计',  templet: '#attr-total'}
+            /*, {field: 'pv', title: 'pv'}
+            , {field: 'activity', title: '活跃',width:80}
+            , {field: 'user', title: '新增用户'}
+            , {field: 'build_user', title: '渠道用户'}
+            , {field: 'and_user', title: '安卓用户'}
+            , {field: 'charge', title: '今日充值'}
+            , {field: 'vip_charge', title: 'vip充值'}
+            , {field: 'and_charge', title: '安卓充值'}
+            , {field: 'build_charge', title: '渠道充值'}
+            , {field: 'order_number', title: '今日单数'}
+            , {field: 'order_amount', title: '订单额度'}
+            , {field: 'total_charge', title: '累计充值'}
+            , {field: 'total_user', title: '总用户'}*/
+            //, {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+            {field: 'id', title: 'id',sort:true,width:80}
+            , {field: 'day', title: '日期',sort:true,width: 180}
+            , {field: 'user', title: '新增用户'}
+            , {field: 'and_user', title: '安卓用户'}
+            , {field: 'pwa_user', title: 'PWA用户'}
+            , {field: 'activity', title: '活跃',width:80}
+            , {field: 'and_active', title: '安卓活跃',width:80}
+            , {field: 'pwa_active', title: 'PWA活跃',width:80}
+            , {field: 'charge', title: '今日充值'}
+            , {field: 'vip_charge', title: 'vip充值'}
+            , {field: 'gold_charge', title: '金币充值'}
+            , {field: 'build_user', title: '渠道用户'}
+            , {field: 'build_charge', title: '渠道充值'}
+            , {field: 'and_charge', title: '安卓充值'}
+            , {field: 'pv', title: '官网总访问数'}
+            //, {field: 'gw_rate', title: '官网点击率'}
+            , {field: 'ip', title: '渠道ip',width:80}
+            , {field: 'tui_user', title: '渠道访问数'}
+            , {field: 'and_down', title: '安卓下载'}
+            , {field: 'pwa_down', title: 'pwa下载'}
+            , {field: 'total_down', title: '总下载'}
+            , {field: 'keep_1day', title: '次日留存'}
+            , {field: 'keep_1day_rate', title: '次日留存率'}
+            , {field: 'keep_3day', title: '3日留存'}
+            , {field: 'keep_3day_rate', title: '3日留存率'}
+            , {field: 'keep_7day', title: '7日留存'}
+            , {field: 'keep_7day_rate', title: '7日留存率'}
+            // ,{field: 'id', title: '官网', width: 220, templet: '#attr-id'}
+            // ,{field: 'id', title: '用户', width: 300, templet: '#attr-user'}
+            // ,{field: 'id', title: '交易',  templet: '#attr-order'}
+            // ,{field: 'id', title: '累计',  templet: '#attr-total'}
+            // , {field: 'order_number', title: '今日单数'}
+            // , {field: 'order_amount', title: '订单额度'}
+            // , {field: 'total_charge', title: '累计充值'}
+            // , {field: 'total_user', title: '总用户'}
+            //, {fixed: 'right',width:100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

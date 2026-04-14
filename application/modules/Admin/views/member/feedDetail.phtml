@@ -1,0 +1,50 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<style>
+.chat {background: #1ab394; color: #fff; border-radius: 6px; line-height: 14px; max-width: 50%; margin-bottom: 10px; padding: 5px 10px; display: block; word-wrap:break-word;}
+.txxtRight {text-align: right; clear: both; float: right}
+.txxtRight .chat {float: right; background: #f3f3f4; color: #676a6c;}
+.seed {position: fixed; bottom: 0px; left: 0px; height: 40px;}
+</style>
+<div class="row" style="background: #fff; height: 420px;">
+    <div class="col-xs-12">
+        <div><?=$data['created_at'];?></div>
+        <div><span class="chat"><?=$data['question'];?></span></div>
+    </div>
+    <?php if(!empty($data['detail'])):?>
+    <!--{loop $data['detail'] $k $v}-->
+        <div class="col-xs-12 <?php if($v['type'] == 2):?>txxtRight<?php endif;?>">
+            <div><?=$v['created_at'];?></div>
+            <div><span class="chat"><?=$v['reply'];?></span></div>
+        </div>
+    <!--<?php endforeach; ?>-->
+    <?php endif;?>
+    <?php if($data['status'] == 2 || $data['status'] == 0):?>
+    <div class="seed">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <input type="text" id="reply" placeholder="请输入反馈" class="input-sm form-control"> <span class="input-group-btn">
+                    <button type="submit" class="btn btn-sm btn-primary" onclick="feedback()"> 发送</button> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php endif;?>
+</div>
+
+<script>
+function feedback() {
+    var reply = $('#reply').val()
+    reply = reply.replace(/(^\s*)|(\s*$)/g, "")
+    if (reply.length == 0)  {
+        layer.msg('请输入反馈内容', {icon: 5})
+        return false
+    }
+    var url = "d.php?mod=user&code=replyUserFeed&feed_id=<?=$data['id'];?>&reply=" + reply
+    parent.getAjax(url, function (res) {
+        parent.parent.layer.msg(res, {icon: 1})
+        parent.window.location.reload()
+    })
+}
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

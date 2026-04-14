@@ -1,0 +1,103 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>福利任务统计</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>日期</th>
+                                        <th>绑定手机</th>
+                                        <th>保存二维码</th>
+                                        <th>观看漫画</th>
+                                        <th>观看动漫</th>
+                                        <th>点赞</th>
+                                        <th>分享</th>
+                                        <th>收藏</th>
+                                        <th>全部完成</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($items):?>
+                                    <?php foreach ($items as $k=>$v) :?>
+                                    <tr>
+                                        <td><?=$v['id'];?></td>
+                                        <td><?=$v['date'];?></td>
+                                        <td><?=$v['bind_phone'];?></td>
+                                        <td><?=$v['save_qr_code'];?></td>
+                                        <td><?=$v['watch_mh'];?></td>
+                                        <td><?=$v['watch_dm'];?></td>
+                                        <td><?=$v['likes'];?></td>
+                                        <td><?=$v['share'];?></td>
+                                        <td><?=$v['collection'];?></td>
+                                        <td><?=$v['off_count'];?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="16">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            layui.laydate.render({
+                elem: '#start'
+            })
+            layui.laydate.render({
+                elem: '#end'
+            })
+            function showUser(aff) {
+                var url = "d.php?mod=user&code=index&aff=" + aff
+                layerOpen(url, '用户详情')
+            }
+
+            function layerOpen(url, title) {
+                parent.layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['1200px', '500px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                layer.msg(msg, {icon: 1})
+                setTimeout(function () {
+                    window.location.reload()
+                }, 3000)
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

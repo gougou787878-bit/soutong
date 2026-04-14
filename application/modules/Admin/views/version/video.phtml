@@ -1,0 +1,30 @@
+<link href="/static/admin/css/video-js.css" rel="stylesheet">
+<script src="/static/admin/js/video.js"></script>
+<script src="/static/admin/js/hls.min.js"></script>
+<script src="/static/admin/js/jquery.min.js?v=2.1.4"></script>
+<div id="videobox">
+    <video id="myVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" width="300" height="250">
+        <source id="source" src="" type="application/x-mpegURL">
+    </video>
+</div>
+<script>
+   $(function(){
+
+       let vdoSrc = decodeURI('<?php echo $_GET['videoUrl'] ?>')
+       videojs('myVideo').ready(function(vdoSrc){
+           myVideo = this;
+           if (/\.m3u8$/.test(vdoSrc)) { //判断视频源是否是m3u8的格式
+               myVideo.src({
+                   src: vdoSrc,
+                   type: 'application/x-mpegURL' //在重新添加视频源的时候需要给新的type的值
+               })
+           } else {
+               myVideo.src(vdoSrc)
+           }
+           myVideo.load();
+           myVideo.play();
+       })
+
+   })
+</script>
+

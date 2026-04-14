@@ -1,0 +1,238 @@
+
+body {
+}
+
+
+/* index */
+.home{}
+.home .top{
+}
+.home .top .myagent{
+	position:relative;
+    padding:0 10px;
+	height:60px;
+	line-height:60px;
+    font-size:16px;
+	color: #323232;
+}
+.home .top .myagent .li_l{
+    
+}
+.home .top .myagent .li_r{
+    float:right;
+    font-weight:bold;
+}
+.home .top .myagent .agent_add .li_r{
+    color:#323232;
+    font-weight:normal;
+}
+.home .list{
+    padding:0 10px;
+}
+.home .list ul{}
+.home .list ul li{
+    padding-right:30px;
+    height:60px;
+    line-height:60px;
+    border-top:1px solid #eeeeee;
+    background:url("../images/right.png") no-repeat center right;
+    background-size:14px;
+    
+
+    font-size:16px;
+}
+.home .list ul li a{
+    display:block;
+}
+.home .list ul li .li_l{
+	color: #323232;
+}
+.home .list ul li .li_r{
+    float:right;
+    color:#fe0089;
+    font-size:26px;
+    font-weight:bold;
+}
+
+.home .mycode_title{
+	line-height:50px;
+	padding:20px 10px 0;
+	font-size:16px;
+    font-weight:bold;
+	color: #323232;
+}
+.home .mycode{
+	line-height:50px;
+	padding:0 10px 20px;
+	font-size:16px;
+    font-weight:bold;
+}
+.home .mycode .code{}
+.home .mycode .code i{
+	display:inline-block;
+	width:30px;
+	height:30px;
+	text-align:center;
+	line-height:30px;
+	border:1px solid #a0a0a0;
+	font-style: normal;	
+	margin:0 2px;
+	color:#fe0089;
+}
+.home .mycode .copy{
+    float:right;
+	color:#323232;
+	margin-right:5px;
+	display:initial;
+    font-weight:normal;
+}
+
+.home .tips{
+	padding:10px;
+	color:#323232;
+    font-size:1.2rem;
+	line-height:30px;
+}
+
+/* 下级分成 */
+.profit{
+}
+.profit ul{
+	padding-left:10px;
+}
+.profit ul li{
+	position:relative;
+	padding:10px 0 10px  60px;
+	height:60px;
+	border-bottom: 1px solid #eeeeee;
+}
+.profit ul li .thumb{
+	position:absolute;
+	top:10px;
+	left:0;
+	width:50px;
+	height:50px;
+	border-radius:50%;
+}
+.profit ul li .info{
+	width:60%;
+	line-height:30px;
+}
+.profit ul li .info .name{
+	color:#323232;
+	font-size:16px;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.profit ul li .info .id{
+	color:#323232;
+}
+.profit ul li .info2{
+	position:absolute;
+	top:10px;
+	right:10px;
+	width:100px;
+	height:60px;
+	line-height:30px;
+}
+.profit ul li .info2 .icon{
+	text-align:center;
+}
+.profit ul li .coin{
+	text-align:center;
+	color: #323232;
+}
+
+/* 设置邀请码 */
+.setcode{
+	width: 100%;
+	position: absolute;
+}
+.setcode .top{
+	max-width: 375px;
+	height:160px;
+	background:url("../images/agent/top_set.png") no-repeat center;
+	background-size:100% 100%;
+	margin: 0 auto;
+
+}
+.setcode{
+}
+.setcode .mycode{
+	color:#323232;
+	line-height:50px;
+	padding:0 10px;
+	font-size:16px;
+	text-align:center;
+}
+.setcode .mycode .code{
+	position:relative;
+	display:inline-block;
+}
+.setcode .mycode .code i{
+	display:inline-block;
+	width:30px;
+	height:30px;
+	text-align:center;
+	line-height:30px;
+	color:#58b4f4;
+	border:1px solid #58b4f4;
+	font-style: normal;	
+	margin:0 2px;
+}
+.setcode .mycode .code input{
+	position:absolute;
+	top:0;
+	left:0;
+	width:auto;
+	height:auto;
+	opacity: 0;
+	z-index:-1;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+}
+.setcode .mycode .copy i{
+	display:inline-block;
+	width:20px;
+	height:20px;
+	background:url("../images/agent/copy.png") no-repeat center;
+	background-size:20px;
+	vertical-align: middle;
+    margin-top: -3px;
+	margin-right:3px;
+}
+.setcode .tips{
+	padding:10px;
+	color:#b4b4b4;
+	line-height:30px;
+}
+.setcode .submit{
+	width:60%;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+	color:#323232;
+	font-size:16px;
+	margin:20px auto 0;
+	border-radius:20px;
+	border: solid 1px #323232;
+	background-color: transparent;
+	position: relative;
+}
+
+.setcode .submit:after {
+	content: '';
+	position: absolute;
+	top: 3px;
+	left: 7px;
+	width: 100%;
+	height: 2.75em;
+	border-radius: 1.375em;
+	background-color: #ffd321;
+	z-index: -1;
+}

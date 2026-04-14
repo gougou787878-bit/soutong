@@ -1,0 +1,89 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户下载列表</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>收藏时间</th>
+                                        <th>uuid</th>
+                                        <th>标题</th>
+                                        <th>类型</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($topic):?>
+                                    <!--<?php foreach ($topic as $k=>$v) :?>-->
+                                    <tr>
+                                        <td><?=$v['created_at'];?></td>
+                                        <td><a onclick="showMember('<?=$v['uuid'];?>')" href="javascript:;"><?=$v['uuid'];?></a></td>
+                                        <td><a onclick="showInfo('<?=$v['title'];?>', '<?=$v['type'];?>')" href="javascript:;"><?=$v['title'];?></a></td>
+                                        <td><?php if($v['type'] == 'mh'):?>漫画<?php else:?>动漫<?php endif;?></td>
+                                    </tr>
+                                    <!--<?php endforeach; ?>-->
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="16">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            function showMember(uuid) {
+                var url = "d.php?mod=user&code=index&uuid=" + uuid
+                layerOpen(url, '用户详情')
+            }
+
+            function showInfo(title, type) {
+                var type = type == 'mh' ? 'mh' : 'av';
+                var url = "d.php?mod=" + type + "&code=index&title=" + title
+                layerOpen(url, '详情')
+            }
+
+            function layerOpen(url, title) {
+                parent.layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['1200px', '500px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url) {
+                alert('123')
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                parent.layer.msg(msg, {icon: 1})
+                window.location.reload()
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

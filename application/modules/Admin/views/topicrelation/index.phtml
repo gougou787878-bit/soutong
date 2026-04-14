@@ -1,0 +1,160 @@
+<?php use service\TopicService;
+
+importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">所属专题</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[topic_id]', TopicService::getSearchTopicList()); ?>
+                                <!--<input type="text" name="search[topic_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">-->
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">mv_id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[mv_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>移除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="600" data-h="600" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">所属合集：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('topic_id', TopicService::getSearchTopicList(),
+                    ['data-value' => '{{=d.topic_id }}']); ?>
+                <!-- <input lay-verify="required" placeholder="topic_id" name="topic_id"
+                        value="{{=d.topic_id }}" class="layui-input">-->
+
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">mv_id：</label>
+            <div class="layui-input-block">
+                <textarea lay-verify="required" placeholder="mv_id,多个使用,分割" name="mv_id" class="layui-textarea">{{=d.mv_id }}</textarea>
+            </div>
+
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script>
+    <?php
+    $w = [];
+    if(isset($_GET['_tpid']) && $_GET['_tpid']){
+        $w['where[topic_id]'] = (int)$_GET['_tpid'];
+    }
+    ?>
+    xx.use({
+        url: '<?php echo url_backend("listAjax",$w) ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id', width: 100,}
+            , {
+                field: 'topic_title', title: '专题信息', templet: function (d) {
+                    return "<span style='color: #1AB394'>[" + d.topic_id + "] " + d.topic_title + "</span>";
+                }
+            }
+            , {field: 'mv_title', title: '视频信息', templet:"#attr-text"}
+            , {
+                field: 'mv_img_thumb', title: '图标', width: 100, templet: function (d) {
+                    return '<img src="' + d.mv_img_thumb + '" style="width: 100px;height: 80px;" onclick="show_img(\'' + d.mv_img_thumb + '\')">';
+                }
+            }, {
+                field: 'mv_pre_href', title: '播放源', width: 80, templet: function (d) {
+                    return "<a class='layui-btn layui-btn-sm layui-btn-xs' onclick=\"previewVideo('" + d.mv_pre_href + "')\"><i class='layui-icon layui-icon-play'></i>Pre</a>";
+                }
+            }, {
+                field: 'mv_full_href', title: '播放源', width: 80, templet: function (d) {
+
+                    return "<a class='layui-btn layui-btn-sm layui-btn-xs' onclick=\"previewVideo('" + d.mv_full_href + "')\"><i class='layui-icon layui-icon-play'></i>Full</a>";
+                }
+            }
+            , {field: 'mv_id', title: '视频编号',edit:true}
+            , {field: 'mv_status', title: '视频状态', type: 'enum', value:<?php echo json_encode(MvModel::STAT); ?>}
+            , {field: 'mv_hide', title: '视频展示', type: 'switch', value: '0|1'}
+            , {field: 'mv_coins', title: '钻石'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<script type="text/html" id="attr-text">
+    视频ID: {{d.mv_id}}
+    <br/>
+    <span style='color: orangered'>{{d.mv_title}}</span>
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

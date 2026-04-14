@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<h1><?php echo $detail->title ?></h1>
+<div class="img">
+    <?php foreach ($detail->img_list as $img): ?>
+        <img src="<?php echo $img ?>" alt="">
+    <?php endforeach; ?>
+</div>
+
+
+<div class="reply">
+    <ul>
+        <?php foreach ($detail->withReply as $reply): ?>
+            <li>
+                <h3>#(<?php echo $reply->id ?>)<?php echo $reply->uuid ?></h3>
+                <?php
+                /** @var FindReplyModel $reply */
+                //print_r($reply->getMvAry()->toArray());
+                ?>
+                <?php foreach ($reply->getMvAry() as $mv): ?>
+                    <div class="list">
+                        <img src="<?php echo $mv->cover_thumb_url ?>" alt=""/>
+                        <a title="<?php echo $mv->title ?>" target='_blank' href="<?php echo getAdminPlayM3u8($mv->m3u8) ?>"><?php echo $mv->title ?></a>
+                    </div>
+                <?php endforeach; ?>
+
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+
+<style>
+    html,body{
+        padding: 10px;
+        margin: 0;
+        background: #EEEEEE;
+    }
+    
+    .reply .list {
+        width: 120px;
+        display: inline-block;
+        overflow: hidden;
+    }
+
+    .reply .list img {
+        width: 120px;
+    }
+    .reply .list a {
+        width: 120px;
+        display: inline-block;
+        white-space:nowrap;
+        text-overflow:ellipsis; overflow:hidden;
+    }
+</style>
+
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/tab
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "version": "2.2.0"
+}
+### json请求 公公配置
+POST {{host}}/api/lanpron/home
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+### json请求 公公配置
+POST {{host}}/api/lanpron/viewed
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "page": 0
+}
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/new
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/category
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/search
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "kwy": "校园"
+}
+###
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/tag_mv
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "tag": "鲜肉"
+}
+###
+###
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/detail
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "code": "Ums-0f28"
+}
+
+###
+###
+###
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/recommend
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "code": "Ums-0f28"
+}
+
+######
+###
+###
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/contact
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+######
+###
+###
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/lanpron/address
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###

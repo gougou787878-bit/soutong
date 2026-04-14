@@ -1,0 +1,232 @@
+<?php use service\TopicService;
+
+importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">影片ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[mv_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">作者uid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[mv_uid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">处理状态</label>
+                            <div class="layui-input-block">
+                                <select name="where[status]">
+                                    <option value="">不限</option>
+                                    <option value="0">未处理</option>
+                                    <option value="1">成功</option>
+                                    <option value="2">失败</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户UUID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uuid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                        <div class="layui-inline">
+                            <span style="color: #029789;font-size: 12px;">备注： 处理（逻辑删除视频并一次性标记所有举报次视频为处理成功）忽略（一次性标记所有对此视频的举报为失败） </span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="operate-toolbar">
+                        {{# if (d.status == 0) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="del-mv" data-pk="{{d.id}}">
+                            <i class="layui-icon layui-icon-website"></i>处理</a>
+                       <!-- <a class="layui-btn layui-btn-xs" lay-event="success" data-pk="{{d.id}}">
+                            <i class="layui-icon layui-icon-website"></i>处理</a>-->
+                        <a class="layui-btn layui-btn-xs" lay-event="fail" data-pk="{{d.id}}">
+                            <i class="layui-icon layui-icon-website"></i>忽略</a>
+                       <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" data-pk="{{d.id}}">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>-->
+                        {{# } }}
+
+                        {{# if (d.mv_is_delete == 1) { }}
+                        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="recovery" data-pk="{{d.id}}">
+                            <i class="layui-icon layui-icon-website"></i>视频撤销</a>
+                        {{# } }}
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php echo Html::css(LAY_UI_STATIC . 'table-member.css') ?>
+<script src="<?php echo LAY_UI_STATIC ?>layuiadmin/layui-xtree.js"></script>
+<style>
+    .layui-xtree-item > .layui-xtree-item {
+        display: inline-block;
+        width: 80px;
+    }
+
+    .layui-xtree-item > .layui-form-checkbox {
+        display: block;
+    }
+    .layui-table-body td .layui-table-cell{
+        height: 60px;
+        line-height: 20px;
+    }
+</style>
+<script type="text/html" id="cover-title">
+    <div class="td-cover-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position: relative">
+        <a style="display: inline-block;width: 100px;position: absolute;left: 0" class="layui-btn-xs"
+           href="javascript:;" onclick="url_cover_show('{{=d.thumb_cover_url}}')"><img
+                    src="{{url_cover(d.thumb_cover_url)}}"/></a>
+        <p style="display: inline-block;margin-left: 110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+            {{=d.title}}</p>
+    </div>
+</script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend('listAjax') ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            // {type: 'checkbox', fixed: 'left'}
+            {field: 'id', title: 'id', width: 60}
+            , {title: '发布者', width: 230, field: 'uuid'}
+            , {
+                field: 'mv_title', width: 280, title: '视频信息', templet: function (d) {
+                    return "<span style='color: orangered'>[" + d.mv_id + "] " + d.mv_title + "<br>作者:<em>"+d.mv_username+"</em><br>uuid:<em>"+d.mv_uid+"</em></span>";
+                }
+            }
+            , {
+                field: 'mv_img_thumb', title: '视频封面', width: 140, templet: function (d) {
+                    return '<img src="' + d.mv_img_thumb + '" style="width: 100px;height: 80px;" onclick="show_img(\'' + d.mv_img_thumb + '\')">';
+                }
+            }
+            , {
+                field: 'mv_pre_href', title: '播放源', width: 80, templet: function (d) {
+                    return "<a class='layui-btn layui-btn-sm layui-btn-xs' onclick=\"previewVideo('" + d.mv_pre_href + "')\"><i class='layui-icon layui-icon-play'></i>Pre</a>";
+                }
+            }
+//            , {field: 'mv_is_delete', width: 100, title: '视频状态', type: 'enum', value: {"0": "", "1": "已删"}}
+            , {field: 'status', width: 100,title: '举报状态', type: 'enum', value:<?php echo json_encode(MvReportModel::STATUS); ?>}
+            , {field: 'content', title: '举报内容'}
+            , {field: 'mv_coins', title: '金币',width: 80}
+            , {fixed: 'right',  title: '操作',width: 240, align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        "event": {
+            "operate": {
+                "success": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('确定要处理吗?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend('save')?>", {"_pk": $this.data('pk'), 'status': 1})
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                },
+                "recovery": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    //var tr_index = $this.parents("tr").attr('data-index');
+                    layer.confirm('确定撤销所有对该视频的举报处理，并标记所有对此视频的举报为忽略', function (index) {
+                        layer.close(index);
+                        var index2 = layer.load(0, {time: 3 * 1000, shade: [0.5, '#666']});
+                        ajax.post("<?php echo url_backend('recovery')?>", {"_pk": $this.data('_pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,Util.reload);
+                                    //$("tr[data-index='" + tr_index + "']").remove();
+                                }
+                            })
+                    });
+                },
+                "fail": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    var tr_index = $this.parents("tr").attr('data-index');
+                    layer.confirm('确定忽略视频处理，批量并标记所有对此视频的举报为忽略', function (index) {
+                        layer.close(index);
+                    var index2 = layer.load(0, {time: 3 * 1000, shade: [0.5, '#666']});
+                        ajax.post("<?php echo url_backend('refuse')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                    $("tr[data-index='" + tr_index + "']").remove();
+                                }
+                            })
+                    });
+                },
+                "del-mv": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    var tr_index = $this.parents("tr").attr('data-index');
+                    layer.confirm('确定要删除视频，批量并标记所有对此视频的举报为已处理?', function (index) {
+                        layer.close(index);
+
+                        var in2 = layer.load(0, {time: 3 * 1000, shade: [0.5, '#666']});
+                        ajax.post("<?php echo url_backend('delMv')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(in2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                    $("tr[data-index='" + tr_index + "']").remove();
+                                }
+                            })
+                    });
+                },
+            }
+        }
+    });
+
+
+</script>
+
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

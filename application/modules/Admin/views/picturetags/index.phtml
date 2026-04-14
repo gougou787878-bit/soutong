@@ -1,0 +1,254 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">标签</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[name]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标签：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="标签" name="name"
+                           value="{{=d.name }}" class="layui-input">
+
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="排序" name="sort_num"
+                           value="{{=d.sort_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">描述：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="描述" name="description" class="layui-textarea">{{=d.description }}</textarea>
+            </div>
+
+        </div>
+
+        <!-- <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">首页显示：</label>
+                <div class="layui-input-inline">
+                    <?php /*echo Layui::select('home' , TagsModel::HOME , ['data-value' => '{{=d.home}}']) */?>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">列表显示：</label>
+                <div class="layui-input-inline">
+                    <?php /*echo Layui::select('status' , TagsModel::STATUS , ['data-value' => '{{=d.status}}']) */?>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户上传：</label>
+                <div class="layui-input-inline">
+                    <?php /*echo Layui::select('user_up' , TagsModel::USER_UP , ['data-value' => '{{=d.user_up}}']) */?>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标签封面图：</label>
+                <div class="layui-input-inline">
+                    <?php /*echo Layui::uploadPos('img_url_full', 'img_url', 40, 40, 'ads') */?>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">横向封面：</label>
+                <div class="layui-input-inline">
+                    <?php /*echo Layui::uploadPos('horizontal_img_url', 'horizontal_img', 40, 40, 'ads') */?>
+                </div>
+            </div>
+        </div>-->
+
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标签封面图：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.img_url }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标签：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.name }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.sort_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">updated_at：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">竖版封面：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.y_cover }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            // {type: 'checkbox', fixed: 'left'}
+            {field: 'id', title: 'id',sort:true,width:200}
+            /* , {
+                 field: 'img_url_full', title: '封面图', width: 200, templet: function (d) {
+                     if (d.img_url) {
+                         return '<img src="' + d.img_url_full + '" style="width: 100px;height: 80px;" onclick="show_img(\'' + d.img_url_full + '\')">';
+                     } else {
+                         return '--';
+                     }
+                 }
+             }*/
+            , {field: 'name', title: '标签'}
+            //, {field: 'description', title: '描述', width: 200}
+            , {field: 'sort_num', title: '排序', width: 200,edit:true,sort:true}
+            /* , {field: 'home', title: '首页显示'}
+             , {field: 'status', title: '列表显示'}
+             , {field: 'user_up', title: '用户上传'}*/
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

@@ -1,0 +1,228 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><span style="color: palevioletred;font-weight: bold">版本管理</span>
+                </div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">版本</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[version]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                       <!-- <div class="layui-inline">
+                            <label class="layui-form-label">平台</label>
+                            <div class="layui-input-block">
+                                <?php /*echo Layui::search("where[platform]", VersionModel::PLAT) */?>
+                            </div>
+                        </div>-->
+                        <div class="layui-inline">
+                            <label class="layui-form-label">系统</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search("where[type]", VersionModel::TYPE) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search("where[status]", VersionModel::STATUS) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">域名跟随</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search("where[custom]", VersionModel::CUSTOM_TIPS) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新缓存</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: palevioletred">版本信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本号：</label>
+            <div class="layui-input-block">
+
+                <input lay-verify="required" placeholder="版本号" name="version"
+                       value="{{=d.version }}" class="layui-input">
+
+            </div>
+
+
+            <label class="layui-form-label">渠道：</label>
+            <div class="layui-input-inline">
+
+                <input placeholder="渠道判断" name="via"
+                       value="{{=d.via }}" class="layui-input">
+
+            </div>
+
+
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">系统：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select("type", VersionModel::TYPE, ['data-value' => '{{=d.type}}']) ?>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">下载连接：</label>
+            <div class="layui-input-block">
+                <textarea lay-verify="required" placeholder="下载连接" name="apk" class="layui-textarea" style="height: 200px">{{=d.apk }}</textarea>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">更新说明：</label>
+            <div class="layui-input-block">
+                <textarea lay-verify="required" placeholder="更新说明" name="tips"
+                          class="layui-textarea" style="height: 200px">{{=d.tips }}
+                </textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select("status", VersionModel::STATUS, ['data-value' => '{{=d.status}}']) ?>
+
+            </div>
+            <label class="layui-form-label">强制：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select("must", VersionModel::MUST, ['data-value' => '{{=d.must}}']) ?>
+
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">域名跟随：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select("custom", VersionModel::CUSTOM_TIPS, ['data-value' => '{{=d.custom}}']) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<?php echo \Layui::renderJs() ?>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id',width: 100}
+            , {field: 'version', title: '版本',width: 100,templet:function (d) {
+                    return "<span style='color: palevioletred'>"+d.version+"</span>"
+                }}
+            , {field: 'type', title: '系统',type:'enum',value:<?php echo json_encode(VersionModel::TYPE) ?>,width: 100}
+            , {field: 'apk', title: '下载',templet:function (d) {
+                    return "<span style='color: palevioletred'>"+d.apk+"</span>"
+                }}
+            //, {field: 'tips', title: '说明'}
+            //, {field: 'bundle_id', title: 'ios企业安装包id'}
+            , {field: 'must', title: '强更',type:'enum',value:<?php echo json_encode(VersionModel::MUST) ?>,width: 100}
+            //, {field: 'created_at', title: '创建时间'}
+            , {field: 'via', title: '渠道',width: 100}
+            , {field: 'status', title: '状态', type: "switch", "value": "1|0", edit: true,width: 120}
+            , {field: 'custom', title: '域名跟随', type: "switch", "value": "1|0", edit: true,width: 120}
+            // , {field: 'message', title: '系统维护公告'}
+            // , {field: 'mstatus', title: '系统公告状态 0 没有 1通知 2禁用'}
+            // , {field: 'from_id', title: '更新起点'}
+            // , {field: 'to_id', title: '更新终点'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            "toolbar": {
+                "refresh": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.confirm('刷新缓存?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend('refresh')?>")
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                },
+            }
+        }
+    });
+</script>
+
+
+<?php importView("fooler.phtml"); ?>

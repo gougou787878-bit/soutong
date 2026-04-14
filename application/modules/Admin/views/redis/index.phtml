@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>redis gui</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style type="text/css">
+        * {
+            font-family: Microsoft Yahei, Tahoma, Arial
+        }
+
+        body {
+            margin: 0 auto;
+            background-color: #fafafa;
+            text-align: center;
+            font-size: 12px;
+            font-family: Tahoma, Arial
+        }
+
+        body, h1 {
+            padding: 0
+        }
+
+        h1 {
+            margin: 0;
+            color: #333;
+            font-size: 26px;
+            font-family: Lucida Sans Unicode, Lucida Grande, sans-serif
+        }
+
+        h1 small {
+            font-weight: 700;
+            font-size: 11px;
+            font-family: Tahoma
+        }
+
+        a {
+            color: #666
+        }
+
+        a, a.black {
+            text-decoration: none
+        }
+
+        a.black {
+            color: #000
+        }
+
+        table {
+            clear: both;
+            margin: 0 0 10px;
+            padding: 0;
+            width: 100%;
+            border-collapse: collapse;
+            -webkit-box-shadow: 1px 1px 1px #ccc;
+            -moz-box-shadow: 1px 1px 1px #ccc;
+            box-shadow: 1px 1px 1px #ccc;
+            border-spacing: 0;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=2, Direction=135, Color='#CCCCCC')"
+        }
+
+        th {
+            padding: 3px 6px;
+            border: 1px solid #ccc;
+            background: #dedede;
+            color: #626262;
+            text-align: left;
+            font-weight: 700
+        }
+
+        tr {
+            padding: 0;
+            background: #fff
+        }
+
+        td {
+            padding: 3px 6px;
+            border: 1px solid #ccc
+        }
+
+        .w_logo {
+            width: 13%;
+            color: #333;
+            FONT-SIZE: 15px
+        }
+
+        .w_logo, .w_top {
+            height: 25px;
+            text-align: center
+        }
+
+        .w_top {
+            width: 8.7%
+        }
+
+        .w_top:hover {
+            background: #dadada
+        }
+
+        .w_foot {
+            height: 25px;
+            background: #dedede;
+            text-align: center
+        }
+
+        input {
+            padding: 2px;
+            border-color: #666 #ccc #ccc #666;
+            border-style: solid;
+            border-width: 1px;
+            background: #fff;
+            font-size: 12px
+        }
+
+        input.btn {
+            padding: 0 6px;
+            height: 20px;
+            border: 1px solid #999;
+            background: #f2f2f2;
+            color: #666;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 20px
+        }
+
+        #page {
+            margin: 0 auto;
+            padding: 0 auto;
+            width: 86%;
+            text-align: left
+        }
+
+        .quick-execute {
+            color: red;
+        }
+    </style>
+    <script type="text/javascript" src="/static/admin/js/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $('.input-execute').click(function () {
+                $('#input-command').val($(this).data('command'));
+            })
+
+            $('.quick-execute').click(function () {
+                $('#input-command').val($(this).data('command'));
+                $('input.command[value=run]').click();
+            })
+
+
+            $('.command').click(function () {
+                $.post("/d.php?mod=redis&code=doCommend", $('#command').serializeArray())
+                    .then(function (jsonStr) {
+                        let json, msg;
+                        if (typeof (jsonStr) === "string") {
+                            json = JSON.parse(jsonStr)
+                        } else {
+                            json = jsonStr;
+                        }
+                        msg = JSON.stringify(json.msg, null, "    ");
+                        if (json.status) {
+                            $('#result').text(msg).css('color', 'red');
+                        } else {
+                            $('#result').text(msg).css('color', 'green');
+                        }
+                    })
+                return false;
+            })
+        })
+    </script>
+</head>
+<body>
+<a name="w_top"></a>
+<div id="page">
+    <table>
+        <tr>
+            <th class="w_logo">Redis-GUI</th>
+            <?php foreach ($navList as $nav): ?>
+                <th class="w_top">
+                    <a href="javascript:;" class="input-execute"
+                       data-command="<?php echo $nav['command'] ?>"><?php echo $nav['name'] ?></a>
+                </th>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+    <!--服务器相关参数-->
+    <table>
+        <tr>
+            <th colspan="4">服务器参数</th>
+        </tr>
+        <tr>
+            <td>服务器系统</td>
+            <td colspan="3"><?php echo $config['os'] ?></td>
+        </tr>
+        <tr>
+            <td>服务地址</td>
+            <td colspan="3"><?php echo $server_hosts ?></td>
+        </tr>
+        <tr>
+            <td>服务端口</td>
+            <td colspan="3"><?php echo $config['tcp_port'] ?></td>
+        </tr>
+        <?php if (isset($config['slave'])): ?>
+            <tr>
+                <td>slave</td>
+                <td colspan="3">
+                    <?php foreach ($config['slave'] as $item): ?>
+                        <?php echo $config['slave0'] ?><br>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <td>前缀</td>
+            <td colspan="3"><?php echo $server_prefix ?></td>
+        </tr>
+
+    </table>
+
+    <form id="command" method="post">
+        <table>
+            <tr>
+                <th colspan="3">命令执行</th>
+            </tr>
+            <tr>
+                <td width="15%">执行的命令</td>
+                <td width="70%">
+                    <textarea type="text" id="input-command" name="command"
+                              style="width: 99.5%;height: 100px;resize: none"></textarea>
+                    <a href="javascript:;" data-command="INFO SERVER" class="quick-execute">INFO</a> |
+                    <a href="javascript:;" data-command="ping" class="quick-execute">PING</a> |
+<!--                    <a href="javascript:;" data-command="keys *" class="quick-execute">KEYS</a> |-->
+                    <a href="javascript:;" data-command="slowlog get 10" class="quick-execute">SLOWLOG</a> |
+                    <a href="javascript:;" data-command="TIME" class="quick-execute">TIME</a> |
+                    <a href="javascript:;" data-command="client list" class="quick-execute">CLIENTS</a>
+                </td>
+                <td width="15%">
+                    <input class="command btn" type="submit" name="act" value="run" style="margin-bottom: 10px"/><br>
+                    <input class="command btn" type="submit" name="act" value="Lua"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="15%">执行结果</td>
+                <td width="75%" colspan="2" style="word-wrap:break-word;word-break:break-all;">
+                    <pre id="result" style="width: 95.5%;font-size: 14px;white-space: pre-wrap;word-wrap: break-word;">
+                    </pre>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <table>
+        <tr>
+            <td class="w_foot"><A HREF="javascript:;" target="_blank">Redis GUI</A></td>
+            <td class="w_foot">Processed in 1.0021 seconds. 0.54MB memory usage.</td>
+            <td class="w_foot"><a href="#w_top">返回顶部</a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[title]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">父级ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[parent]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], AiNavModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标题：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="标题" name="title"
+                           value="{{=d.title }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('cover', 'cover') ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('type', AiNavModel::TYPE_TIPS,['data-value' => '{{=d.type}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">父级ID：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="父级ID" name="parent"
+                           value="{{=d.parent }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('status', AiNavModel::STATUS_TIPS,['data-value' => '{{=d.status}}']) ?>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="排序" name="sort"
+                           value="{{=d.sort }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述：</label>
+            <div class="layui-input-block">
+                <input placeholder="描述" name="desc" value="{{=d.desc }}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/html" id="a1">
+    <div style="display: inline-block;flex-direction: row;align-items:center;">
+        <img style="width: 50px;height:50px;" title="封面"  alt="封面" src="{{d.cover}}" onclick="show_img('{{d.cover}}')">
+    </div>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'title', title: '标题'}
+            , {field: 'desc', title: '描述'}
+            , {field: 'parent', title: '父级ID'}
+            , {field: 'cover', title: '封面图',templet:'#a1',width:100}
+            , {field: 'type_str', title: '类型'}
+            , {field: 'status', title: '状态', type: "switch", value: "1|0", edit: true}
+            , {field: 'sort', title: '排序', edit:true, sort:true}
+            , {field: 'created_at', title: '创建时间'}
+            , {field: 'updated_at', title: '更新时间'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

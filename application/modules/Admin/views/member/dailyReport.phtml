@@ -1,0 +1,71 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+    <tbody>
+    <tr class="header">
+        <td class="altbg1" width="300px">
+            <a href="d.php?mod=user&code=dailyReport&rank=yestoday">昨日</a> /
+            <a href="d.php?mod=user&code=dailyReport&rank=week">本周</a> /
+            <a href="d.php?mod=user&code=dailyReport&rank=pre_week">上周</a> /
+            <a href="d.php?mod=user&code=dailyReport&rank=month">本月</a> /
+        </td>
+        <form action="d.php?mod=user&code=dailyReport" method="post">
+            <td class="altbg2">
+                <input value="<?=$date_start;?>" type="text" name="date_start" id="date-start" readonly placeholder="点击选择开始日期">&nbsp;|&nbsp;
+                <input value="<?=$date_end;?>" type="text" name="date_end" id="date-end" readonly placeholder="点击选择结束日期">
+                <input class="button lf" type="submit" name="setting_submit" value=" 查 询 ">
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>时间</td>
+        <td>访问分享推广人数</td>
+        <td>访问影片分享人数</td>
+        <td>成功邀请人数【发起邀请】</td>
+        <td>受邀成功人数【安装人数】</td>
+        <td>新增用户</td>
+        <td>活跃用户人数</td>
+        <td>成功邀请人数/活跃用户</td>
+        <td>受邀成功人数/成功邀请人数</td>
+        <td>手机绑定率</td>
+    </tr>
+    <?php if($returndata):?>
+    <!--{loop $returndata $k $v}-->
+    <tr>
+        <td><?=$v['date_at'];?></td>
+        <td><?=$v['visit_web'];?></td>
+        <td><?=$v['visit_mv'];?></td>
+        <td><?=$v['invited_num'];?></td>
+        <td><?=$v['reg_invited_num'];?></td>
+        <td><?=$v['reg_num']}【ios:{$v['reg_ios_num'];?>&nbsp;&nbsp;android:$v['reg_android_num']】</td>
+        <td><?=$v['active_num']}【ios:{$v['active_ios_num'];?> &nbsp;&nbsp;android:$v['active_android_num']】</td>
+        <td><?=$v['fordown_active'];?></td>
+        <td><?=$v['rateing_post'];?></td>
+        <td><?=$v['bind_rating'];?></td>
+    </tr>
+    <!--<?php endforeach; ?>-->
+    <?php else:?>
+    <tr>
+        <td colspan="16">暂无数据</td>
+    </tr>
+    <?php endif;?>
+</table>
+<br>
+<?=$page_arr['html'];?>
+<br>
+<br>
+<script>
+    laydate.render({
+        elem: '#date-start'
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#date-end'
+        ,type: 'datetime'
+    });
+</script>
+</body>
+</html>

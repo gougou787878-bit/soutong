@@ -1,0 +1,13 @@
+### 用户个人中心
+POST {{host}}/api/users/hasPhone
+Content-Type: application/json
+
+{
+  "phone": "15882469862",
+  "mobile_prefix": "+86"
+}
+
+###
+
+
+

@@ -1,0 +1,756 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">帖子ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[seed_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">pid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[pid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户aff</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[aff]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">评论内容</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[comment]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态
+                            </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]',
+                                    merge_array(['' => '全选'], SeedPostCommentModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户ip</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[ipstr]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">定位城市</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[cityname]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">置顶</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_top]',
+                                    merge_array(['' => '全选'], PostCommentModel::TOP_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <!--<button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>-->
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="passSelect" data-pk="id">批量通过</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="refuseSelect" lay-form="refuseSelect" data-pk="id">批量拒绝</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <!-- <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>-->
+                        <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                             <i class="layui-icon layui-icon-edit"></i>修改</a>-->
+                        {{# if(d.status == 0 ) { }}
+                        <a class="layui-btn layui-btn-xs" lay-event="pass" data-pk="{{=d.id}}" data-flag="ban">
+                            通过</a> ｜
+                        <a class="layui-btn layui-btn-xs" lay-event="refuse" data-pk="{{=d.id}}" data-flag="black">
+                            拒绝</a>
+                        {{# } }}
+                        <a class="layui-btn layui-btn-xs" lay-event="blackdo" data-pk="{{=d.id}}" data-flag="ban">
+                            一键禁言</a>
+                        <a class="layui-btn layui-btn-xs" lay-event="blackdo" data-pk="{{=d.id}}" data-flag="black">
+                            一键拉黑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="reviewSelect">
+    <form class="layui-form form-dialog" action="" lay-filter="form-save" style="margin-top: 20px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">审核：</label>
+            <div class="layui-input-inline">
+                <select name="review_status" data-value="1">
+                    <option value="{{PostCommentModel::STATUS_PASS}}">通过</option>
+                    <option value="{{PostCommentModel::STATUS_UNPASS}}">拒绝</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">原因：</label>
+            <div class="layui-input-inline">
+                <select name="review_reason" data-value="">
+                    <option value=""></option>
+                    {%html_options options=$reasons%}
+                </select>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帖子ID：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="帖子ID" name="seed_id"
+                           value="{{=d.seed_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论ID,默认0(第一层评论)：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="评论ID,默认0(第一层评论)" name="pid"
+                           value="{{=d.pid }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户aff：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户aff" name="aff"
+                           value="{{=d.aff }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">留言内容：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="留言内容" name="comment"
+                           value="{{=d.comment }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0:待审核
+                    1:审核通过
+                    2.未通过
+                    3.禁言
+                    ：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="0:待审核
+1:审核通过
+2.未通过
+3.禁言
+" name="status"
+                           value="{{=d.status }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">被回复者是否已读：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="被回复者是否已读" name="is_read"
+                           value="{{=d.is_read }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">此条评论点赞数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="此条评论点赞数量" name="like_num"
+                           value="{{=d.like_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="视频数量" name="video_num"
+                           value="{{=d.video_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="图片数量" name="photo_num"
+                           value="{{=d.photo_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户ip：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户ip" name="ipstr"
+                           value="{{=d.ipstr }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">定位城市：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="定位城市" name="cityname"
+                           value="{{=d.cityname }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">被举报次数：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="被举报次数" name="complain_num"
+                           value="{{=d.complain_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">拒绝通过原因：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="拒绝通过原因" name="refuse_reason"
+                           value="{{=d.refuse_reason }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">created_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="created_at" name="created_at"
+                           value="{{=d.created_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">updated_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="updated_at" name="updated_at"
+                           value="{{=d.updated_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">资源是否处理完 0未处理 1已处理：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="资源是否处理完 0未处理 1已处理" name="is_finished"
+                           value="{{=d.is_finished }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否置顶 0未置顶 1已置顶：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="是否置顶 0未置顶 1已置顶" name="is_top"
+                           value="{{=d.is_top }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帖子ID：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.seed_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论ID,默认0(第一层评论)：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.pid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户aff：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.aff }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">留言内容：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.comment }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0:待审核
+                    1:审核通过
+                    2.未通过
+                    3.禁言
+                    ：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.status }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">被回复者是否已读：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_read }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">此条评论点赞数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.like_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.video_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.photo_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户ip：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.ipstr }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">定位城市：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.cityname }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">被举报次数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.complain_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">拒绝通过原因：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.refuse_reason }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">created_at：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">updated_at：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">资源是否处理完 0未处理 1已处理：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_finished }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否置顶 0未置顶 1已置顶：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_top }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="refuseSelect" data-h="480" data-w="700" layer-dialog="确认,取消"
+        data-option="{title:'拒绝申请',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>审核不通过</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择拒绝的理由：</label>
+            <div class="layui-input-block">
+                <select name="refused" class="refused layui-select" id="refused" data-id="{{d.id}}">
+                    <option value="">选择拒绝理由</option>
+                    <option value="评论植入广告或联系方式。">1.评论植入广告或联系方式。</option>
+                    <option value="评论内容标题和主题不符。">2.评论内容标题和主题不符。</option>
+                    <option value="评论不适用抖阴MAX'',含暴力/血腥/未成年等违反国际法行为">3.评论不适用抖阴MAX'',含暴力/血腥/未成年等违反国际法行为
+                    </option>
+                    <option value="其他">4.其他</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="comment_ids" value="">
+            <button class="layui-btn submit" lay-submit="" lay-filter="refuseSelect"></button>
+        </div>
+    </form>
+</script>
+<script id="a1">
+    {{d.seed_id}}   |  {{d.pid}}
+</script>
+<script type="text/html" id="a2">
+    <div class="td-cover-title" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position: relative">
+        <img onclick="show_img('{{d.user_thumb}}')" width="100" height="100" src="{{d.user_thumb}}">
+    </div>
+    <hr/>
+    aff：<span class="st">{{d.aff}}</span>
+    <hr/>
+    昵称：<span class="st">{{d.user_nickname}}</span>
+</script>
+<?php
+$w = [];
+if(isset($_GET['seed_id']) && $_GET['seed_id']){
+    $w['where[seed_id]'] = (int)$_GET['seed_id'];
+}
+?>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax",$w) ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id', sort: true, width: 100}
+            , {field: 'seed_id', title: '帖子ID|pid', width: 100,templet:'#a1'}
+            // , {field: 'pid', title: '评论ID,默认0(第一层评论)'}
+            , {field: 'aff', title: '用户信息', width: 200, templet:'#a2'}
+            , {field: 'comment', title: '留言内容'}
+            // , {field: 'status', title: '0:待审核'}
+            // , {field: 'is_read', title: '被回复者是否已读'}
+            //, {field: 'like_num', title: '此条评论点赞数量'}
+            //, {field: 'video_num', title: '视频数量'}
+            //, {field: 'photo_num', title: '图片数量'}
+            , {field: 'ipstr', title: '用户ip', width: 100}
+            , {field: 'cityname', title: '定位城市', width: 100}
+            //, {field: 'complain_num', title: '被举报次数'}
+            , {
+                field: 'status',
+                width: 80,
+                title: '状态',
+                type: 'enum',
+                value:<?php echo json_encode(PostCommentModel::STATUS_TIPS)?>}
+            , {field: 'is_top', title: '置顶', type: "switch", value: "1|0", edit: true, width: 120}
+            // , {field: 'refuse_reason', title: '拒绝通过原因'}
+            , {field: 'created_at', title: '创建时间',width: 150}
+            // , {field: 'updated_at', title: 'updated_at'}
+            // , {field: 'is_finished', title: '资源是否处理完 0未处理 1已处理'}
+            , {fixed: 'right', width: 340, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            'toolbar': {
+                addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    xx.config('event.renderTree', xx.emptyFn()).call(this, obj, table, ajax, laytpl, layerEle, form, $, nextFn)
+                },
+                passSelect: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+
+                    layer.confirm('确定审核通过吗?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend("passAll") ?>", {
+                            "ids": pkValAry.join(','),
+                        })
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, function (){
+                                        Util.reload();
+                                    });
+                                }
+                            })
+                    });
+                },
+                refuseSelect: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "comment_ids": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('batchRefuse')?>", form, ajax, 'refuseSelect', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    Util.reload();
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+            },
+            operate: {
+                /**
+                 * 通过
+                 */
+                "pass": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('真的通过审核吗?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend("doPass") ?>", {"id": $this.data('pk')})
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                },
+                /**
+                 * 拉黑
+                 */
+                "blackdo": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('确定当前操作?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend("doBlack") ?>", {
+                            "id": $this.data('pk'),
+                            'flag': $this.data('flag')
+                        })
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                },
+                /**
+                 * 拒绝
+                 */
+                "refuse": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    var index3 = layer.load(0, {time: 3 * 1000, shade: [0.5, '#666']});
+                    ajax.post("<?php echo url_backend("doReject") ?>", {"id": $this.data('pk')})
+                        .then(function (json) {
+                            layer.close(index);
+                            layer.close(index);
+                            layer.close(index3);
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg, Util.reload);
+                            }
+                        })
+
+                }
+            }
+        },
+    })
+    ;
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

@@ -1,0 +1,127 @@
+### 首页接口
+POST {{host}}/wapi/mv/index
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "sort": "recommend",
+  "version": "5.2.0",
+  "page": 3,
+  "token": ""
+}
+
+### 视频导航详情
+POST {{host}}/wapi/mv/tab_detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "id": 1,
+  "version": "5.2.0"
+}
+
+### 视频列表接口
+POST {{host}}/wapi/mv/list_mvs
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "sort": "new",
+  "id": 1,
+  "page": 1,
+  "version": "5.2.0"
+}
+
+### 视频详情
+POST {{host}}/wapi/mv/detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "id": 143492,
+  "version": "5.2.0"
+}
+
+### 视频详情页推荐视频
+POST {{host}}/wapi/mv/recommend_mvs
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "id": 38735,
+  "version": "5.2.0"
+}
+
+### 视频评论列表接口
+POST {{host}}/wapi/mv/list_comments
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "id": 38735,
+  "version": "5.2.0"
+}
+
+### 发布视频评论接口
+POST {{host}}/wapi/mv/comment
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "mv_id": 38735,
+  "c_id": 4,
+  "content": "旺仔联盟爆插刺青骚狗海冬冬，无套中出 ！",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207D37F294A11C2D99"
+}
+
+### 发布视频评论接口
+POST {{host}}/wapi/mv/search
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "word": "自拍"
+}
+
+### 视频点赞/收藏
+POST {{host}}/wapi/mv/favorite
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "id": "38735",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207D37F294A11C2D99"
+}
+
+### 视频点赞列表
+POST {{host}}/wapi/mv/list_favorite
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207D31F891A0132D99"
+}

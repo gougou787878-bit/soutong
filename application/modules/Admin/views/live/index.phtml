@@ -1,0 +1,742 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入ID"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[username]" placeholder="请输入用户名"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[model_id]" placeholder="请输入用户ID"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">国家</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[country]" placeholder="请输入国家"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">语言</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[language]" placeholder="请输入语言"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">标签</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[tag]" placeholder="请输入标签"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">主题</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[theme_id]', merge_array(['' => '全部'], $themes)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">性别</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[gender]', merge_array(['' => '全部'], LiveModel::GENDER_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">秀类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[show]', merge_array(['' => '全部'], LiveModel::SHOW_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">收费类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]', merge_array(['' => '全部'], LiveModel::TYPE_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], LiveModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">原观众排序</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[view_oct]" lay-search="">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">原收藏排序</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[favorite_oct]" lay-search="">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">排序</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[sort]" lay-search="">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">真观看</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[view_ct]" lay-search="">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">真收藏</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[favorite_ct]" lay-search="">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">-->
+<!--                                添加-->
+<!--                            </button>-->
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>-->
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddCoins" data-pk="id" lay-form="batch-add-coins">设置类型</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="batch-add-coins" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'批量设置VIP/金币/专属',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">批量设置VIP/金币</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('type', LiveModel::TYPE_TIPS) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">金币</label>
+            <div class="layui-input-inline">
+                <input name="coins" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="live_ids">
+            <button class="layui-btn submit" lay-submit="" lay-filter="addBatchCoinsSave"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">收费金币：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="收费金币" name="coins"
+                           value="{{=d.coins }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="评论数" name="comment_ct"
+                           value="{{=d.comment_ct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">主播国家：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="主播国家" name="country"
+                           value="{{=d.country }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">cover：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="cover" name="cover"
+                           value="{{=d.cover }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">created_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="created_at" name="created_at"
+                           value="{{=d.created_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">原始封面地址：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="原始封面地址" name="f_cover"
+                           value="{{=d.f_cover }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">随机收藏：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="随机收藏" name="favorite_ct"
+                           value="{{=d.favorite_ct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">真收藏：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="真收藏" name="favorite_fct"
+                           value="{{=d.favorite_fct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">原站收藏数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="原站收藏数" name="favorite_oct"
+                           value="{{=d.favorite_oct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帧高：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="帧高" name="fr_height"
+                           value="{{=d.fr_height }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帧宽：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="帧宽" name="fr_width"
+                           value="{{=d.fr_width }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">主播性别：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="主播性别" name="gender"
+                           value="{{=d.gender }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">hls：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="hls" name="hls"
+                           value="{{=d.hls }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">描述：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="描述" name="intro"
+                           value="{{=d.intro }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">语言：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="语言" name="language"
+                           value="{{=d.language }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">主播ID：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="主播ID" name="model_id"
+                           value="{{=d.model_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">已支付金币数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="已支付金币数" name="pay_coins"
+                           value="{{=d.pay_coins }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">支付次数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="支付次数" name="pay_ct"
+                           value="{{=d.pay_ct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏金额：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="打赏金额" name="reward_coins"
+                           value="{{=d.reward_coins }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏次数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="打赏次数" name="reward_ct"
+                           value="{{=d.reward_ct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="状态" name="show"
+                           value="{{=d.show }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="排序" name="sort"
+                           value="{{=d.sort }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="状态" name="status"
+                           value="{{=d.status }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标签：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="标签" name="tag"
+                           value="{{=d.tag }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">thumb：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="thumb" name="thumb"
+                           value="{{=d.thumb }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">收费类型：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="收费类型" name="type"
+                           value="{{=d.type }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">updated_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="updated_at" name="updated_at"
+                           value="{{=d.updated_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">username：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="username" name="username"
+                           value="{{=d.username }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">随机浏览：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="随机浏览" name="view_ct"
+                           value="{{=d.view_ct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">真浏览：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="真浏览" name="view_fct"
+                           value="{{=d.view_fct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">原站观众数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="原站观众数" name="view_oct"
+                           value="{{=d.view_oct }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" id="play-info">
+    <div style="line-height: normal">
+        <img style="display: inline-block;max-width: 100px;max-height: 100px;margin-bottom: 3px;margin-top: 15px"
+             onclick="clickShowImage(this)"
+             src="{{d.cover||''}}">
+    </div>
+    <div style="text-align: left;;height: 25px">
+        <a
+            href="https://zh.stripchat.com/{{=d.username}}" target="_blank">原地址</a>&nbsp;&nbsp;&nbsp;
+        <span>{{d.size_str}}</span>
+    </div>
+    {{#  layui.each(d.streams, function(index, item){ }}
+    <div style="display: flex;align-items: center;">
+        播放:&nbsp;&nbsp;&nbsp;{{#  layui.each(item, function(index, item){ }}
+<!--        <a href="{{=item.url}}" target="_blank">{{item.label}}</a>&nbsp;&nbsp;&nbsp;-->
+        <a
+            href="javascript:;" onclick="previewVideo('{{=item.url}}')">{{item.label}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </a>&nbsp;&nbsp;&nbsp;
+        {{#  }); }}
+    </div>
+    {{#  }); }}
+</script>
+<script type="text/html" id="info">
+    <div style="display: flex">
+        <div style="line-height: normal;display: inline-block;padding: 5px;margin-top: 20px">
+            <img style="display: inline-block;max-width: 60px;width: 60px;height:60px;overflow: hidden"
+                 onclick="clickShowImage(this)" src="{{=d.thumb}}">
+        </div>
+        <div>
+            主播国家:&nbsp;&nbsp;{{d.country}}<br>
+            主播性别:&nbsp;&nbsp;{{d.gender}}<br>
+            主播标识:&nbsp;&nbsp;{{d.model_id}}<br>
+            主播名称:&nbsp;&nbsp;{{d.username}}<br>
+            主播语言:&nbsp;&nbsp;{{d.language}}<br>
+            主播标签:&nbsp;&nbsp;{{d.tag}}<br>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="stat">
+    <div style="text-align: left">
+        观众数:&nbsp;&nbsp;{{d.view_oct}}<br>
+        收藏数:&nbsp;&nbsp;{{d.favorite_oct}}<br>
+        真观看:&nbsp;&nbsp;{{d.real_view_count}}<br>
+        真点赞:&nbsp;&nbsp;{{d.real_like_count}}<br>
+        真收藏:&nbsp;&nbsp;{{d.real_favorite_count}}<br>
+        评论数:&nbsp;&nbsp;{{d.comment_ct}}<br>
+    </div>
+</script>
+<script type="text/html" id="stat2">
+    <div style="text-align: left">
+        假观看:&nbsp;&nbsp;{{d.view_count}}<br>
+        假点赞:&nbsp;&nbsp;{{d.like_count}}<br>
+        假收藏:&nbsp;&nbsp;{{d.favorite_count}}<br>
+        已支次:&nbsp;&nbsp;{{d.pay_ct}}<br>
+        已付额:&nbsp;&nbsp;{{d.pay_coins}}<br>
+        打赏次:&nbsp;&nbsp;{{d.reward_ct}}<br>
+        打赏额:&nbsp;&nbsp;{{d.reward_coins}}<br>
+    </div>
+</script>
+<script type="text/html" id="attr-x">
+    创：{{d.created_at}}<br>
+    更：{{d.updated_at}}<br>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'info', title: '主播信息',templet:'#info'}
+            , {field: 'play-info', title: '直播信息',templet:'#play-info'}
+            , {field: 'type_str', title: '收费类型'}
+            , {field: 'coins', title: '金币'}
+            , {field: 'status', title: '状态', type: "switch", 'edit': true, text: "上架|下架", value: "1|0"}
+            , {field: 'sort', title: '排序', edit:true, sort:true}
+            , {field: 'show_str', title: '秀'}
+            , {field: 'stat1', title: '统计1',templet:'#stat'}
+            , {field: 'stat2', title: '统计2',templet:'#stat2'}
+            , {field: 'attr-x', title: '操作时间',templet:'#attr-x'}
+        ]],
+        event:{
+            toolbar:{
+                batchAddCoins: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "live_ids": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('set_attr')?>", form, ajax, 'addBatchCoinsSave', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

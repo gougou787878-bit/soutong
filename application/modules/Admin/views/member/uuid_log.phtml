@@ -1,0 +1,55 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a>设备交换记录</a></li>
+            <!--        <li><a  onclick="handleEdit(0);">靓号添加</a></li>-->
+        </ul>
+
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form action="d.php" method="get">
+
+                        <input type="hidden" name="mod" value="user">
+                        <input type="hidden" name="code" value="uuidLog">
+                        <div class="col-sm-3">
+                            <input type="text" name="uid" class="input-sm form-control input-s-sm "
+                                   value="<?= $uid ?? '' ?>" placeholder="请输入会员UID值...">
+                        </div>
+                            <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th align="center">ID</th>
+                <th>(UID)</th>
+                <th>设备类型</th>
+                <th>设备ID</th>
+                <th>旧UUID</th>
+                <th>新UUD</th>
+                <th>交换时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($data as $k => $vo): ?>
+                <tr>
+                    <td align="center"><?= $vo->id ?></td>
+                    <td><?php if ($vo->withMember): ?><?= $vo->withMember->nickname ?>(<?= $vo->withMember->uid ?>)<?php else: ?>用户不存在<?php endif; ?></td>
+                    <td><?= $vo->oauth_type ?></td>
+                    <td><?= $vo->oauth_id ?></td>
+                    <td><?= $vo->old_uuid ?></td>
+                    <td><?= $vo->new_uuid ?></td>
+                    <td><?= date('Y-m-d H:i:s', $vo->created_at); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="pagination"><?= $pape_arr['html'] ?></div>
+
+    </div>
+
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

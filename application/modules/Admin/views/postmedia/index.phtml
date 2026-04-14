@@ -1,0 +1,313 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">帖子ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[pid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">上传用户AFF</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[aff]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]', merge_array(['' => '请选着'], PostModel::TYPE_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加图片
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                       <!-- <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>-->
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                       <hr/>
+                       {{# if(d.media_flag == 1) { }}
+                       <a class="layui-btn  layui-btn-xs" data-pk="{{=d.id}}" lay-event="pass">
+                            <i class="layui-icon layui-icon-delete"></i>mp4切片</a>
+                       {{# } }}
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帖子ID：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="帖子ID" name="pid" value="{{=d.pid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片地址：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::uploadPos('media_url', 'media_url') ?>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频或图片地址：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.media_url }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频封面：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.cover }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面宽：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.thumb_width }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面高：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.thumb_height }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帖子ID：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.pid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上传用户AFF：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.aff }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型 1图片 2视频：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.type }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0 未转换 1 已转换 2 转换中：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.status }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频持续时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.duration }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">更新时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">关联类型 1帖子 2评论：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.relate_type }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<?php
+$w = [];
+if(isset($_GET['pid']) && $_GET['pid']){
+    $w['where[pid]'] = (int)$_GET['pid'];
+}
+?>
+
+<script type="text/html" id="a2">
+    <h3 style="white-space: pre-wrap;color: blue">标题：{{d.post['title']}}</h3>
+    <hr/>
+    <h4 style="white-space: pre-wrap;color: blue">编号：{{d.pid}}</h4>
+</script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax",$w) ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id',sort:true}
+            , {field: 'aff', title: '用户AFF',sort:true}
+            , {field: 'media_url', title: '视频或图片地址',templet:function (d){
+                    if (d.media_url) {
+                        if (d.media_flag == 0) {
+                            return '<img src="' + d.media_url_full + '" style="width: 40px;height: 40px;" onclick="show_img(\'' + d.media_url_full + '\')">';
+                        } else if (d.media_flag == 1) {// mp4
+                            return "<a class='layui-btn layui-btn-sm layui-btn-xs' onclick=\"previewVideo('" + d.media_url_full + "')\"><i class='layui-icon layui-icon-play'></i>MP4</a>"
+                        } else if (d.media_flag == 2) {// m3u8
+                            let html = "<a class='layui-btn layui-btn-sm layui-btn-xs' target='_blank' href='"
+                                + d.media_url_full + "'><i class='layui-icon layui-icon-play'></i>浏览器</a>"
+                            return html
+                        }
+                    }
+                   return '';
+
+                }}
+            , {field: 'cover', title: '封面', width: 80, templet: function (d) {
+                   if(d.cover){
+                    return '<img src="' + d.cover_url_full + '" style="width: 40px;height: 40px;" onclick="show_img(\'' + d.cover_url_full + '\')">';
+                   }
+                   return '';
+                }
+             }
+          //  , {field: 'thumb_width', title: '封面宽'}
+          //  , {field: 'thumb_height', title: '封面高'}
+            , {field: 'pid', title: '帖子',sort:true,templet:'#a2',width:300}
+
+            , {field: 'type_str', title: '类型'}
+            //, {field: 'created_at', title: '创建时间'}
+           , {field: 'status', title: '状态',type:'enum','value':<?php echo json_encode(PostMediaModel::STATUS_TIPS)?>}
+           // , {field: 'duration', title: '视频持续时间'}
+           // , {field: 'updated_at', title: '更新时间'}
+           // , {field: 'relate_type', title: '关联类型 1帖子 2评论'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event:{
+            operate:{
+                pass: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('确定要通过并且切片mp4吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('pass')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                },
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

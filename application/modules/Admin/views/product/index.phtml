@@ -1,0 +1,506 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }
+    .st {
+        color: #e641ff;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><span style="color: palevioletred;font-weight: bold">产品管理</span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[type]', ProductModel::TYPE); ?>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态 </label>
+                            <div class="layui-input-block">
+                                <div class="layui-input-block">
+                                    <?php echo Layui::search('where[status]', ProductModel::STAT); ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">升级卡 </label>
+                            <div class="layui-input-block">
+                                <div class="layui-input-block">
+                                    <?php echo Layui::search('where[is_upgrade]', ProductModel::UPGRADE_TIPS); ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+
+                        </div>
+                    </script>
+<!--                    <script type="text/html" id="operate-toolbar">-->
+<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">-->
+<!--                            <i class="layui-icon layui-icon-edit"></i>修改</a>-->
+<!--                        <a style="color: dodgerblue" lay-event="addRight" lay-form="topic-dialog" data-pk="{{=d.id}}">-->
+<!--                            权益管理</a>-->
+<!--                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">-->
+<!--                            <i class="layui-icon layui-icon-delete"></i>删除</a>-->
+<!--                    </script>-->
+                    <script type="text/html" id="operate-toolbar">
+                        <a lay-event="edit" lay-form="user-edit-dialog">
+                            修改</a>
+                        <hr>
+                        <a style="color: red" data-pk="{{=d.id}}" lay-event="del">
+                            删除</a>
+
+                        {{# if(d.type == <?php echo ProductModel::TYPE_VIP ?>){ }}
+                        <hr>
+                        <a style="color: dodgerblue" lay-event="addRight" lay-form="topic-dialog" data-pk="{{=d.id}}">
+                            权益管理</a>
+                        <hr><a style="color: #e641ff" lay-event="addPriv" lay-form="priv-dialog" data-pk="{{=d.id}}">
+                            权限设置</a>
+                        {{# } }}
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" data-h="800" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: palevioletred">产品信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('type', ProductModel::TYPE, ['data-value' => "{{=d.type}}"]) ?>
+
+            </div>
+            <label class="layui-form-label">vip等级：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('vip_level', ProductModel::VIP_LEVEL,
+                    ['data-value' => "{{=d.vip_level}}"]) ?>
+
+            </div>
+        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">免费看类型：</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                --><?php //echo Layui::select('free_day_type', ProductModel::FREE_TIPS, ['data-value' => "{{=d.free_day_type}}"]) ?>
+<!--            </div>-->
+<!---->
+<!--            <label class="layui-form-label">免费看天数</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input placeholder="免费观看天数" name="free_day" value="{{d.free_day||0 }}" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">升级卡：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('is_upgrade', ProductModel::UPGRADE_TIPS, ['data-value' => "{{=d.is_upgrade}}"]) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">支付方式：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('pay_type', ProductModel::PAY_TYPE, ['data-value' => "{{=d.pay_type}}"]) ?>
+
+
+            </div>
+
+            <label class="layui-form-label">产品状态：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('status', ProductModel::STAT, ['data-value' => "{{=d.status}}"]) ?>
+
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品名称：</label>
+            <div class="layui-input-inline">
+
+                <input lay-verify="required" placeholder="产品名称" name="pname"
+                       value="{{=d.pname }}" class="layui-input">
+
+            </div> <label class="layui-form-label">观影券<a href="#" style="color: red;font-weight: bold" title="赠送观影券只对vip商品有效">??</a>：</label>
+            <div class="layui-input-inline">
+
+                <input  placeholder="观影券" name="ticket"
+                       value="{{d.ticket||0 }}" class="layui-input">
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">图片：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadPos('img_url', 'img', 40, 40, 'ads') ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">VIP图标：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadPos('vip_icon_url', 'vip_icon', 40, 40, 'ads') ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">价格:单位分：</label>
+            <div class="layui-input-inline">
+
+                <input lay-verify="required" placeholder="价格:单位分" name="price"
+                       value="{{=d.price }}" class="layui-input">
+
+            </div>
+            <label class="layui-form-label">推价格:单位分：</label>
+            <div class="layui-input-inline">
+
+                <input lay-verify="required" placeholder="推广价格:单位分" name="promo_price"
+                       value="{{=d.promo_price }}" class="layui-input">
+
+            </div>
+
+        </div>
+
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">VIP天：</label>
+            <div class="layui-input-inline">
+
+                <input lay-verify="required" placeholder="VIP多少天" name="valid_date"
+                       value="{{d.valid_date||0 }}" class="layui-input">
+
+            </div>
+            <label class="layui-form-label">排序：</label>
+            <div class="layui-input-inline">
+                <input lay-verify="required" placeholder="排序" name="sort_order"
+                       value="{{=d.sort_order }}" class="layui-input">
+
+            </div>
+
+
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">钻石：</label>
+            <div class="layui-input-inline">
+
+                <input lay-verify="required" placeholder="多少钻石" name="coins"
+                       value="{{d.coins||0 }}" class="layui-input">
+
+            </div>
+            <label class="layui-form-label">赠送钻石：</label>
+            <div class="layui-input-inline">
+
+                <input lay-verify="required" placeholder="赠送多少钻石" name="free_coins"
+                       value="{{d.free_coins||0 }}" class="layui-input">
+
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">微信支付：</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="payway_wechat"  lay-skin="switch" lay-text="ON|OFF"  {{# if ( d.payway_wechat == 1 ) { }} checked {{# } }}>
+
+            </div>
+            <label class="layui-form-label">银联支付：</label>
+            <div class="layui-input-inline">
+
+                <input type="checkbox" name="payway_bank"  lay-skin="switch" lay-text="ON|OFF"  {{# if ( d.payway_bank == 1 ) { }} checked {{# } }}>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">支付宝：</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="payway_alipay"   lay-skin="switch" lay-text="ON|OFF"  {{# if ( d.payway_alipay == 1 ) { }} checked {{# } }}>
+
+            </div>
+            <label class="layui-form-label">VISA支付：</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="payway_visa"  lay-skin="switch" lay-text="ON|OFF"  {{# if ( d.payway_visa == 1 ) { }} checked {{# } }}>
+
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">数字￥：</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="payway_ecny"  lay-skin="switch" lay-text="ON|OFF"  {{# if ( d.payway_ecny == 1 ) { }} checked {{# } }}>
+            </div>
+            <label class="layui-form-label">新代理<a title="只支持金币类型大额产品">?</a>：</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="payway_agent"  lay-skin="switch" lay-text="ON|OFF"  {{# if ( d.payway_agent == 1 ) { }} checked {{# } }}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">赠送消息：</label>
+            <div class="layui-input-inline">
+
+                <input  placeholder="赠送消息" name="message"
+                       value="{{d.message||0 }}" class="layui-input">
+
+            </div>
+
+<!--            <label class="layui-form-label">赠送视频下载次数：</label>-->
+<!--            <div class="layui-input-inline">-->
+<!--                <input  placeholder="赠送视频下载次数" name="download_num" value="{{d.download_num||0 }}" class="layui-input">-->
+<!--            </div>-->
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">角标：</label>
+            <div class="layui-input-inline">
+                <input  placeholder="角标" name="corner_mark" value="{{d.corner_mark }}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品描述：</label>
+            <div class="layui-input-block">
+                <textarea name="description" rows="10" style="width: 700px" >{{d.description}}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="topic-dialog" data-h="800" data-w="700" layer-dialog="确认,取消"
+        data-option="{title:'产品权益设置',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">产品权益</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+
+                <?php foreach (ProductRightModel::getDataListForProduct() as $v):?>
+                    <input lay-skin="primary" {{# if(d.rightIds.indexOf(<?php echo $v['id']?>) !=-1 ){ }}checked="checked"{{# } }} title="<?php echo $v['id'] . " | " . $v['name'] . " | "  . $v['desc'];?>" name="right[]" value="<?php echo $v['id'];?>" type="checkbox" autocomplete="off" class="">
+                    <img src="<?php echo $v['img_url'];?>" style="width: 50px;height: 50px" />
+                    <br>
+                <?php endforeach;?>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="topicAddSave"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="priv-dialog" data-h="800" data-w="700" layer-dialog="确认,取消"
+        data-option="{title:'产品权限设置',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">产品权限</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <?php //echo Layui::checkbox('priv[]', PrivilegeModel::getDataList()) ?>
+                <?php foreach (PrivilegeModel::getDataListForProduct() as $v):?>
+                    <input lay-skin="primary" {{# if(d.privIds.indexOf(<?php echo $v['id']?>) !=-1 ){ }}checked="checked"{{# } }} title="<?php echo $v['id'] . " | " . $v['resource_type_str'] . " | "  . $v['privilege_type_str']. " | "  . $v['value'];?>" name="priv[]" value="<?php echo $v['id'];?>" type="checkbox" autocomplete="off" class="">
+                    <br>
+                <?php endforeach;?>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="privAddSave"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" id="attr-uid">
+
+    名称：<span style="color: palevioletred;font-weight: bold">{{d.pname}}</span> 分类：<span class="st">
+        {{# if(d.type == 1){ }}
+        会员 / {{d.vip_tips}}
+        {{# } else{ }}
+        金币
+        {{# } }}
+    </span>
+    <hr>
+    原价：<span style="color: darkcyan">{{d.price}}</span> 现价：<span class="st">{{d.promo_price}}</span>
+    <hr>
+    得到VIP天：<span class="st">{{d.valid_date}}</span> 得到余额：<span class="st">{{d.coins}}</span>
+    <hr>
+    礼（余额）：<span class="st">{{d.free_coins}}</span> 礼（观影券）：<span class="st">{{d.ticket}}</span>
+    <hr>
+    支付方式：<span class="st">{{d.pay_name}}</span>
+    <hr>
+    消息：<span class="st">{{d.message}}</span> 下载次数：<span class="st">{{d.download_num}}</span>
+    <hr>
+    角标：<span class="st">{{d.corner_mark}}</span>
+    <hr>
+    描述：<span class="st">{{d.description}}</span>
+</script>
+<script type="text/html" id="attr-info">
+    权益：<span class="st">{{d.map_str}}</span>
+    <hr>
+    权限：<span class="st">{{d.privilege_str}}</span>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: undefined,
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id', width: 60}
+            , {field: 'pname', title: '名称', width: 400, templet: '#attr-uid'}
+            //, {field: 'type',width: 60, title: '类型', type: 'enum', value:<?php //echo json_encode(ProductModel::TYPE) ?>//}
+            // , {
+            //     field: 'pname', title: '名称', width: 120, templet: function (d) {
+            //         return '<span style="color: palevioletred;font-weight: bold">' + d.pname + '</span>'
+            //     }
+            // }
+            //, {field: 'img', title: '图片'}
+            , {
+                field: 'img', width: 200, title: '图片', align: 'center', templet: function (d) {
+                    if (d.img_url) {
+                        return '<div onclick="show_img(\'' + d.img_url + '\')" ><img width="190" src="' + d.img_url + '" /></div>';
+                    }
+                    return '';
+                }
+            }
+            , {
+                field: 'img', width: 100, title: '图标', align: 'center', templet: function (d) {
+                    if (d.vip_icon_url) {
+                        return '<div onclick="show_img(\'' + d.vip_icon_url + '\')" ><img width="190" src="' + d.vip_icon_url + '" /></div>';
+                    }
+                    return '';
+                }
+            }
+            //, {field: 'price', title: '价格'}
+            // , {field: 'promo_price', title: '推广价'}
+            // , {field: 'valid_date', title: 'VIP天',width: 80}
+            // , {field: 'coins', title: '钻石',width: 80}
+            // , {field: 'free_coins', title: '送钻',width: 80}
+            // , {field: 'ticket', title: '影券',width: 80}
+            // , {field: 'message', title: '消息',width: 80}
+            // , {field: 'download_num', title: '下载次数',width: 80}
+            , {field: 'status', title: '状态', type: "switch", "value": "1|0", edit: true, width: 120}
+            , {field: 'is_upgrade', title: '升级卡', type: "switch", "value": "1|0", edit: true, width: 120}
+            , {field: 'sort_order', title: '排序', edit: true,width: 120,sort:true}
+            // , {field: 'description', title: '产品描述'}
+            // , {field: 'pay_type', title: '支付方式',width: 80}
+            //, {field: 'status', title: '状态'}
+
+            // , {field: 'pay_name', title: '支付',width: 200}
+            // , {field: 'payway_wechat', title: '微信支付1支持0不支持'}
+            //, {field: 'payway_bank', title: '银联支付1支持0不支持'}
+            // , {field: 'payway_alipay', title: '支付宝支付1支持0不支持'}
+            //, {field: 'payway_visa', title: '01'}
+            //, {field: 'payway_huabei', title: '0支持1不支持'}
+
+            // , {field: 'url', title: '跳转地址'}
+            //, {field: 'updated_at', title: 'updated_at'}
+            //, {field: 'created_at', title: 'created_at'}
+            //, {field: 'vip_level', title: 'vip等级 0普通 1 月卡 2季卡 3 年卡'}
+            , {field: 'vip_level', title: '优惠选项', width: 350, templet: '#attr-info'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+        , 'event': {
+            'operate': {
+                addRight: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn(undefined, function (layerIndex) {
+                        Util.formSubmit("<?php echo url_backend('addRight')?>", form, ajax, 'topicAddSave', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    //obj.del();
+                                    Util.reload()
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                addPriv: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn(undefined, function (layerIndex) {
+                        Util.formSubmit("<?php echo url_backend('addPriv')?>", form, ajax, 'privAddSave', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    //obj.del();
+                                    Util.reload()
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

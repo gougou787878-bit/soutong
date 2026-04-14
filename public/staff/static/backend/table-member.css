@@ -1,0 +1,21 @@
+.table-member{
+    position: relative;
+    width: 255px;
+    overflow: hidden;
+}
+.table-member img {width: 35px;height: 35px;float: left;border-radius: 20px;float: left}
+.table-member img,.table-member span,.table-member em{
+    display:block;
+    font-style: normal;
+    padding: 0;
+    margin: 0;
+}
+.table-member span,.table-member em{
+    line-height: 17px;
+    height: 17px;
+    max-width: 200px;
+}
+.table-member p {position: relative;font-size: 12px;padding-left: 5px;float: left}
+.table-member i {margin-left: 5px;}
+/*.layui-table-body tr{height: 100px;}*/
+/*.layui-table-body td .layui-table-cell{height: 35px;line-height: 35px;}*/

@@ -1,0 +1,205 @@
+### 话题详情
+POST {{host}}/wapi/post/topic_detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "topic_id": "57"
+}
+
+### 帖子列表接口
+POST {{host}}/wapi/post/list_posts
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "sort": "recommend",
+  "id": 52,
+  "version": "5.2.0"
+}
+
+### 帖子详情
+POST {{host}}/wapi/post/detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "id": 96,
+  "version": "5.2.0",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 关注圈子
+POST {{host}}/wapi/post/topic_follow
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "id": 52,
+  "version": "5.2.0",
+  "token":"5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 关注圈子列表
+POST {{host}}/wapi/post/list_topic_follow
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "token":"5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 他人帖子列表
+POST {{host}}/wapi/post/list_user_posts
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "aff":"14115152"
+}
+
+### 帖子搜索
+POST {{host}}/wapi/post/search
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "word":"同居事件",
+  "topic_id":"52"
+}
+
+### 帖子点赞
+POST {{host}}/wapi/post/like
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "id":96,
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 帖子点赞列表
+POST {{host}}/wapi/post/list_like
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 创建帖子
+POST {{host}}/wapi/post/create
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "topic_id": 52,
+  "content": "广受欢迎的Abstinence禁欲系即将迎来系列第五部作品，为了将Abstinence系列推上更高水准的品质，此次摄影师刘京把不可能转变为可能，邀请到在中国男模大赛屡屡夺得冠军的极品男神Lee勇敢突破尺度极限，带来这部堪称美梦成真级的全见作品。 Lee既是模特也是演员，多重身份让他常年保持最佳身材状态，英俊帅气的脸庞，时而忧郁充满男人味，时而又绽放天真孩子般的灿烂笑容，强大的魅力无论男人还是女人都难以抵抗。相信禁欲系5绝对会成为系列历史上最新的巅峰之作。",
+  "title": "【写真】ABSTINENCE 05（第五弹）",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 发布帖子评论
+POST {{host}}/wapi/post/comment
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "post_id": 96,
+  "comment_id": 614312,
+  "comment": "广受欢迎的禁欲系即将迎来系",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+
+### 评论列表
+POST {{host}}/wapi/post/list_comments
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "id": 96
+}
+
+### 二级评论列表
+POST {{host}}/wapi/post/comments
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "comment_id": 614312
+}
+
+### 我的帖子列表
+POST {{host}}/wapi/post/list_my_posts
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "status": 1,
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+### 我的评论
+POST {{host}}/wapi/post/list_my_comment
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}
+
+
+### 我的回复
+POST {{host}}/wapi/post/list_reply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "version": "5.2.0",
+  "token": "5CD7C8328E8463DB9B206EB0B082F99854686E807E5C982E21ED969A3FDE8A0D2C9EBCEDBB15A3F487A03C47ADE6391EFF9F23806444A52687927352705D8EF54E85426CD36DE929AD2A2D337BF4D47B9D7A0EE8464C207E34F997A5112D99"
+}

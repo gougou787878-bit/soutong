@@ -1,0 +1,267 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户反馈列表(<?=$count;?>)</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <form action="d.php?mod=user&code=listUserFeed" method="post">
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <input class="input-sm form-control input-s-sm inline" value="<?=$flag;?>" placeholder="uuid" id="flag" name="flag">
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                            <select name="feed_status" class="input-sm form-control input-s-sm inline">
+                                                <option value="999">反馈状态筛选</option>
+                                                <!--<?php foreach ($this->user_feed_status as $k=>$v) :?>-->
+                                                <option <?php if($feed_status == $k):?> selected<?php endif;?> value="<?=$k?>"><?=$v;?></option>
+                                                <!--<?php endforeach; ?>-->
+                                            </select>
+                                            
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <select name="type" class="input-sm form-control input-s-sm inline">
+                                            <option value="0">反馈类型</option>
+                                            <!--<?php foreach ($this->user_feedback_type as $k=>$v) :?>-->
+                                            <option <?php if($type == $k):?> selected<?php endif;?> value="<?=$k?>"><?=$v;?></option>
+                                            <!--<?php endforeach; ?>-->
+                                        </select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="input-group">
+                                        <select name="system" class="input-sm form-control input-s-sm inline">
+                                            <option value="0">系统类型</option>
+                                            <option <?php if($system == 'ios'):?>selected<?php endif;?> value="ios">ios</option>
+                                            <option <?php if($system == 'andriod'):?>selected<?php endif;?> value="andriod">android</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="input-sm form-control input-s-sm inline" style="width: 200px" value="<?=$start;?>" readonly placeholder="开始时间" id="start" name="start">
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="input-sm form-control input-s-sm inline" style="width: 200px" value="<?=$end;?>" readonly placeholder="结束时间" id="end" name="end">
+                                </div>
+                                <div class="col-sm-1"><button type="submit" class="btn btn-sm btn-primary"> 搜索</button> </span></div>
+
+                            </form>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9"></div>
+<!--                            <div class="col-sm-1"><button type="submit" class="btn btn-sm btn-primary"> 搜索</button> </span></div>-->
+                            <div class="col-sm-1"><a class="btn btn-sm btn-primary" onclick="replylist()">回复模板</a></div>
+                            <div class="col-sm-1"><a class="btn btn-sm btn-primary" onclick="replyall()">批量回复</a></div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>选择</th>
+                                        <th>增加时间</th>
+                                        <th>uuid</th>
+                                        <th>版本号</th>
+                                        <th>IP</th>
+                                        <th>反馈问题</th>
+                                        <th>图片1</th>
+                                        <th>图片2</th>
+                                        <th>状态</th>
+                                        <th>评价</th>
+                                        <th>更新时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <?php if($topic):?>
+                                        <!--<?php foreach ($topic as $k=>$v) :?>-->
+                                        <tr>
+                                            <td><input type="checkbox" class="sel" value="<?=$v['id'];?>"></td>
+                                            <td><?=$v['created_at'];?></td>
+                                            <td><a onclick="userInfo('<?=$v['uuid'];?>')"><?=$v['uuid'];?></a></td>
+                                            <td><?=$v['version'];?></td>
+                                            <td><a href="http://ip.zxinc.org/ipquery/?ip=<?=$v['user_ip'];?>&action=2" target="_blank"><?=$v['user_ip'];?></a></td>
+                                            <td><?=$v['question'];?></td>
+                                            <td>
+                                                <?php if(!empty($v['image_1'])):?>
+                                                <img class="images" src="{IMG_ADS}<?=$v['image_1'];?>" style="max-width:100px;" onclick="showImg('{IMG_ADS}<?=$v['image_1'];?>')">
+                                                <?php endif;?>
+                                            </td>
+                                            <td>
+                                                <?php if(!empty($v['image_2'])):?>
+                                                <img class="images" src="{IMG_ADS}<?=$v['image_2'];?>" style="max-width:100px;" onclick="showImg('{IMG_ADS}<?=$v['image_2'];?>')">
+                                                <?php endif;?>
+                                            </td>
+                                            <td><?=$v['status_name'];?></td>
+                                            <td><?=$v['evaluation_name'];?></td>
+                                            <td><?=$v['updated_at'];?></td>
+                                            <td>
+                                                <a class="btn btn-xs btn-primary" onclick="feedDetail('<?=$v['id'];?>')">详情</a>
+                                                <?php if($v['status'] != $this->feed_status_closed):?>
+                                                <a class="btn btn-xs btn-warning" onclick="closeFeed('<?=$v['id'];?>')" href="javascript:void(0)">关闭</a>
+                                                <?php endif;?>
+                                                <a class="btn btn-xs btn-danger" onclick="handleDel('<?=$v['id'];?>')">删除</a>
+                                            </td>
+                                        </tr>
+                                        <!--<?php endforeach; ?>-->
+                                        <?php else:?>
+                                        <tr>
+                                            <td colspan="15">暂无数据</td>
+                                        </tr>
+                                        <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <script>
+            layui.laydate.render({
+                elem: '#start',
+                event: 'click', //触发事件
+                format: 'yyyy-MM-dd HH:mm:ss', //日期格式
+                istime: true, //是否开启时间选择
+                type:'datetime'
+            })
+            layui.laydate.render({
+                elem: '#end',
+                event: 'click', //触发事件
+                format: 'yyyy-MM-dd HH:mm:ss', //日期格式
+                istime: true, //是否开启时间选择
+                type:'datetime'
+            })
+
+            function userInfo(uuid) {
+                var url = "d.php?mod=user&code=index&uuid=" + uuid
+                layerOpen(url, '用户详情')
+            }
+            function replyall(){
+                var arr = new Array();
+                $(".sel:checked").each(function(i){
+                    arr[i] = $(this).val();
+                });
+                if(arr.length == 0){
+                    layer.msg("请选择回复的项", {icon: 1})
+                    return;
+                }
+                var ids = arr.join(",");
+                layer.open({
+                    type: 2,
+                    title: '批量回复',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['600px', '800px'],
+                    content: "d.php?mod=user&code=replyall&ids=" + ids
+                });
+            }
+            function feedback(id) {
+                var url = "d.php?mod=user&code=replyUserFeed&feed_id=" + id
+                layer.prompt({title: '请填写回复', formType: 2}, function (reply, index) {
+                    if (reply.replace(/(^\s*)|(\s*$)/g, "").length ==0) {
+                        layer.msg('回复不能为空!', {icon: 5});
+                        return false
+                    }
+                    url += "&reply=" + reply.replace(/(^\s*)|(\s*$)/g, "")
+                    getAjax(url, function (res) {
+                        parent.layer.msg(res, {icon: 1})
+                        window.location.reload()
+                    })
+                });
+            }
+            function feedDetail(id) {
+                layer.open({
+                    type: 2,
+                    title: '反馈详情',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['400px', '500px'],
+                    content: "d.php?mod=user&code=getUserFeedDetail&feed_id=" + id
+                });
+            }
+            function closeFeed(id) {
+                var url = "d.php?mod=user&code=closeUserFeed&feed_id=" + id
+                layer.confirm('确定要关闭问题嘛？', { btn: ['确定', '取消']}, function () {
+                    getAjax(url, function (res) {
+                        parent.layer.msg(res, {icon: 1})
+                        window.location.reload()
+                    })
+                })
+            }
+
+            function handleDel (id) {
+                var url = "d.php?mod=user&code=delFeed&id=" + id
+                layer.confirm('确定要删除问题嘛？', { btn: ['确定', '取消']}, function () {
+                    getAjax(url, function (res) {
+                        parent.layer.msg(res, {icon: 1})
+                        window.location.reload()
+                    })
+                })
+            }
+
+            function replylist() {
+                layer.open({
+                    type: 2,
+                    title: '回复模板',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['800px', '700px'],
+                    content: "d.php?mod=user&code=replylist"
+                });
+            }
+
+            function showImg(url) {
+                layer.open({
+                    type: 1,
+                    title: false,
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['auto', 'auto'],
+                    content: "<img src='" + url + "' style='max-height:500px;max-width:800px;' />"
+                });
+            }
+
+            function layerOpen(url, title) {
+                parent.layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['1200px', '500px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url, reloadRes) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                            reloadRes(res.data)
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                parent.layer.msg(msg, {icon: 1})
+                window.location.reload()
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

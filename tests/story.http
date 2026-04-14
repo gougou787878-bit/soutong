@@ -1,0 +1,189 @@
+### json请求 公公配置
+POST {{host}}/api/tab/tuwen
+Content-Type: application/json
+
+{
+    "bundle_id": "tips.yc.bs",
+    "version": "5.2.0",
+    "oauth_type": "pwa",
+    "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/index
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/search
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "kwy": "模特"
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/story/filter
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1,
+  "order": "",
+  "type": "",
+  "tab": ""
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/story/cat_list
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1,
+  "tab": 13
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/detail
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 12771
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/story/read
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 12771,
+  "s_id": 1
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/recommend
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 12771
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/liking
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 12771
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/story/liking
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 12772
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/buy
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 12772
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/story/my_liking
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/story/my_buy
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1
+}
+
+###

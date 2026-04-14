@@ -1,0 +1,73 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Aff -> 推广码：</label>
+
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="" class="form-control" id="aff" value="">
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="getInvited()">转换</button>
+                    </div>
+                    <div style="color:orangered; font-weight: bolder;font-size: larger" class="col-sm-1" id="invited"></div>
+                    <div style="color:orangered; font-weight: bolder;font-size: larger" class="col-sm-3" id='url'></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">推广码 -> Aff：</label>
+
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="" class="form-control" id="num" value="">
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="getNum()">转换</button>
+                    </div>
+                    <div style="color:orangered; font-weight: bolder;font-size: larger" class="col-sm-1" id="Numner"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+function getInvited() {
+    var aff = $('#aff').val()
+    if (aff == '') {
+        layer.msg('请填写Aff', {icon: 5})
+        return false
+    }
+    var getUrl = "d.php?mod=index&code=showAff&num=" + aff
+    getAjax(getUrl, function (res) {
+        $('#invited').text('推广码：' + res.aff)
+        $('#url').text('推广链接：' + res.url)
+    })
+}
+
+function getNum() {
+    var aff = $('#num').val()
+    if (aff == '') {
+        layer.msg('请填写Aff', {icon: 5})
+        return false
+    }
+    var getUrl = "d.php?mod=index&code=showNum&aff=" + aff
+    getAjax(getUrl, function (res) {
+        $('#Numner').text('Aff：' + res)
+    })
+}
+
+function getAjax(url, call) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (res) {
+            if (res.status == 1) {
+                call(res.data)
+            } else {
+                layer.msg(res.data, {icon: 5})
+            }
+        }
+    })
+}
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

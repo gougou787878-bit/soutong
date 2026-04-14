@@ -1,0 +1,109 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+    <tbody>
+    <tr class="header">
+        <?php if(MEMBER_ROLE==1):?>
+        <!--<form action="d.php?mod=index&code=listProxyUserRank" method="post">-->
+            <!--<td width="300" class="altbg1">-->
+                <!--代理邀请：-->
+                <!--<select name="proxy" style="width: 100px;height: 20px">-->
+                    <!--<option value="ys_xg">香蕉-西港</option>-->
+                    <!--<option value="ys_xh">香蕉-全民</option>-->
+                    <!--<option value="lu_xg">撸先生-西港</option>-->
+                    <!--<option value="lu_xh">撸先生-全民</option>-->
+                <!--</select>-->
+                <!--<select name="rank" style="width: 60px;height: 20px">-->
+                    <!--<option value="day">今日</option>-->
+                    <!--<option value="week">本周</option>-->
+                    <!--<option value="month">本月</option>-->
+                    <!--<option value="all">总</option>-->
+                <!--</select>-->
+                <!--<input class="button lf" type="submit" value="查询">-->
+            <!--</td>-->
+        <!--</form>-->
+        <?php endif;?>
+        <form action="d.php?mod=proxy" method="post">
+            <td width="200" class="altbg2">
+                <input type="text" name="flag" size="20" placeholder="顶级代理aff / aff">
+                <input class="button lf" type="submit" id="setting_submit" value="搜索">
+            </td>
+        </form>
+        <!--<form action="d.php?mod=user&code=export" method="post">-->
+            <!--<td class="altbg2">-->
+                <!--<input type="text" name="time" id="date" readonly placeholder="点击选择日期">-->
+                <!--<input class="button lf" type="submit" name="setting_submit" value="导出">-->
+            <!--</td>-->
+        <!--</form>-->
+    </tr>
+    </tbody>
+</table>
+<h3 style="margin-left: 30px">当前总计<?=$total;?>人</h3>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>id</td>
+        <td>顶级代理aff</td>
+        <td>用户aff</td>
+        <td>代理层级</td>
+        <td width="200">层级关系</td>
+        <td>
+            创建时间
+            (
+            <a href="<?=$query_link;?>&sort=creasc">升序</a>
+            |
+            <a href="<?=$query_link;?>&sort=credesc">降序</a>
+            )
+        </td>
+        <?php if(MEMBER_ROLE==1):?>
+        <td>操作</td>
+        <?php endif;?>
+    </tr>
+    <?php if($topic):?>
+    <!--<?php foreach ($topic as $k=>$v) :?>-->
+    <tr>
+        <td><?=$v['id'];?></td>
+        <td><?=$v['root_aff'];?></td>
+        <td><?=$v['aff'];?></td>
+        <td><?=$v['proxy_level'];?>
+            (
+            <?php if($v['root_aff']!=$v['aff']):?><a href="<?=$query_link?>&lv=up&aff=<?=$v['aff'];?>">上级 </a><?php endif;?>
+            <?php if($v['proxy_level']>2 && MEMBER_ROLE!=1):?>
+            <?php else:?>
+            <a href="<?=$query_link?>&lv=down&aff=<?=$v['aff']?>&level=<?=$v['proxy_level'];?>"> 下级</a>
+            <?php endif;?>
+            )
+        </td>
+        <td><?=$v['proxy_node'];?></td>
+        <td><?=$v['created_at'];?></td>
+        <?php if(MEMBER_ROLE==1):?>
+        <td>
+            <a href="d.php?mod=user&code=editProxy&id=<?=$v['id'];?>">编辑</a> |
+            <a href="d.php?mod=user&code=delProxy&id=<?=$v['id'];?>">删除</a>
+        </td>
+        <?php endif;?>
+    </tr>
+    <!--<?php endforeach; ?>-->
+    <?php else:?>
+    <tr>
+        <td colspan="15">暂无数据</td>
+    </tr>
+    <?php endif;?>
+</table>
+<br>
+<?=$page_arr['html'];?>
+<br>
+<br>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#import1').change(function () {
+            $('#import_btn1').click();
+        });
+        $('#import2').change(function () {
+            $('#import_btn2').click();
+        })
+    });
+    laydate.render({
+        elem: '#date' //指定元素
+    });
+</script>

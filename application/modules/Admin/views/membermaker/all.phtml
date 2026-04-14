@@ -1,0 +1,97 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header" style="color: red;font-weight: bold">全量制片人列表</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">uuid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uuid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">手机</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[phone]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[status]',MemberMakerModel::CREATOR_STATUS_TEXT); ?>
+
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: undefined,
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+             {field: 'id', title: '#',width: 80}
+            , {field: 'uuid', title: 'uuid',width: 280}
+            , {field: 'level_num', title: '等级',width: 80}
+            , {field: 'phone', title: '手机'}
+            , {field: 'status', title: '状态',type:'enum',value:<?php echo json_encode(MemberMakerModel::CREATOR_STATUS_TEXT) ?>}
+            , {field: 'refuse_reason', title: '拒绝理由'}
+            , {field: 'created_at', title: '时间'}
+            , {field: 'nickname', title: '昵称'}
+            //, {field: 'contact', title: '扩展联系方式'}
+            //, {field: 'total_coins', title: '累计汤币',sort:true}
+            //, {field: 'pay_rate', title: '结算比例',edit:true}
+            //, {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

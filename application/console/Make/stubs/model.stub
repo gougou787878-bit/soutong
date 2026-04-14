@@ -1,0 +1,32 @@
+<?php
+
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * class {{className}}Model
+ *
+{{propertyList}}
+ *
+ * @author xiongba
+ * @date {{date}}
+ *
+ * @mixin \Eloquent
+ */
+class {{className}}Model extends Model
+{
+
+    protected $table = "{{table}}";
+
+    protected $primaryKey = '{{pkName}}';
+
+    protected $fillable = {{fields}};
+
+    protected $guarded = '{{pkName}}';
+
+    public $timestamps = false;
+
+{{constList}}
+
+
+}

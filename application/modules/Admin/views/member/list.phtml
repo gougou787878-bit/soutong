@@ -1,0 +1,359 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+    <tbody>
+    <tr class="header">
+        <td>
+            <form action="d.php" method="get">
+                <input type="hidden" name="mod" value="user">
+                <input type="hidden" name="code" value="index">
+                <div class="col-sm-2">
+                    <input class="input-sm form-control input-s-sm inline" placeholder="uuid" type="text"
+                           name="uuid">
+                </div>
+                <div class="col-sm-2">
+                    <input class="input-sm form-control input-s-sm inline" placeholder="昵称" type="text"
+                           name="username">
+                </div>
+                <div class="col-sm-2">
+                    <input class="input-sm form-control input-s-sm inline" placeholder="手机号码" type="text"
+                           name="phone">
+                </div>
+
+                <div class="col-sm-2">
+                    <input class="input-sm form-control input-s-sm inline" placeholder="uid 或 aff" type="text"
+                           name="aff">
+                </div>
+                <div class="col-sm-2">
+                    <input class="input-sm form-control input-s-sm inline" placeholder="被谁邀请uid" type="text"
+                           name="invited_by">
+                </div>
+
+                <div class="col-sm-2">
+                    <select name="is_live_super" class="input-sm form-control input-s-sm inline">
+                        <option value="">未设置</option>
+                        <option value="30">普通</option>
+                        <option value="50">房管</option>
+                        <option value="60">超管</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select name="role_id" class="input-sm form-control input-s-sm inline">
+                        <option value="">角色</option>
+                        <?php foreach ($user_roles as $k => $v) { ?>
+                            <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                        <?php } ?>
+                    </select>
+                </div><div class="col-sm-2">
+                    <select name="vip_level" class="input-sm form-control input-s-sm inline">
+                        <option value="">vip等级</option>
+                        <?php foreach (MemberModel::USER_VIP_TYPE as $k => $v) { ?>
+                            <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+                    </span></div>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<h5>用户列表</h5>
+
+
+<table width="" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>uid</td>
+        <!--<td>oautd_type,oautd_id,app_version</td>-->
+        <td>uuid</td>
+        <!--<td>用户名</td>-->
+        <td>别名</td>
+        <td>权限</td>
+        <!--<td>权限类型</td>-->
+        <!-- <td>性别</td>-->
+        <!--<td>注册ip</td>
+        <td>注册时间</td>
+        <td>最后登录ip</td>-->
+        <td>注册时间</td>
+        <td>最后访问时间</td>
+        <td>会员到期时间</td>
+        <!-- <td>用户积分</td>-->
+        <td>邀请码</td>
+        <td>被谁 aff 邀请</td>
+        <td>已邀请安装个数</td>
+        <!-- <td>new_topic_reply</td>-->
+        <td>类型</td>
+        <td>设备</td>
+        <td>直播管理</td>
+        <td>电话</td>
+        <!--<td>用户头像</td>-->
+        <td>用户金币余额</td>
+        <!--<td>累计金币</td>
+        <td>粉丝数</td>
+        <td>关注数</td>
+        <td>作品数</td>
+        <td>获赞数</td>
+        <td>喜欢数</td>
+        <td>关注性别</td>-->
+        <td>vip级别</td>
+        <!-- <td>个人签名</td>-->
+        <!-- <td>超级签名标识</td>-->
+        <!--<td>认证状态</td>-->
+        <td>经验值</td>
+        <!--<td>聊天标识</td>
+        <td>生日</td>-->
+        <td>操作</td>
+    </tr>
+    <?php if ($topic): ?>
+        <?php foreach ($topic as $v): ?>
+            <tr>
+                <td><?= $v['uid'] ?></td>
+                <!--<td><? /*= $v['oauth_type'], $v['oauth_id'], $v['app_version'] */ ?></td>-->
+                <td><?= $v['uuid'] ?></td>
+                <!-- <td>
+                                        <? /*= $v['username'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= $v['nickname'] ?>
+                </td>
+                <td>
+                    <?php echo isset($user_roles[$v['role_id']]) ? $user_roles[$v['role_id']] : '' ?>
+                </td>
+                <!-- <td>
+                                        <? /*= $v['role_type'] */ ?>
+                                    </td>-->
+                <!--<td>
+                                        <? /*= $v['gender'] */ ?>
+                                    </td>-->
+                <!--<td>
+                                        <? /*= $v['regip'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['regdate'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['lastip'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= $v['regdate'] ? date('Ymd H:i', $v['regdate']) : '' ?>
+                </td>
+                <td>
+                    <?= $v['lastvisit'] ? date('Ymd', $v['lastvisit']) : '' ?>
+                </td>
+                <td>
+                    <?= $v['expired_at'] ? date('Ymd', $v['expired_at']) : '' ?>
+                </td>
+                <!-- <td>
+                                        <? /*= $v['score'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= $v['aff'] ?>
+                </td>
+                <td>
+                    <?= $v['invited_by'] ?>
+                </td>
+                <td>
+                    <?= $v['invited_num'] ?>
+                </td>
+                <!-- <td>
+                                        <? /*= $v['new_topic_reply'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= $v['oauth_type'] ?>
+                </td>
+                <td>
+                    <?= $v['oauth_id'] ?>
+                </td>
+                <td>
+                    <?php
+                    if ($v['is_live_super'] == 30) {
+                        echo '普通';
+                    } elseif ($v['is_live_super'] == 50) {
+                        echo '房间管理';
+                    } elseif ($v['is_live_super'] == 60) {
+                        echo '超管';
+                    }
+                    ?>
+                </td>
+                <td>
+                    <?= $v['phone'] ?>
+                </td>
+                <!-- <td>
+                                        <? /*= $v['thumb'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= $v['coins'] ?>
+                </td>
+                <!--<td>
+                                        <? /*= $v['coins_total'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['fans_count'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['followed_count'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['videos_count'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['fabulous_count'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['likes_count'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['sexType'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= MemberModel::USER_VIP_TYPE[$v['vip_level']]; ?>
+                </td>
+                <!--<td>
+                                        <? /*= $v['person_signnatrue'] */ ?>
+                                    </td>-->
+                <!-- <td>
+                                        <? /*= $v['build_id'] */ ?>
+                                    </td>-->
+                <!-- <td>
+                                        <? /*= $v['auth_status'] */ ?>
+                                    </td>-->
+                <td>
+                    <?= $v['exp'] ?>
+                </td>
+                <!-- <td>
+                                        <? /*= $v['chat_uid'] */ ?>
+                                    </td>
+                                    <td>
+                                        <? /*= $v['birthday'] */ ?>
+                                    </td>-->
+                <td>
+                    <a class="btn btn-xs btn-primary" onclick="handleEdit(<?= $v['uid'] ?>)">编辑</a>
+                    |
+                    <a class="btn btn-xs btn-info" onclick="handleEditVip(<?= $v['uid'] ?>)">VIP&房管</a>
+                    |
+                    <?php if ($v['is_recommend']): ?>
+                        <a class="btn btn-xs btn-warning" onclick="handleEditRecommend(<?= $v['uid'] ?>,0)">取消推荐</a>
+                    <? else: ?>
+                        <a class="btn btn-xs btn-success" onclick="handleEditRecommend(<?= $v['uid'] ?>,1)">设置推荐</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="16">暂无数据</td>
+        </tr>
+    <?php endif; ?>
+    </tbody>
+</table>
+<br/>
+<?= $page_arr['html']; ?>
+
+<script>
+    function handleEdit(id) {
+        var url = "d.php?mod=user&code=useredit&id=" + id
+        layerOpen(url, '修改用户')
+    }
+
+    function handleEditVip(id) {
+        var url = "d.php?mod=user&code=user_edit_vip&id=" + id
+        layerOpen(url, '修改用户VIP', ['800px', '600px'])
+    }
+
+    function handleAdd() {
+        var url = "d.php?mod=user&code=useredit"
+        layerOpen(url, '增加用户')
+    }
+
+    function handleBan(ip) {
+        var url = "d.php?mod=ip&code=doAdd&ip=" + ip
+        getAjax(url)
+    }
+
+    function watchList(uuid) {
+        var url = "d.php?mod=user&code=listUserMvLog&uuid=" + uuid
+        layerOpen(url, '观看记录')
+    }
+
+    function collectionList(uuid) {
+        var url = "d.php?mod=user&code=listUserSaved&uuid=" + uuid
+        layerOpen(url, '收藏记录')
+    }
+
+    function downloadList(uuid) {
+        var url = "d.php?mod=user&code=listDownload&uuid=" + uuid
+        layerOpen(url, '下载记录')
+    }
+
+    function searchList(uuid) {
+        var url = "d.php?mod=user&code=listUserSearchLog&uuid=" + uuid
+        layerOpen(url, '搜索记录')
+    }
+
+    function goldChange(uuid) {
+        var url = 'd.php?mod=gold&code=change&uuid=' + uuid
+        layerOpen(url, '金币变化记录')
+    }
+
+    function goldSpend(uuid) {
+        var url = 'd.php?mod=gold&code=spend&uuid=' + uuid
+        layerOpen(url, '消费记录')
+    }
+
+    function layerOpen(url, title, area = ['800px', '800px']) {
+        layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: area,
+            content: url
+        })
+    }
+
+    function getAjax(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (res) {
+                if (res.status == 1) {
+                    layer.msg(res.data, {icon: 1})
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+            }
+        })
+    }
+
+    function handleEditRecommend(id, Recommend) {
+        url = 'd.php?mod=user&code=setRecommend&id=' + id + '&recommend=' + Recommend;
+        let title = '您确定要设置用户UID:' + id + '推荐吗？';
+        if (Recommend == 0) {
+            title = '您确定要取消用户UID:' + id + '推荐吗？';
+        }
+        layer.confirm(title, {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            reload(res.data, 1)
+                        } else {
+                            reload(res.data, 5)
+                        }
+                    }
+                })
+            }
+        )
+    }
+
+    function reload(msg) {
+        parent.layer.msg(msg, {icon: 1})
+        window.location.reload()
+    }
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

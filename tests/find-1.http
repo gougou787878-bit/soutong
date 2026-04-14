@@ -1,0 +1,201 @@
+### 3620fa7115d77258ead6ad8cd8a9ffc5 14115520
+### b0b284963c352cb885ae992e7f65835d 14115521
+### dd6537bf016a6c09741a95b5590275ca 141155
+
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "5.2.0"
+}
+
+### 想看
+POST {{host}}/api/find/wantLook
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "find_id": 1
+}
+
+### 追加赏金
+POST {{host}}/api/find/appendCoins
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "find_id": 3,
+  "coins": 5
+}
+
+### 追加赏金列表
+POST {{host}}/api/find/appendDetail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "find_id": 3
+}
+
+### 推片
+POST {{host}}/api/find/reply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "find_id": 5,
+  "vid": "40127,40118"
+}
+
+### 求片详情
+POST {{host}}/api/find/detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "find_id": 2
+}
+
+### 回复列表
+POST {{host}}/api/find/replyByFind
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "find_id": 3
+}
+
+### 回复的评论列表
+POST {{host}}/api/find/commentByReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "reply_id": 1
+}
+
+
+### 对回复评论点赞
+POST {{host}}/api/find/praiseCommentReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "comment_id": 2,
+  "type": "set"
+}
+
+### 对推片评论
+POST {{host}}/api/find/commentReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "reply_id": 4,
+  "comment": "其他的商家联系方式 温馨提示不"
+}
+
+### 对推片点赞
+POST {{host}}/api/find/praiseReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "reply_id": 3,
+  "type": "set"
+}
+
+### 对推片回复点赞
+POST {{host}}/api/find/praiseCommentReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "comment_id": 3,
+  "type": "set"
+}
+
+### 打赏推片
+POST {{host}}/api/find/reward
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "reply_id": 3,
+  "coins": 10
+}
+
+### 我的想看
+POST {{host}}/api/find/myLook
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1"
+}
+
+### 我的推片
+POST {{host}}/api/find/myReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1"
+}
+
+### 我的推片
+POST {{host}}/api/find/mvList
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "3620fa7115d77258ead6ad8cd8a9ffc5",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "type": "all",
+  "kwy": "高清"
+}

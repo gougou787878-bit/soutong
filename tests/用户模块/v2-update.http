@@ -1,0 +1,246 @@
+
+### v2侧边栏个人中心.http
+POST {{host}}/v2/user/getBaseInfo
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.1.2",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_new_id": "",
+  "ver": "2",
+  "oauth_type": "android",
+  "oauth_id": "dd08f4e4c8ad8f2775ca5af4b73d75b1",
+  "token": "4c7e125d82a06fb66686f391a3d9fe32"
+}
+
+> ../assert/侧边栏个人中心.js
+
+### v2砖石中心.http
+POST {{host}}/v2/product/diamondCenter
+Content-Type: application/json
+
+> ../assert/钻石中心.js
+
+### 钻石视频广场.http
+POST {{host}}/v2/search/index
+Content-Type: application/json
+
+> ../assert/搜索界面.js
+
+### 搜索视频.http
+POST {{host}}/v2/search/mv
+Content-Type: application/json
+
+{
+  "kwy": "最爱"
+}
+
+> ../assert/搜索-视频.js
+
+### 搜索用户.http
+POST {{host}}/v2/search/user
+Content-Type: application/json
+
+{
+  "kwy": "游客"
+}
+
+> ../assert/搜索-用户.js
+
+### 搜索用户.http
+POST {{host}}/v2/ChargeVideo/index
+Content-Type: application/json
+
+{
+  "tag": "游客"
+}
+
+> ../assert/搜索-用户.js
+
+### 获取指定标签的收费视频.http
+POST {{host}}/v2/ChargeVideo/tag
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "7e34453f162c449400b011104381fc70",
+  "tag": "激情"
+}
+
+> ../assert/钻石广场-标签视频.js
+
+### 钻石广场-主页
+POST {{host}}/v2/ChargeVideo/index
+Content-Type: application/json
+
+> ../assert/钻石广场-主页.js
+
+### 钻石广场-推荐视频
+POST {{host}}/v2/ChargeVideo/recommend
+Content-Type: application/json
+
+> ../assert/钻石广场-标签视频.js
+
+### 钻石广场-购买视频
+POST {{host}}/v2/ChargeVideo/buy
+Content-Type: application/json
+
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.1.0",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "dd08f4e4c8ad8f2775ca5af4b73d75b1",
+  "id": 84335
+}
+
+> ../assert/钻石广场-购买视频.js
+
+###钻石广场-买过的视频
+POST {{host}}/v2/ChargeVideo/maiguo
+Content-Type: application/json
+
+
+> ../assert/钻石广场-我购买的视频.js
+
+###
+
+###钻石广场-关注者发布的收费视频
+POST {{host}}/v2/ChargeVideo/chargeForFollow
+Content-Type: application/json
+
+
+> ../assert/钻石广场-我购买的视频.js
+
+###钻石广场-关注者发布的收费视频
+POST {{host}}/v2/UserFollow/videoWithAnchor
+Content-Type: application/json
+
+
+> ../assert/用户关注-有关注.js
+
+###钻石广场-关注者发布的收费视频
+POST {{host}}/v2/live/index
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "2FF0B218-D1CB-4F3A-8268-AAAABBBB",
+  "title": "小test",
+  "type": "0",
+  "type_val": "",
+  "token": "",
+  "live_class_id": ""
+}
+
+> ../assert/用户关注-无关注.js
+
+### 只用中的用户
+POST {{host}}/v2/live/index
+Content-Type: application/json
+
+
+> ../assert/直播-首页.js
+
+### 获取参评列表
+POST {{host}}/v2/product/list
+Content-Type: application/json
+
+
+> ../assert/产品-列表.js
+
+### 获取参评列表
+POST {{host}}/v2/Contribute/index
+Content-Type: application/json
+
+{
+  "live_uuid": "64782004a614800c94d4d4e9843aff34"
+}
+
+> ../assert/产品-列表.js
+
+### 充值记录
+POST {{host}}/v2/UserRechargeLogs/logs
+Content-Type: application/json
+
+{
+  "lastIndex": "26"
+}
+
+> ../assert/用户-充值记录.js
+
+### 充值记录
+POST {{host}}/v2/UserBuy/liang
+Content-Type: application/json
+
+{
+  "id": "26"
+}
+
+> ../assert/用户-购买靓号.js
+
+### 用户的等级
+POST {{host}}/v2/UserLevel/user
+Content-Type: application/json
+
+
+> ../assert/用户-用户的等级.js
+
+### 主播的等级
+POST {{host}}/v2/UserLevel/anchor
+Content-Type: application/json
+
+
+> ../assert/用户-购买靓号.js
+
+### 主播的等级
+POST {{host}}/v2/mv/index
+Content-Type: application/json
+
+
+> ../assert/用户-购买靓号.js
+
+###用户视频列表
+POST {{host}}/v2/user/videos
+Content-Type: application/json
+
+{
+  "uid": 41
+}
+
+> ../assert/用户-视频列表.js
+
+### 用户视频列表
+POST {{host}}/v2/mv/listForTag
+Content-Type: application/json
+
+{
+  "tag": "自拍",
+  "limit": 1,
+  "type": "newest"
+}
+
+> ../assert/用户-视频列表.js
+
+###
+

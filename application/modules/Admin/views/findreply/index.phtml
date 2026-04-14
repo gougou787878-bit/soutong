@@ -1,0 +1,165 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">推荐人</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[uuid]" placeholder="请输入uuid" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">求片编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[find_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">被采纳</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[is_accept]', FindReplyModel::IS_ACCEPT) ?>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php /*echo Layui::search('where[status]', FindReplyModel::STATUS) */ ?>
+                            </div>
+                        </div>-->
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                    {{# if(d.is_accept == 1) { }}
+                        <a class="layui-btn layui-btn-disabled layui-btn-xs">
+                            <i class="layui-icon layui-icon-set"></i>已采纳</a>
+                    {{# } else { }}
+                        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="accept" data-pk="{{=d.id}}" >
+                            <i class="layui-icon layui-icon-set"></i>采纳</a>
+                    {{# } }}
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del"
+                           lay-form="log-dialog">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="log-dialog" data-w="600" layer-dialog="确认,取消"
+        data-iframe="<?php echo url('findreplycomment/log') ?>?reply_id={{d.id}}"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+
+</script>
+<script type="text/html" class="data-dialog" id="accept_project" data-h="200" data-w="450" layer-dialog="确认,取消"
+        data-option="{shadeClose:true,full:false}">
+    <form class="layui-form form-dialog" action="accept" lay-filter="form-accept" style="margin-top: 30px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::radioMulti('is_accept', FindReplyModel::IS_ACCEPT) ?>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <!-- <input type="hidden" name="is_accept" value="{{=d.is_accept}}"> -->
+            <button class="layui-btn submit" lay-submit="" lay-filter="accept"></button>
+        </div>
+
+    </form>
+</script>
+
+<script>
+    
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("accept") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            /*  {type: 'checkbox', fixed: 'left'}*/
+            {field: 'id', title: 'id'}
+            , {title: '推荐人', width: 275, templet: "#member-basis"}
+            , {field: 'comment', title: '评论'}
+            , {field: 'find_id', title: '求片编号'}
+            , {field: 'mvIds', title: '视频编号'}
+            , {field: 'praize', title: '点赞'}
+            , {field: 'is_accept_str', title: '采纳状态'}
+            /*  , {field: 'status_str', title: '状态'}*/
+            , {field: 'created_str', title: ' 创建时间'}
+            , {fixed: 'right', width: 240, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+          event:{
+
+            operate: {
+                accept: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    var id = $this.data('pk'); // 获取 data-pk
+                    console.log("采纳ID：", id);
+
+                    if (!id) {
+                        Util.msgErr('ID 不存在，无法采纳');
+                        return;
+                    }
+
+                    layer.confirm('确定要采纳吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('accept')?>", {id: id})
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, function () {
+                                        obj.del();
+                                    });
+                                }
+                                layer.close(index2); // 关闭弹窗
+                            })
+                            .catch(function () {
+                                Util.msgErr('请求失败，请稍后重试');
+                                layer.close(index2);
+                            });
+                    });
+                }
+            }
+
+        }
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js?v=2"></script>
+<?php importView("fooler.phtml"); ?>

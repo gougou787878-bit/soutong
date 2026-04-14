@@ -1,0 +1,1558 @@
+<?php use service\TopicService;
+
+importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 5px
+    }
+    .layui-form-item .layui-inline{
+        margin-right: 0px
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space1">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理<span style="color: red" class="layui-inline" id="total-id"></span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="order-search">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">影片标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[title]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">标签</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[tags]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户UID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">推荐</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_recommend]', merge_array(['' => '请选择'], MvModel::RECOMMEND)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">付费类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('_is_free', merge_array(['' => '请选择'], MvModel::IS_FREE)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">是否18</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_18]',
+                                    merge_array(['' => '请选择'], MvModel::IS_18)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">精选</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[is_feature]', MvModel::IS_FEATURE) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">展示</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[is_hide]', MvModel::IS_HIDE) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '请选择'], MvModel::STAT)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">暗网</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_aw]',merge_array(['' => '请选择'],MvModel::IS_AW_TIPS)) ?>
+                            </div>
+                        </div>
+<!--                        <div class="layui-inline">-->
+<!--                            <label class="layui-form-label">WEB免费</label>-->
+<!--                            <div class="layui-input-block">-->
+<!--                                --><?php //echo Layui::select('where[web_free]',merge_array(['' => '请选择'],MvModel::WEB_FREE_TIPS)) ?>
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="layui-inline">
+                            <label class="layui-form-label">结构</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[construct_id]', merge_array(['' => '全部', '-1' => '无结构视频'], $constructs), ['lay-search' => ""]) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">创建时间</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('created_at') ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">刷新时间</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('refresh_at', date("Y-m-d", TIMESTAMP)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">视频时长</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::between('duration') ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]',merge_array(['' => '请选择'],MvModel::TYPE_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-add-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddTag" data-pk="id"
+                                    lay-form="batch-add-tag">
+                                设置标签
+                            </button>
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="batchPcRecommend" data-pk="id"-->
+<!--                                    lay-form="batch-add-pc-recommend">-->
+<!--                                PC导航推荐-->
+<!--                            </button>-->
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddTopic" data-pk="id"
+                                    lay-form="batch-add-topic">
+                                批量加合集
+                            </button>
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="batchAddSync" data-pk="id">同步海角</button>-->
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddConstruct" data-pk="id"
+                                    lay-form="batch-add-construct">
+                                加入结构
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="batchIsShow" data-pk="id"
+                                    lay-form="batch-add-is-show">
+                                批量展示
+                            </button>
+
+                            <button class="layui-btn layui-btn-sm" lay-event="batchModifyCoins" data-pk="id"
+                                    lay-form="batch-modify-coins-dialog">
+                                修改金币
+                            </button>
+
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAdd18" data-pk="id" lay-form="batch-add-18">
+                                批量18岁
+                            </button>
+
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="batchAddSyncGtv" data-pk="id">同步GTV</button>-->
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="batchAddSyncGg" data-pk="id">同步GiliGili</button>-->
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <div class="operate-toolbar">
+                            <a lay-event="edit" lay-form="user-add-dialog">修改</a> |
+                            <a data-pk="{{=d.id}}" lay-event="del">删除</a> |<a lay-event="syncNanYanAv" data-pk="{{=d.id}}">
+
+                                <span style="color: orangered">BLUED同步</span>
+
+                            </a> <br>
+                            <a lay-event="refresh" data-pk="{{=d.id}}">
+                                刷新
+                            </a> |
+                            <a lay-event="addTopic" lay-form="topic-dialog" data-pk="{{=d.id}}">
+                                加合集
+                            </a> |
+<!--                            {{# if ( d.is_feature == 0 ) { }}-->
+<!--                            <a lay-event="upFeature" data-pk="{{=d.id}}">-->
+<!--                                上精选</a>-->
+<!--                            </a>-->
+<!--                            {{#  } else { }}-->
+<!--                            <a lay-event="downFeature" data-pk="{{=d.id}}">-->
+<!--                                下精选</a>-->
+<!--                            </a>-->
+<!--                            {{#  }  }} |-->
+                            <a lay-event="recommend" data-pk="{{=d.id}}">
+                                {{# if (d.is_recommend==0) { }}
+                                上推
+                                {{#  } else  { }}
+                                下推
+                                {{#  } }}
+<!--                            </a> |<a lay-event="syncAv" data-pk="{{=d.id}}">-->
+<!--                                {{# if (d.music_id==0) { }}-->
+<!--                                <span style="color: lightseagreen">同步</span>-->
+<!--                                {{#  } else  { }}-->
+<!--                                <span style="color: hotpink">同步</span>-->
+<!--                                {{#  } }}-->
+<!--                            </a>-->
+                                <br>
+                                <a lay-event="fakeComment" lay-form="user-comment-dialog" data-pk="{{d.id}}">伪造评论</a>
+                        </div>
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-add-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">影片标题：</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" placeholder="影片标题" name="title"
+                       value="{{=d.title }}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户id：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="用户id" name="uid" value="{{d.uid||4888000 }}" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">结构ID：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('construct_id', merge_array(['' => '请选择'], $constructs), ['data-value' => "{{=d.construct_id}}", 'lay-search' => ""]) ?>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">影片标签：</label>
+            <div class="layui-input-block">
+                <div id="adminrole_div" class="xtree_contianer" style="margin-bottom: 10px"></div>
+            </div>
+        </div>
+
+        <div class="layui-inline">
+            <label class="layui-form-label">是否18：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('is_18', MvModel::IS_18, ['data-value' => '{{d.is_18}}']) ?>
+            </div>
+        </div>
+                
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">竖版封面：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::uploadPos('y_cover_url', 'y_cover', 40, 40, 'xiao') ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面小图：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::uploadPos('cover_thumb_url', 'cover_thumb', 40, 40, 'xiao') ?>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面宽：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="封面宽" name="thumb_width" value="{{d.thumb_width||0 }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">封面高：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="封面高" name="thumb_height" value="{{d.thumb_height||0 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('type', MvModel::TYPE_TIPS, ['data-value' => '{{=d.type}}']) ?>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">动图宽：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="动图宽" name="thumb_width" value="{{d.gif_width||0 }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">动图高：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="动图高" name="thumb_height" value="{{d.gif_height||0 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">影片资源：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadFile(url_backend('upload/uploadMp4'),'m3u8') ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">完整视频资源：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadFile(url_backend('upload/uploadMp4'),'full_m3u8') ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">影片时长：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="时长，秒" name="duration" value="{{=d.duration }}" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="时长，秒" name="duration" value="{{=d.duration }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">定价：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="定价" name="coins" value="{{d.coins||0 }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">会员价：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="定价" name="vip_coins" value="{{d.vip_coins||-1 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论数：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="评论数" name="comment" value="{{d.comment||0 }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">喜欢数：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="喜欢点击数" name="like" value="{{d.like||0 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否限免：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="是否限免 0 收费 1 限免" name="is_free"
+                           value="{{d.is_free||1 }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">隐藏：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="0显示1隐藏" name="is_hide" value="{{d.is_hide||0 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">点击数：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="总历史点击数" name="rating" value="{{d.rating||0 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">精彩时长：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="精彩时长：秒" name="thumb_duration"
+                           value="{{d.thumb_duration||0 }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">开始时间：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="精彩片段开始时间" name="thumb_start_time"
+                           value="{{d.thumb_start_time||0 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">影片标题：</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" placeholder="影片标题" name="title" value="{{=d.title }}" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">影片标签：</label>
+            <div class="layui-input-block">
+                <div id="adminrole_div" class="xtree_contianer" style="margin-bottom: 30px"></div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">演员：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.actors }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">分类：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.category }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">定价：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.coins }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.comment }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面小图：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.cover_thumb }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">导演：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.directors }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">时长，秒：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.duration }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否限免 0 收费 1 限免：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_free }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0显示1隐藏：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_hide }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">喜欢点击数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.like }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">影片资源1：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.m3u8 }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">音乐id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.music_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">影片上映时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.onshelf_tm }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">总历史点击数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.rating }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">刷新时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.refresh_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0未审核1审核通过：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.status }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">影片标签：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.tags }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">精彩时长：秒：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.thumb_duration }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面高：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.thumb_height }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">精彩片段开始时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.thumb_start_time }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面宽：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.thumb_width }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">影片标题：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.title }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户UUID：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.uid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频格式类型：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.v_ext }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">来源：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.via }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-refuse-dialog" data-h="480" data-w="700" layer-dialog="确认,取消"
+        data-option="{title:'拒绝申请',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择拒绝的理由：</label>
+            <div class="layui-input-block">
+                <select name="refused" class="refused layui-select" id="refused" data-id="{{d.id}}">
+                    <option value="">选择拒绝理由</option>
+                    <option value="您上传的视频含有水印，语音，道具植入等广告或联系方式。">1.您上传的视频含有水印，语音，道具植入等广告或联系方式。</option>
+                    <option value="您上传的视频可能是重复的，如果是原创请加上手势或小卡片再次上传">2.您上传的视频可能是重复的，如果是原创请加上手势或小卡片再次上传。</option>
+                    <option value="您上传的视频质量、清晰度还不够好，建议在丰富一下内容再次上传">3.您上传的视频质量、清晰度还不够好，建议在丰富一下内容再次上传</option>
+                    <option value="您上传的视频过短，看不到内容/没有声音/主题，请上传新的内容。">4.您上传的视频过短，看不到内容或者没有声音或者是主题，请上传新的内容。</option>
+                    <option value="您上传的视频的内容标题和主题不符，请修改后上传。">5.您上传的视频的内容标题和主题不符，请修改后上传。</option>
+                    <option value="您上传的视频不适用成人搜同片，请更换内容重新上传">6.您上传的视频不适用成人搜同片，请更换内容重新上传</option>
+                    <option value="您上传的视频,标签与视频内容不符">7.您上传的视频,标签与视频内容不符</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <input type="hidden" name="status" value="<?php echo MvModel::STAT_REFUSE ?>">
+            <button class="layui-btn submit" lay-submit="" lay-filter="refuseUserUpload"></button>
+        </div>
+    </form>
+</script>
+
+
+<script type="text/html" class="data-dialog" id="topic-dialog" data-h="480" data-w="700" layer-dialog="确认,取消"
+            data-option="{title:'合集MV设置',closeBtn:false,shadeClose:true,anim:3}">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend style="color: orangered">合集列表信息</legend>
+        </fieldset>
+        <form class="layui-form form-dialog" action="" lay-filter="form-save">
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::search('topic_id', TopicService::getSearchTopicList()) ?>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide">
+                <input type="hidden" name="_pk" value="{{=d.id}}">
+                <button class="layui-btn submit" lay-submit="" lay-filter="topicAddSave"></button>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/html" class="data-dialog" id="batch-add-topic" data-h="500" data-w="800" layer-dialog="确认,取消"
+            data-option="{title:'批量加合集',closeBtn:false,shadeClose:true,anim:3}">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend style="color: orangered">批量加合集</legend>
+        </fieldset>
+        <form class="layui-form form-dialog" action="" lay-filter="form-save">
+            <div class="layui-form-item">
+                <label class="layui-form-label">合集列表</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::search('topic_id', TopicService::getSearchTopicList()) ?>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide">
+                <input type="hidden" name="mv_ids" value="">
+                <button class="layui-btn submit" lay-submit="" lay-filter="topicAddTopicSave"></button>
+            </div>
+        </form>
+    </script>
+<script type="text/html" class="data-dialog" id="batch-add-pc-recommend" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'PC导航推荐',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">PC导航推荐设置</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">导航</label>
+            <div class="layui-input-block">
+                <?php echo Layui::search('tab_id', $pcTab, ["lay-search" => '']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">mv</label>
+            <div class="layui-input-block">
+                <textarea name="series_mv_id" class="layui-textarea"
+                          style="height: 100px">{{=d.series_mv_id }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <button class="layui-btn submit" lay-submit="" lay-filter="topicAddBatchSave"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-add-is-show" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'视频批量展示',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">视频批量展示</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">展示</label>
+            <div class="layui-input-block">
+                <?php echo Layui::search('is_hide', MvModel::IS_HIDE) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">mv</label>
+            <div class="layui-input-block">
+            <textarea name="series_mv_id" class="layui-textarea"
+                      style="height: 100px">{{=d.series_mv_id }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <button class="layui-btn submit" lay-submit="" lay-filter="batchAddIsShow"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-modify-coins-dialog" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'金币批量修改',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">金币批量修改</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">金币</label>
+            <div class="layui-input-block">
+                <input type="number" name="new_coins" required lay-verify="required" placeholder="请输入新的金币数" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">mv</label>
+            <div class="layui-input-block">
+            <textarea name="series_mv_id" class="layui-textarea"
+                      style="height: 100px">{{=d.series_mv_id }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <button class="layui-btn submit" lay-submit="" lay-filter="batchAddModifyCoins"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-add-construct" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'批量加入结构',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">批量加入结构</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <?php foreach (ConstructModel::getAdminConstruct() as $v):?>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 130px"> <?php echo $v['name']?>:</label>
+            <div class="layui-input-block" style="margin-left: 160px">
+                <?php foreach ($v['eles'] as $v1):?>
+                <input type="radio" name="construct_id" lay-skin="primary" title="<?php echo $v1['name']?>" value="<?php echo $v1['id']?>">
+                <?php endforeach;?>
+            </div>
+        </div>
+        <hr>
+        <?php endforeach;?>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="mv_ids" value="">
+            <button class="layui-btn submit" lay-submit="" lay-filter="addConstructSave"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-add-tag" data-h="700" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'批量标签设置',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">批量标签设置</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div id="adminrole_div" class="xtree_contianer" style="margin-bottom: 30px"></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="series_mv_id">
+            <button class="layui-btn submit" lay-submit="" lay-filter="mvBatchAddTag"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="user-comment-dialog" data-h="450" data-w="600" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: coral">伪造评论设置-[ID:{{=d.id}}]</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">*评论内容：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::textarea('content', '', ['placeholder' => '自定义评论内容，不填则为随机评论内容']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">评论用户aff：</label>
+            <div class="layui-input-block">
+                <input name="aff" value="" placeholder="不填默认为随机用户aff" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">随机评论数：</label>
+            <div class="layui-input-block">
+                <input type="number" name="num" value="1" placeholder="不填默认随机生成1条，一次最多10条" class="layui-input">
+                <div class="red">注：随机评论数量一次最多10条</div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="batchCommentUpdate"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-add-18" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'批量18岁修改',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">批量18岁修改</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否18岁</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('is_18', MvModel::IS_18) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="series_mv_id">
+            <button class="layui-btn submit" lay-submit="" lay-filter="addBatchFanSave"></button>
+        </div>
+    </form>
+</script>
+
+<style>
+    .layui-table-cell {
+        height: 50px;
+        line-height: 50px
+    }
+
+
+
+    .layui-xtree-item {
+        display: inline-block;
+        width: 80px;
+    }
+</style>
+    <script type="text/html" id="search-total">
+        <p style="font-size: medium;margin-left: 10px;">
+            统计数据： 总视频:{{=d.totalMV}}, 钻石视频:{{=d.totalGoldMV}}, 小视频: {{=d.totalXiao}}, 过审视频: {{=d.totalPassed}}, 视频收益: {{=d.totalProfit}}
+        </p>
+    </script>
+<script src="<?php echo LAY_UI_STATIC ?>layuiadmin/layui-xtree.js"></script>
+    <script type="text/html" id="cover-title">
+        <div style="width: 150px">
+            <div style="width: 150px" class="clearfix">
+                <img style="float:left;width: 40px; display: block;background: #cccccc" src="{{d.cover_thumb_url}}" width="40px" height="22px" onclick="url_cover_show('{{=d.cover_thumb_url}}')"/>
+                <p style="white-space: pre-wrap;float:left;margin-left: 5px;max-width: 100px">
+                    {{=d.title}}
+                </p>
+            </div>
+            <hr>
+            <p class="clearfix" style="white-space: pre-wrap"><span style="color: red">标签：</span>{{d.tagsname}}</p>
+            <hr>
+            <p class="clearfix" style="white-space: pre-wrap"><span style="color: red">结构：</span>{{d.construct_name}}</p>
+        </div>
+    </script>
+    <script type="text/html" id="attr-text">
+        类型：{{d.free_str}}&nbsp;&nbsp;
+        点赞：{{d.like}}<br>
+        <span style="font-weight: bolder;color:orangered">销量：{{d.buy_num}}</span>&nbsp;&nbsp;
+        播放：{{d.rating}}<br>
+        创建：{{d.created_at}}<br>
+        合集:<span style="color:green">{{d.topic_title}}</span>
+    </script>
+    <script type="text/html" id="user-text">
+        <span style="color: green">#{{d.uid}}</span><br>
+        <span style="white-space: pre-wrap">{{d.nickname}}</span>
+    </script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            ,{field: 'id', title: 'ID',width:100}
+           /* , {
+                field: 'x_cover_url', title: '竖版封面', width: 130, templet: function (d) {
+                    if(d.x_cover_url){
+                        return '<img src="' + d.x_cover_url + '" style="width: 100px;height: 80px;" onclick="show_img(\'' + d.x_cover_url + '\')">';
+                    }else{
+                        return '--';
+                    }
+                }
+            }*/
+            , {field: 'title', title: '标题', width: 180 ,templet:'#cover-title'}
+            , {
+                field: 'href', title: '播放源', width: 100, templet: function (d) {
+                    let html = "<a class='layui-btn layui-btn-sm layui-btn-xs' target='_blank' href='"
+                        + d.full_href + "'><i class='layui-icon layui-icon-play'></i>浏览器</a>"
+                    return html
+                }
+            }
+            , {field: 'uid', title: '上传用户',templet:'#user-text'}
+            // , {
+            //     field: 'thumb', title: '封面图', width: 130, templet: function (d) {
+            //         return '<img src="' + d.cover_thumb_url + '" style="width: 100px;height: 80px;" onclick="show_img(\'' + d.cover_thumb_url + '\')">';
+            //     }
+            // }
+            // , {field: 'tagsname', title: '标签'}
+            /*, {
+                field: 'category', title: '评论数', templet: function (d) {
+
+                    return '<a title="点我查看" style="font-weight: bolder;font-size: x-large;color: red" onclick="layerOpen(\'d.php?mod=comment&code=index&mv_id=' + d.id + '\',\'评论列表\')">' + d.comment + '</a>';
+                }
+            }*/
+            , {
+                field: 'coins', title: '金币', width: 80,edit:true,templet: function (d) {
+                    return '<span style="font-weight: bolder;color: red">' + d.coins + '</span>';
+                }
+            }
+            , { title: '属性', width: 165, templet:"#attr-text"}
+            // , {field: 'is_free', title: '免费', width: 80, edit:true}
+            // , {field: 'like', title: '点赞量'}
+            // , {field: 'rating', title: '播放量','sort':true}
+            // , {field: 'buy_num', title: '购买数',width: 80,templet: function (d) {
+            //         return '<span style="font-weight: bolder;font-size: x-large;color:orangered">' + d.buy_num + '</span>';
+            //     }
+            // }
+            , {field: 'statusname', title: '状态'}
+            , {field: 'duration', title: '时长', sort:true}
+            , {field: 'is_hide', title: '展示',type: "switch", value: "0|1", edit: true}
+            // , {field: 'web_free', title: 'web端免费',type: "switch", value: "1|0", edit: true}
+            , {field: 'type', title: '类型', type: "switch", edit: true, text: "短视频|长视频", value: "1|0"}
+            , {field: 'is_aw', title: '暗网',type: "switch", value: "1|0", edit: true}
+            , {field: 'filter_vip', title: '过滤VIP通卡',type: "switch", value: "1|0", edit: true}
+            , {field: 'is_18', title: '是否18', type: "switch", value: "1|0", edit: true, text: "18+|18-",}
+           /* , {field: 'refresh_at', title: '刷新时间'}*/
+            // , {field: 'created_at', title: '创建时间'}
+            , {fixed: 'right', width: 180, title: '操作', align: 'left', toolbar: '#operate-toolbar'}
+        ]],
+        "done": function (table, data, from, ajax, tpl, $) {
+            ajax.get("<?php echo url_backend('tagsList')?>")
+                .then(function (json) {
+                    return json.data;
+                })
+                .then(function (data) {
+                    xx.use({"menu": data})
+                })
+        },
+        event: {
+            search: function (ajax, laytpl, where) {
+                ajax.get("<?php echo url_backend('total')?>&" + xx.queryEncode(where)).then(function (json) {
+                    if(json.code =='0'){
+                        let data = json.data,$ = layui.$;
+                        $('#total-id').html(laytpl($('#search-total').html()).render(data));
+                    }
+                });
+            },
+            'toolbar':{
+                addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    xx.config('event.renderTree', xx.emptyFn()).call(this, obj, table, ajax, laytpl, layerEle, form, $, nextFn)
+                },
+                batchPcRecommend: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "series_mv_id": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('pcRecommend')?>", form, ajax, 'topicAddBatchSave', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchAddTopic: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "mv_ids": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('batchAddTopic')?>", form, ajax, 'topicAddTopicSave',function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchIsShow: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "series_mv_id": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('batchIsShow')?>", form, ajax, 'batchAddIsShow', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchModifyCoins: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "series_mv_id": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('batchModifyCoins')?>", form, ajax, 'batchAddModifyCoins', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchAddSync: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    ajax.post("<?php echo url_backend('batchAddSync')?>", {"series_mv_id": pkValAry.join(','), 'type':"hj"})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg, function () {
+                                    //table.reload("gridTab");
+                                });
+                            }
+                        })
+                },
+                batchAddConstruct: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "mv_ids": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('batchAddConstruct')?>", form, ajax, 'addConstructSave', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchAddSyncGg: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    ajax.post("<?php echo url_backend('batchAddSync')?>", {"series_mv_id": pkValAry.join(','), 'type':"gg"})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg, function () {
+                                    //table.reload("gridTab");
+                                });
+                            }
+                        })
+                },
+                batchAddSyncGtv: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    ajax.post("<?php echo url_backend('batchAddSync')?>", {"series_mv_id": pkValAry.join(','), 'type':"gtv"})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg, function () {
+                                    //table.reload("gridTab");
+                                });
+                            }
+                        })
+                },
+                batchAdd18: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "series_mv_id": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('addBatch18')?>", form, ajax, 'addBatchFanSave', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchAddTag: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    xx.config('event.renderTree', xx.emptyFn()).call(this, obj, table, ajax, laytpl, layerEle, form, $, nextFn)
+                    form.val("form-save", {
+                        "series_mv_id": pkValAry.join(',')
+                    });
+                    form.render(null, 'form-save');
+                    Util.formSubmit("<?php echo url_backend('addBatchTags')?>", form, ajax, 'mvBatchAddTag', function (json) {
+                        layer.closeAll()
+                        if (json.code == 0) {
+                            Util.msgOk(json.msg, function () {
+                                table.reload("gridTab");
+                            });
+                        } else {
+                            Util.msgErr(json.msg);
+                        }
+                    });
+                },
+            },
+            //event.operate->refuse
+            "operate": {
+                fakeComment: function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn();
+                    Util.formSubmit("<?php echo url_backend('fakeComment')?>", form, ajax, 'batchCommentUpdate', function (json) {
+                        layer.closeAll();
+                        Util.msgOk(json.msg);
+                    });
+                },
+                edit: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    xx.config('event.renderTree', xx.emptyFn()).call(this, obj, table, ajax, laytpl, layerEle, form, $, nextFn)
+                },
+                upFeature: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('您确认需要上精选?', function (index2) {
+                        ajax.post("<?php echo url_backend('upFeature')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                },
+                downFeature: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('您确认需要下精选?', function (index2) {
+                        ajax.post("<?php echo url_backend('upFeature')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                },
+                refuse: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn(undefined , function (layerIndex) {
+                        Util.formSubmit("<?php echo url_backend('refuseUserUpload')?>", form, ajax, 'refuseUserUpload',function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                addTopic :function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn(undefined , function (layerIndex) {
+                        Util.formSubmit("<?php echo url_backend('addTopic')?>", form, ajax, 'topicAddSave',function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                approved: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('您确认要通过审核吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('approvedUserUpload')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                },
+                recommend: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    ajax.post("<?php echo url_backend('switchRecommend')?>", {"_pk": $this.data('pk')})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg,function () {
+                                    obj.del();
+                                });
+                            }
+                        })
+                },
+                refresh: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    ajax.post("<?php echo url_backend('refresh')?>", {"_pk": $this.data('pk')})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg,function () {
+                                    obj.del();
+                                });
+                            }
+                        })
+                },
+                syncAv: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    ajax.post("<?php echo url_backend('syncAv')?>", {"_pk": $this.data('pk')})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.data);
+                            }
+                        })
+                },
+                syncNanYanAv: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    ajax.post("<?php echo url_backend('syncNanYanAv')?>", {"_pk": $this.data('pk')})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.data);
+                            }
+                        })
+                },
+                retryslice: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('重试切片?', function (index2) {
+                        ajax.post("<?php echo url_backend('retryslice')?>", {"_pk": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                }
+            }
+            , "renderTree": function (obj, table, ajax, tpl, layerEle, form, $, nextFn) {
+                console.log(obj.data);
+                let ruleArray = [] , menudata = xx.config('menu'), treeJson = [];
+                if (typeof(obj.data) !=="undefined"){
+                    ruleArray = obj.data.tags_list
+                }
+                $.each(menudata, function (i, item, data) {
+                    data = {
+                        "inputname": 'tags[]',
+                        "title": item,
+                        "value": item,
+                        "checked": in_array(item, ruleArray),
+                        "data": [],
+                    };
+                    treeJson.push(data);
+                });
+                nextFn();
+                Util.renderSelect(obj.data , $,form);
+                new layuiXtree({
+                    elem: 'adminrole_div'
+                    , form: form
+                    , data: treeJson
+                });
+            },
+        }
+    });
+
+
+    layui.use(['form', 'jquery', 'laytpl'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let laytpl = layui.laytpl;
+        let data = form.val('order-search');
+        //console.log('order-search'+xx.queryEncode(data))
+        $.ajax({
+            url: "<?php echo url_backend('total')?>&" + xx.queryEncode(data),
+            dataType: 'json',
+            success: function (json) {
+                //console.log(json.code)
+                if (json.code == '0') {
+                    let response = json.data;
+                    $('#total-id').html(laytpl($('#search-total').html()).render(response));
+                }
+            }
+        });
+    })
+
+</script>
+
+<?php echo Layui::renderJs(); ?>
+<?php importView("fooler.phtml"); ?>

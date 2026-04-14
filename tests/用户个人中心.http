@@ -1,0 +1,50 @@
+### 用户个人中心
+POST {{host}}/api/users/getBaseInfo
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "c717482a85492c7fec75c4e1961ea030",
+  "oauth_type": "android",
+  "type": "all",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "video",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "live",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/myProfit
+Content-Type: application/json
+
+{
+  "oauth_id": "02be0b77f09170a71ea7edbde3addb84",
+  "oauth_type": "android"
+}
+
+### 用户个人中心
+POST {{host}}/api/users/getBaseInfo
+Content-Type: application/json
+
+{
+    "oauth_id": "02be0b77f09170a71ea7edbde3addb84",
+    "oauth_type": "android"
+}
+
+###
+

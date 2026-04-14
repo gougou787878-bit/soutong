@@ -1,0 +1,382 @@
+<?php
+/**
+ * @var $reward_amount
+ * @var $uid
+ * @var $uuid
+ * @var $token
+ * @var $reward_remainder
+ * @var $end_date
+ * @var array $reward_items
+ * @var array $leader_board
+ * @var array $exchange_vip_items
+ * @var array $exchange_gold_items
+ */
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>抽奖送现金</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+    <base href="/static/activity-invite/">
+    <link rel="stylesheet" type="text/css" href="./css/dialog.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+</head>
+<body>
+<div class="header-container">
+    <img class="header-bg" src="./assets/header_bg.png" alt="">
+    <div class="lottery-container">
+        <img class="lottery-bg" src="./assets/lottery_bg.png" alt="">
+        <div class="lottery-my-value">可用奖金<span><?php echo $reward_amount ?></span></div>
+        <div class="lottery-count-down">
+            剩余时间<span id="lotteryDay">0</span>天<span id="lotteryHours">0</span>小时<span id="lotteryMinutes">0</span>分钟
+        </div>
+        <div class="lottery-box" id="lotteryTable">
+            <table border="0" cellspacing="6">
+                <tbody>
+                <tr>
+                    <td class="lottery-td lottery-unit-0" colspan="2">
+                        <img class="lottery-item-img" src="./assets/lottery/rectangle_block.png" alt="rectangle_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/rectangle_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_666.png" alt="">
+                            <div class="lottery-table-text-value">666元红包</div>
+                        </div>
+                    </td>
+                    <td class="lottery-td lottery-unit-1">
+                        <img class="lottery-item-img" src="./assets/lottery/square_block.png" alt="square_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/square_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_1.png" alt="">
+                            <div class="lottery-table-text-value">1元红包</div>
+                        </div>
+                    </td>
+                    <td class="lottery-td lottery-unit-2">
+                        <img class="lottery-item-img" src="./assets/lottery/square_block.png" alt="square_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/square_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_05.png" alt="">
+                            <div class="lottery-table-text-value">0.5元红包</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lottery-td lottery-unit-7">
+                        <img class="lottery-item-img" src="./assets/lottery/square_block.png" alt="square_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/square_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_5.png" alt="">
+                            <div class="lottery-table-text-value">5元红包</div>
+                        </div>
+                    </td>
+                    <td colspan="2" id="lotteryAction">
+                        <img src="./assets/lottery/lottery_button.png" alt="lottery_button">
+                        <div class="lottery-table-button" id="lotteryNumbers"></div>
+                    </td>
+                    <td class="lottery-td lottery-unit-3">
+                        <img class="lottery-item-img" src="./assets/lottery/square_block.png" alt="square_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/square_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_2.png" alt="">
+                            <div class="lottery-table-text-value">2元红包</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lottery-td lottery-unit-6">
+                        <img class="lottery-item-img" src="./assets/lottery/square_block.png" alt="square_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/square_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_05.png" alt="">
+                            <div class="lottery-table-text-value">0.5元红包</div>
+                        </div>
+                    </td>
+                    <td class="lottery-td lottery-unit-5">
+                        <img class="lottery-item-img" src="./assets/lottery/square_block.png" alt="square_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/square_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_1.png" alt="">
+                            <div class="lottery-table-text-value">1元红包</div>
+                        </div>
+                    </td>
+                    <td class="lottery-td lottery-unit-4" colspan="2">
+                        <img class="lottery-item-img" src="./assets/lottery/rectangle_block.png" alt="rectangle_block">
+                        <img class="lottery-item-img-active" src="./assets/lottery/rectangle_block_active.png" alt="">
+                        <div class="lottery-table-text">
+                            <img src="./assets/lottery/bonus_10.png" alt="">
+                            <div class="lottery-table-text-value">10元红包</div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="lottery-action-button">
+            <img id="inviteButton" src="./assets/share_button.png" alt="share">
+            <img id="myBonus" src="./assets/my_button.png" alt="my">
+        </div>
+    </div>
+</div>
+<div class="middle-container">
+    <div class="bonus-container-box">
+        <img class="bonus-container-box-title" src="./assets/bonus_title.png" alt="bonus">
+        <div class="bonus-container">
+            <div class="bonus-container-item" id="exchangeVip">
+                <img class="bonus-item-img" src="./assets/exchange_vip.png" alt="">
+                <div class="bonus-item-title">兑换会员</div>
+                <div class="bonus-item-button">
+                    <div>GO</div>
+                    <img src="./assets/arrow_right.png" alt="arrow_right">
+                </div>
+            </div>
+            <div class="bonus-container-item" id="exchangeGold">
+                <img class="bonus-item-img" src="./assets/exchange_gold.png" alt="">
+                <div class="bonus-item-title">兑换金币</div>
+                <div class="bonus-item-button">
+                    <div>GO</div>
+                    <img src="./assets/arrow_right.png" alt="arrow_right">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if (count($leader_board) >= 3): ?>
+        <div class="rank-container-box">
+            <img class="rank-container-box-title" src="./assets/rank_title.png" alt="rank_title">
+            <div class="rank-container">
+                <div class="rank-item-top">
+                    <?php if (isset($leader_board[1])): ?>
+                        <?php $item = $leader_board[1]; ?>
+                        <div class="rank-item-top-container">
+                            <div class="rank-item-top-avatar-container">
+                                <img class="rank-item-top-avatar" src="<?php echo $item['avatar_url'] ?>" alt="">
+                                <img class="rank-item-top-number" src="./assets/rank2.png" alt="rank-item-top-number">
+                            </div>
+                            <div class="rank-item-top-nickname"><?php echo $item['nickname'] ?></div>
+                            <div class="rank-item-top-bonus">抽中<span><?php echo $item['score'] ?></span>元</div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($leader_board[0])): ?>
+                        <?php $item = $leader_board[0]; ?>
+                        <div class="rank-item-top-container">
+                            <div class="rank-item-top-avatar-container">
+                                <img class="rank-item-top-avatar" src="<?php echo $item['avatar_url'] ?>" alt="">
+                                <img class="rank-item-top-number" src="./assets/rank1.png" alt="rank-item-top-number">
+                            </div>
+                            <div class="rank-item-top-nickname"><?php echo $item['nickname'] ?></div>
+                            <div class="rank-item-top-bonus">抽中<span><?php echo $item['score'] ?></span>元</div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (isset($leader_board[2])): ?>
+                        <?php $item = $leader_board[2]; ?>
+                        <div class="rank-item-top-container">
+                            <div class="rank-item-top-avatar-container">
+                                <img class="rank-item-top-avatar" src="<?php echo $item['avatar_url'] ?>" alt="">
+                                <img class="rank-item-top-number" src="./assets/rank3.png" alt="rank-item-top-number">
+                            </div>
+                            <div class="rank-item-top-nickname"><?php echo $item['nickname'] ?></div>
+                            <div class="rank-item-top-bonus">抽中<span><?php echo $item['score'] ?></span>元</div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <?php foreach ($leader_board as $k => $item) : ?>
+                    <?php if ($k < 3) continue ?>
+                    <div class="rank-item">
+                        <div class="rank-item-numbers"><?php echo $k + 1 ?></div>
+                        <img class="rank-item-avatar" src="<?php echo $item['avatar_url'] ?>" alt="">
+                        <div class="rank-item-nickname"><?php echo $item['nickname'] ?></div>
+                        <div class="rank-item-bonus">抽中<span><?php echo $item['score'] ?></span>元</div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+<div class="foot-container">
+    <img src="./assets/foot_bg.png" alt="foot_bg">
+</div>
+
+<!--<script src="./js/zepto.min.js"></script>-->
+<script src="/default/js/jquery.min.js"></script>
+<script src="/static/activity-invite/js/dialog1.js?v=<?php echo time() ?>"></script>
+<script src="./js/index.js?v=1"></script>
+<script>
+    var base_data = {
+        "uid": '<?php echo $uid ?>',
+        "uuid": '<?php echo $uuid ?>',
+        "token": '<?php echo $token ?>',
+    }
+    let click = false;
+    $(function (){
+        // 我的奖品
+        $('#myBonus').click(function () {
+            let record = [
+                {
+                    url: './assets/lottery/bonus_10.png',
+                    text: '10元红包',
+                    time: '2019-10-26   09:53'
+                },
+            ];
+            sDialog.loading({
+                src: './assets/loading.gif',
+                hint: '请求中...'
+            });
+
+            $.ajax({
+                "url": "/index.php?m=activity&a=lottery_log",
+                'type': 'post',
+                'data': base_data,
+                'success': function (json) {
+                    record = [];
+                    for (let i = 0, _data; i < json.data.length; i++) {
+                        _data = json.data[i];
+                        record.push({
+                            'url': _data['item_icon'],
+                            'text': _data['log'],
+                            'time': _data['created_str'],
+                        })
+                    }
+                    sDialog.closeLoading()
+                    if (0 === record.length) {
+                        sDialog.alert('您还没有抽过奖')
+                        return false
+                    }
+                    sDialog.showRecord({
+                        list: record,
+                        backBtnClick: function () {
+                            // 返回按钮
+                            console.log("返回按钮");
+                        }
+                    })
+                }
+            })
+        })
+
+        // 兑换会员
+        $('#exchangeVip').click( function () {
+            // btn url 会员图片地址 id:会员ID
+            let vipList = <?php echo json_encode($exchange_vip_items, JSON_UNESCAPED_UNICODE)?>;
+            sDialog.showBottom({
+                title: '兑换会员',
+                row: false,
+                btn: vipList,
+                btnClick: function (index) {
+                    // 请求前
+                    sDialog.loading({
+                        src: './assets/loading.gif',
+                        hint: '请求中...'
+                    })
+                    let info = vipList[index];
+                    $.ajax({
+                        "url": "/index.php?m=activity&a=exchange",
+                        'type': 'post',
+                        'data': $.extend(base_data, {'item_id': info['id'], 'type': 'vip'}),
+                        'success': function (json) {
+                            sDialog.closeLoading()
+                            if (json.code) {
+                                sDialog.alert(json.data);
+                            } else {
+                                sDialog.toast('兑换成功');
+                            }
+                        }
+                    })
+                }
+            });
+        })
+
+        //邀请
+        $('#inviteButton').click(function (){
+            sDialog.loading({
+                src: './assets/loading.gif',
+                hint: '正在打开...'
+            })
+            setTimeout(function (){
+                sDialog.closeLoading();
+            },600);
+            window.location = 'xlpmncode://share?uid=<?php echo $uid?>'
+        })
+
+        // 兑换金币
+        $('#exchangeGold').click( function () {
+            let vipList = <?php echo json_encode($exchange_gold_items, JSON_UNESCAPED_UNICODE)?>;
+            sDialog.showBottom({
+                title: '兑换金币',
+                row: true,
+                btn: vipList,
+                btnClick: function (index) {
+                    // 请求前
+                    sDialog.loading({
+                        src: './assets/loading.gif',
+                        hint: '请求中...'
+                    })
+                    let info = vipList[index];
+                    $.ajax({
+                        "url": "/index.php?m=activity&a=exchange",
+                        'type': 'post',
+                        'data': $.extend(base_data, {'item_id': info['id'], 'type': 'gold'}),
+                        'success': function (json) {
+                            sDialog.closeLoading()
+                            if (json.code) {
+                                sDialog.alert(json.data);
+                            } else {
+                                sDialog.toast('兑换成功');
+                            }
+                        }
+                    })
+                }
+            });
+        })
+
+
+        lottery.init('lotteryTable');
+        let lotteryNumber = <?php echo $reward_remainder?>; // 初始化抽奖次数
+        $('#lotteryNumbers').text('剩余' + lotteryNumber + '次')
+        render_countdown(<?php echo $end_date?> * 1000);
+        $("#lotteryAction").click( function () {
+            if (click) {
+                sDialog.toast('正在抽奖，操作不要太频繁哦')
+                return false;
+            } else {
+                if (lotteryNumber <= 0) {
+                    sDialog.alert('您的抽奖次数已经不足')
+                    return false
+                }
+                // 请求前
+                sDialog.loading({
+                    src: './assets/loading.gif',
+                    hint: '请求中...'
+                })
+
+
+                $.ajax({
+                    "url": "/index.php?m=activity&a=invite_post",
+                    'type': 'post',
+                    'data': base_data,
+                    'success': function (json) {
+                        lotteryNumber--;
+                        $('#lotteryNumbers').text('剩余' + lotteryNumber + '次');
+                        sDialog.closeLoading()
+                        if (json.code) {
+                            sDialog.alert(json.data);
+                            return false;
+                        }
+
+                        lottery.speed = 100; // 模拟请求返回后
+                        lottery.prize = json.data['id'] - 1; // 抽奖停止的位置 顺时针从0开始 第一排第一个
+                        // 中奖的物品的图片
+                        lottery.bonusImg = json.data['icon'];//'./assets/lottery/bonus_1.png';
+                        // 中奖物品的名称
+                        lottery.text = json.data['name'];//'1元现金红包';
+                        roll();
+                        click = true;
+                        return false;
+                    }
+                })
+            }
+        });
+    })
+
+</script>
+</body>
+</html>

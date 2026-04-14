@@ -1,0 +1,83 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+</head>
+<style>
+    body{
+        width: 500px;
+        height: auto;
+        margin: 0 auto;
+        padding: 0px;
+    }
+    tr {
+        border-bottom: 1px solid salmon;
+    }
+    th{
+        color: orangered;
+    }
+</style>
+<body>
+<table class="table">
+    <tr><td>正在加载历史问答 .. .</td></tr>
+</table>
+        <div class="layui-form-item">
+            <label class="layui-form-label">回复对象：</label>
+            <div class="layui-input-block">
+                <input type="text" style="width:500px;" name="touid" id="uid"  value="<?= $data['uid']; ?>" readonly >
+                <input type="hidden" id="fid" name="fid" value="<?= $data['id']; ?>">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容：</label>
+            <div class="layui-input-block">
+                <textarea type="text" name="content" rows="8" cols="10" style="width:500px; color: orangered;font-weight: bold"></textarea>
+            </div>
+
+        </div>
+        <div class="form-actions">
+            <button type="button" class="btn btn-primary js-ajax-submit" onclick="handReplay()">回复</button>
+        </div>
+
+
+<script>
+
+    
+    function handReplay() {
+        var data = {
+            touid: "<?=$data['uid'];?>",
+            fid: "<?=$_GET['id'];?>",
+            content: $('textarea[name=content]').val(),
+        }
+
+        $.ajax({
+            url: 'd.php?mod=reports&code=reply_post',
+            data: data,
+            type: 'POST',
+            success: function (res) {
+                var icon = 1;
+                if (res.status != 1) {
+                    icon = 5;
+                }
+                layer.msg(res.data, {icon: icon,time:600},function () {
+                    parent.layer.closeAll();
+                })
+            }
+        });
+    }
+
+    function getReplyList() {
+        $.ajax({
+            url: 'd.php?mod=reports&code=replayList',
+            type: 'GET',
+            data:{uid:"<?=$data['uid'];?>"},
+            success: function (res) {
+                $('.table').html(res).fadeIn(1000);
+            }
+        });
+    }
+    $(function () {
+        getReplyList();
+    });
+
+</script>
+</body>
+</html>

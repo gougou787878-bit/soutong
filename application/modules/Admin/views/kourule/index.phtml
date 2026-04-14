@@ -1,0 +1,239 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><span style="color: #e641ff;font-weight: bold">扣量规则列表</span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">规则编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[agent_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">生效 </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[status]', [
+                                    0 => '禁用',
+                                    1 => '生效'
+                                ]) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">管理人员</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[admin_name]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新规则</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+
+
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900"  data-h="600" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: #e641ff;font-weight: bold">扣量规则设置</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+
+                <label class="layui-form-label">用户编号：</label>
+                <div class="layui-input-block">
+                    <input lay-verify="required" placeholder="用户编号|uuid" name="agent_id"
+                           value="{{d.agent_id||0 }}" class="layui-input">
+                </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+
+                <label class="layui-form-label">生效：</label>
+                <div class="layui-input-block">
+
+                    <?php echo Layui::select('status', [
+                            0=>'否',
+                            1=>'是',
+                    ], ['data-value' => '{{=d.status }}']) ?>
+
+                </div>
+
+        </div>
+
+        <div class="layui-form-item">
+
+                <label class="layui-form-label">扣量基数：</label>
+                <div class="layui-input-block">
+
+                    <input lay-verify="required" placeholder="扣量基数" name="base_number"
+                           value="{{d.base_number || 0 }}" class="layui-input">
+
+                </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+
+                <label class="layui-form-label">扣量点位：</label>
+                <div class="layui-input-block">
+
+                    <input lay-verify="required" placeholder="扣量点位 比如10 即按10%扣量浮动" name="point"
+                           value="{{d.point || 0 }}" class="layui-input">
+
+                </div>
+
+        </div>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>时间域规则</legend>
+        </fieldset>
+
+        <?php for ($i = 0; $i < 3; $i++): ?>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">规则 <?php echo $i+1 ; ?> </label>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="time_rule[<?php echo $i ; ?>][date]" placeholder="日期，格式2020-02-02" value="{{data_get(d.time_rule,'0.date','1971-01-01')}}" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">-</div>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="time_rule[<?php echo $i ; ?>][point]" placeholder="扣量点数" autocomplete="off" value="{{data_get(d.time_rule,'0.point','0')}}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <?php endfor; ?>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block" >
+                <p>1. 扣量规则适用于所有视频收益用户每单金额；</p>
+                <p style="color: #e641ff;">2. 扣量基数是按天计算满足最小扣量的起始扣量值</p>
+                <p>3. 扣量点位(1,100] , 0的扣量没有意义，比如设置10 ，即按10%扣量计算</p>
+                <p style="color: #e641ff;">4. 扣量规则不支持修改，生效是按照开关状态设置</p>
+                <p style="color: #e641ff;">5. 扣量规则按最近一条生效规则处理[同时设置多条生效规则也只会按最新处理]，无则不扣量</p>
+                <p style="color: #ff2c26;">6. 扣量的视频没有支付日志,平台能统计查看</p>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script>
+
+
+    function data_get(data, key, def) {
+        if (key === undefined || key.length === 0){
+            return data
+        }
+        if (typeof(data) === "undefined"){
+            return def;
+        }
+
+        let keys = key.split("."),k1 = keys.shift();
+        if (keys.length === 0){
+            return data[k1]
+        }
+        if (typeof (data[k1]) === "undefined") {
+            return def
+        }
+        return data_get(data[k1] , keys.join('.') , def)
+    }
+
+
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+             {field: 'id', title: 'id',sort:true,width:130}
+            , {field: 'agent_id', title: '编号',width:150,sort:true}
+            , {field: 'agent_info', title: '信息'}
+            , {field: 'status',width:100, title: '状态', type: 'switch', value: "1|0", edit: true}
+            , {field: 'base_number', title: '扣量基数',width:130}
+            , {field: 'point', title: '扣量点位',width:130}
+            , {field: 'admin_name', title: '管理',width:130}
+            , {field: 'created_at', title: '时间'}
+           // , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event:{
+            "toolbar": {
+                "refresh": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.confirm('刷新扣量规则缓存?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend('refresh')?>")
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                },
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

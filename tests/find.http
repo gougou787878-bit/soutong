@@ -1,0 +1,311 @@
+### 3620fa7115d77258ead6ad8cd8a9ffc5 14115520
+### b0b284963c352cb885ae992e7f65835d 14115521
+### dd6537bf016a6c09741a95b5590275ca 141155
+
+### 求片
+POST {{host}}/api/find/create
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "title": "这个女的，牛不牛逼宝贝宝贝",
+  "coins": 20,
+  "images": [
+    "/new/xiao/20200615/2020061512291812478.jpeg",
+    "/new/xiao/20200615/2020061512291812478.jpeg"
+  ]
+}
+
+### 检查影片是否被引用
+POST {{host}}/api/find/checkFind
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "mv_id": "1000"
+}
+
+### 求片详情
+POST {{host}}/api/find/detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "find_id": 2
+}
+
+### 回复列表
+POST {{host}}/api/find/replyByFind
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "find_id": 2
+}
+
+### 回复的评论列表
+POST {{host}}/api/find/commentByReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "reply_id": 1
+}
+
+
+### 作品列表
+POST {{host}}/api/find/mvList
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "version": "1.0.1",
+  "type": "all",
+  "kwy": "黑丝"
+}
+
+### 我的求片列表
+POST {{host}}/api/find/myFindList
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android"
+}
+
+### 采纳推片
+POST {{host}}/api/find/myAccept
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "find_id": 3,
+  "reply_id": 3
+}
+
+### 求完整片引用
+POST {{host}}/api/find/checkFind
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "mv_id":40127
+}
+
+### 转盘首页
+POST {{host}}/api/lottery/index
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc"
+}
+
+### 转盘抽奖
+POST {{host}}/api/lottery/draw
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc"
+}
+
+### 转盘抽奖
+POST {{host}}/api/lottery/receive
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "id": 1
+}
+
+### 首页
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "android"
+}
+
+### 首页
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "e3f5536a141811db40efd6400f1d0a4e",
+  "oauth_type": "android"
+}
+
+### 视频下载
+POST {{host}}/api/system/download
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "mv_id": 14115105
+}
+
+### 标签视频列表
+POST {{host}}/api/mv/listOfTagNew
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "tag": "人妻",
+  "type": "0",
+  "sort": "newest",
+  "tab_id": 15
+}
+
+###
+POST {{host}}/api/tab/categoryNew
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+###
+POST {{host}}/api/ai/list_face_cate
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+###
+POST {{host}}/api/porngame/construct
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+###
+POST {{host}}/api/cartoon/construct
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+###
+POST {{host}}/api/cartoon/list
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "id": 1,
+  "sort": "hot"
+}
+
+###
+POST {{host}}/api/cartoon/comment_list
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "id": 1
+}
+
+###
+POST {{host}}/api/recommend/recommend_follow
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "id": 1
+}
+
+###
+POST {{host}}/api/p/addAccount
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "account_bank": "农业银行",
+  "account": "22",
+  "name": "人民"
+}
+
+###
+POST {{host}}/api/ai/my_liking
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_type": "android",
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d"
+}
+

@@ -1,0 +1,86 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+
+<form action="d.php?mod=manager&code=actionList" method="post">
+    <table cellspacing="1" width="100%" align="center" class="tableborder">
+        <tbody>
+        <tr class="header">
+            <td class="altbg1">
+                <input type="text" name="flag" placeholder="控制器名字 / 方法名" style="width: 200px" value="<?=$flag;?>">
+                <input class="button lf" type="submit" name="setting_submit" id="setting_submit" value="搜索">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<p style="padding-left: 10px;font-size: 1.1rem;line-height: 30px;color: #2aabd2;font-weight: bold">
+    首次更新请使用"更新"以更新所有的控制器和方法列表:<br/>
+    再次点击更新:更新权限列表不存在的权限<br/>
+</p>
+&nbsp;&nbsp;
+<a href="d.php?mod=manager&code=updateRoleActions"><input class="button lf" type="button" value=" 更 新 "></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<style>
+    td {
+        width: 17%;
+    }
+
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>权限ID</td>
+        <td>父级权限ID</td>
+        <td>权限名</td>
+        <td>权限控制器</td>
+        <td>权限方法</td>
+        <td>操作</td>
+    </tr>
+    <?php if($topic):?>
+    <?php foreach ($topic as $v):?>
+    <tr>
+        <td><?=$v['id'];?></td>
+        <td><?=$v['pid'];?></td>
+        <td data-id="<?=$v['id'];?>"><input class="action_name" type="text" value="<?=$v['name'];?>"></td>
+        <td><?=$v['module'];?></td>
+        <td><?=$v['action'];?></td>
+        <td>
+        <a href="javascript:if(confirm('确实要删除吗?'))location='d.php?mod=manager&code=delAction&id=<?=$v['id'];?>'">删除</a>
+        </td>
+    </tr>
+        <?php endforeach;?>
+    <?php else:?>
+    <tr>
+        <td colspan="15">暂无数据</td>
+    </tr>
+    <?php endif;?>
+</table>
+<br>
+<?=$page_arr['html'];?>
+<br>
+<br>
+<style>
+    .action_name {
+        border: none;
+    }
+</style>
+<script type="text/javascript" src="/static/admin/js/layer/layer.js"></script>
+<script>
+    $(function () {
+        $(document).on('blur', '.action_name', function () {
+            var a_id = $(this).parent('td').attr('data-id');
+            var a_name = $(this).val();
+            console.log(a_id);
+            $.getJSON('d.php?mod=manager&code=updateActionName', {a_id: a_id, a_name: a_name}, function (data) {
+                if (data == 1) {
+                    layer.msg('更新权限名字成功');
+                    return false;
+                }
+            });
+        });
+    })
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml";?>
+

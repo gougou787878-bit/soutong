@@ -1,0 +1,105 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>模板列表</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-10"> <input type="text" placeholder="模板内容" class="form-control" name="title" id="title" value=""></div> <div class="col-sm-2"><button class="btn btn-sm btn-primary doreplyedit">新增</button></div>
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>模板id</th>
+                                        <th>模板内容</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <?php if($topic):?>
+                                        <!--<?php foreach ($topic as $k=>$v) :?>-->
+                                        <tr>
+                                            <td><?=$v['id'];?></td>
+                                            <td><?=$v['title'];?></td>
+                                            <td>
+                                                <a onclick="handleEdit(<?=$v['id'];?>)" class="btn btn-xs btn-primary">编辑</a>
+                                                <a onclick="handleDel(<?=$v['id'];?>)" class="btn btn-xs btn-primary">删除</a>
+                                            </td>
+                                        </tr>
+                                        <!--<?php endforeach; ?>-->
+                                        <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            function handleEdit (id) {
+                var url = "d.php?mod=user&code=replyedit&id=" + id
+                window.location.href = url;
+            }
+
+            function handleDel (id) {
+                var url = "d.php?mod=user&code=replymodelDel&id=" + id
+                layer.confirm('确定要删除问题嘛？', { btn: ['确定', '取消']}, function () {
+                    getAjax(url, function (res) {
+                        parent.layer.msg(res, {icon: 1})
+                        window.location.reload()
+                    })
+                })
+            }
+
+            $(".doreplyedit").click(function () {
+                var title = $("#title").val();
+                var url = "d.php?mod=user&code=doreplyedit&title="+title
+                getAjax(url, function (res) {
+                    parent.layer.msg(res, {icon: 1})
+                    window.location.reload()
+                })
+            });
+
+
+            function layerOpen(url, title) {
+                parent.layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['1200px', '500px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url, reloadRes) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                            reloadRes(res.data)
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                parent.layer.msg(msg, {icon: 1})
+                window.location.reload()
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

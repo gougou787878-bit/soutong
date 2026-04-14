@@ -1,0 +1,718 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[username]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">顶级ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[root_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">上级ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[parent_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">密码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[password]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">渠道名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[channel_name]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">提成比例</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[rate]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">金币提成</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[rate_gold]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系号码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[phone]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">代理等级</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[agent_level]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">渠道号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[channel]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">账户余额</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[balance]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">累计金额</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[total]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">累计提现金额</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[exchnage]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态 0 禁用 1启用</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[status]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">91 推广码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[aff]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">审计账号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[audit]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">最后登录时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[last_login_time]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">最后登录IP</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[last_login_ip]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">扩展数据</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[extended_data]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">created_at</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[created_at]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">updated_at</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[updated_at]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户名" name="username"
+                           value="{{=d.username }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">顶级ID：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="顶级ID" name="root_id"
+                           value="{{=d.root_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上级ID：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="上级ID" name="parent_id"
+                           value="{{=d.parent_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="密码" name="password"
+                           value="{{=d.password }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道名：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="渠道名" name="channel_name"
+                           value="{{=d.channel_name }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">提成比例：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="提成比例" name="rate"
+                           value="{{=d.rate }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">金币提成：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="金币提成" name="rate_gold"
+                           value="{{=d.rate_gold }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系号码：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="联系号码" name="phone"
+                           value="{{=d.phone }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">代理等级：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="代理等级" name="agent_level"
+                           value="{{=d.agent_level }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道号：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="渠道号" name="channel"
+                           value="{{=d.channel }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账户余额：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="账户余额" name="balance"
+                           value="{{=d.balance }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计金额：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="累计金额" name="total"
+                           value="{{=d.total }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计提现金额：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="累计提现金额" name="exchnage"
+                           value="{{=d.exchnage }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态 0 禁用 1启用：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="状态 0 禁用 1启用" name="status"
+                           value="{{=d.status }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">91 推广码：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="91 推广码" name="aff"
+                           value="{{=d.aff }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">审计账号：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="审计账号" name="audit"
+                           value="{{=d.audit }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">最后登录时间：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="最后登录时间" name="last_login_time"
+                           value="{{=d.last_login_time }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">最后登录IP：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="最后登录IP" name="last_login_ip"
+                           value="{{=d.last_login_ip }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扩展数据：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="扩展数据" name="extended_data"
+                           value="{{=d.extended_data }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">created_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="created_at" name="created_at"
+                           value="{{=d.created_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">updated_at：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="updated_at" name="updated_at"
+                           value="{{=d.updated_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.username }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">顶级ID：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.root_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上级ID：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.parent_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.password }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道名：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.channel_name }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">提成比例：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.rate }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">金币提成：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.rate_gold }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">联系号码：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.phone }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">代理等级：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.agent_level }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道号：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.channel }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账户余额：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.balance }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计金额：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.total }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">累计提现金额：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.exchnage }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">状态 0 禁用 1启用：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.status }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">91 推广码：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.aff }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">审计账号：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.audit }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">最后登录时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.last_login_time }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">最后登录IP：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.last_login_ip }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扩展数据：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.extended_data }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">created_at：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">updated_at：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'username', title: '用户名'}
+            , {field: 'root_id', title: '顶级ID'}
+            , {field: 'parent_id', title: '上级ID'}
+            , {field: 'password', title: '密码'}
+            , {field: 'channel_name', title: '渠道名'}
+            , {field: 'rate', title: '提成比例'}
+            , {field: 'rate_gold', title: '金币提成'}
+            , {field: 'phone', title: '联系号码'}
+            , {field: 'agent_level', title: '代理等级'}
+            , {field: 'channel', title: '渠道号'}
+            , {field: 'balance', title: '账户余额'}
+            , {field: 'total', title: '累计金额'}
+            , {field: 'exchnage', title: '累计提现金额'}
+            , {field: 'status', title: '状态 0 禁用 1启用'}
+            , {field: 'aff', title: '91 推广码'}
+            , {field: 'audit', title: '审计账号'}
+            , {field: 'last_login_time', title: '最后登录时间'}
+            , {field: 'last_login_ip', title: '最后登录IP'}
+            , {field: 'extended_data', title: '扩展数据'}
+            , {field: 'created_at', title: 'created_at'}
+            , {field: 'updated_at', title: 'updated_at'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

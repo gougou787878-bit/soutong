@@ -1,0 +1,60 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<form action="./d.php?mod=ip&code=searchIp" method="post">
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+	<tbody>
+	<tr class="header">
+	  <td colspan="2">搜索被禁ip</td>
+	</tr>
+  </tbody>
+  <tbody id="menu_tip">
+	<tr>
+	  <td class="altbg1" width="120">ip地址:</td>
+	  <td class="altbg2"><input type="text" name="ip" value="" size="20"><input style="margin-left: 30px" class="button lf" type="submit" name="setting_submit" id="setting_submit" value="搜索" ></td>
+	</tr>
+  </tbody>
+</table>	
+</form>
+
+
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+		<tr class="header">
+			<td>ip地址</td>
+			<td>添加时间</td>
+			<td>到期时间</td>
+			<td>添加用户</td>
+			<td width=40>操作</td>
+		</tr>
+	<!--<?php foreach ($topic as $k=>$v) :?>-->
+		<tr>
+			<td><a href="http://ip.zxinc.org/ipquery/?ip=<?=$v['ip'];?>&action=2" target="_blank"><?=$v['ip'];?></a></td>
+			<td><?=$v['dateline'];?></td>
+			<td><?=$v['expiration'];?></td>
+			<td><?=$v['admin'];?></td>
+			<td><a href="d.php?mod=ip&code=removeIp&id=<?=$v['id'];?>">移除</a></td>
+		</tr>
+	<!--<?php endforeach; ?>-->
+	</table>
+	<br>
+<?php if(isset($page_arr)):?><?=$page_arr['html'];?><?php endif;?>
+	<br>
+<form action="./d.php?mod=ip&code=addIp" method="post">
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+	<tbody>
+	<tr class="header">
+	  <td colspan="4">添加禁止访问ip</td>
+	</tr>
+  </tbody>
+  <tbody>
+	<tr>
+		<td class="altbg1">ip地址:</td>
+		<td class="altbg2"><input type="text" name="ip" size="20"></td>
+		<td class="altbg1">有效期:</td>
+		<td class="altbg2">
+			<input type="text" name="expiration" value="" size="20" placeholder="填数字/天数">
+			<input class="button lf" type="submit" name="setting_submit" id="" value="添加" >
+		</td>	  
+	</tr>
+  </tbody>
+</table>	
+</form>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

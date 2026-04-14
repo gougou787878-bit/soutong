@@ -1,0 +1,233 @@
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "version": "5.2.0"
+}
+### json请求 公公配置
+POST {{host}}/api/community/home
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "version": "5.2.0"
+}
+
+### json请求 公公配置
+POST {{host}}/api/community/listPost
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "cate": "new",
+  "version": "5.2.0"
+}
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/community/post_detail_by_id
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "cate": "new",
+  "id": 16688,
+  "version": "5.2.0"
+}
+
+### json请求 公公配置
+POST {{host}}/api/community/topics
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "cate": "new",
+  "id": "2",
+  "version": "5.2.0"
+}
+
+### json请求 公公配置
+POST {{host}}/api/community/topic_detail
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "topic_id": "60",
+  "version": "5.2.0"
+}
+
+
+
+### json请求 公公配置
+POST {{host}}/api/community/comment
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "post_id": "1",
+  "content": "美丽女大学生评论美丽女大学生美丽女大学生美丽女大学生美丽女大学生美丽女大学生美丽女大学生",
+  "version": "5.2.0"
+}
+
+### json请求 公公配置
+POST {{host}}/api/community/follow_user_post
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "cate": "new",
+  "id": "16688",
+  "version": "5.2.0"
+}
+
+### json请求 公公配置 //release verify refuse
+POST {{host}}/api/community/my_post
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "stat": "release",
+  "version": "5.2.0"
+}
+### json请求 公公配置
+POST {{host}}/api/community/pre_post_data
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "stat": "release",
+  "version": "5.2.0"
+}
+### json请求 公公配置
+POST {{host}}/api/mv/listOfLatest
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "version": "5.2.0"
+}
+
+### json请求 公公配置
+POST {{host}}/api/community/follow_topic_post
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "version": "5.2.0"
+}
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/community/favorit_post
+Content-Type: application/json
+
+{
+  "bundle_id":"gov.oasis.xlmv",
+  "new_player":"fx",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "page": 1
+
+}
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/community/unlock_post
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "24ecce838dd4093ca7eb690ed4ca504f",
+  "oauth_type": "pwa",
+  "cate": "new",
+  "id": 20,
+  "version": "5.2.0"
+}
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/community/unlock_post
+Content-Type: application/json
+
+{
+  "bundle_id":"gov.oasis.xlmv",
+  "new_player":"fx",
+  "oauth_type":"android",
+  "oauth_id":"d2a3f68117526f44a6203adbf275ca1a",
+  "theme":"gw",
+  "id":"20",
+  "version":"4.2.1"
+
+}
+
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/community/post_income_list
+Content-Type: application/json
+
+{
+  "bundle_id":"gov.oasis.xlmv",
+  "new_player":"fx",
+  "oauth_type":"android",
+  "oauth_id":"ed10e48f0f0f221ff9c4ce113fbeda2c",
+  "theme":"gw",
+  "version":"4.2.1",
+  "page": 1
+
+}
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/community/favorit_post
+Content-Type: application/json
+
+{
+  "bundle_id":"gov.oasis.xlmv",
+  "new_player":"fx",
+  "oauth_type":"android",
+  "oauth_id":"ed10e48f0f0f221ff9c4ce113fbeda2c",
+  "theme":"gw",
+  "version":"4.2.1",
+  "page": 1
+
+}
+### json请求 公公配置
+## "id": "16688",  "id": 17,
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+
+{
+  "bundle_id":"gov.oasis.xlmv",
+  "new_player":"fx",
+  "oauth_type":"android",
+  "oauth_id":"ed10e48f0f0f221ff9c4ce113fbeda2c",
+  "theme":"gw",
+  "version":"4.2.1",
+  "page": 1
+
+}

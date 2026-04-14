@@ -1,0 +1,62 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="ids" value="<?=$ids;?>">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">模板回复：(手动回复时默认模板为空)</label>
+                            <div class="col-sm-8">
+                                <select class="form-control m-b" name = "reply" id="reply">
+                                    <option value="">选择回复模板</option>
+                                    <!--{loop $replymodel $k $v}-->
+                                    <option value="<?=$v}">{$v;?></option>
+                                    <!--<?php endforeach; ?>-->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">手动回复：</label>
+                            <div class="col-sm-8">
+                                <textarea  placeholder="输入手动回复内容" class="form-control" id="content"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-8">
+                                <button class="btn btn-sm btn-white" type="button" onclick="handleEdit()">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            var index = parent.layer.getFrameIndex(window.name);
+            function handleEdit() {
+                var data = {
+                    mod: 'user',
+                    code: 'doreplyall',
+                    reply: $("#reply").val(),
+                    content: $("#content").val(),
+                    ids: $("#ids").val(),
+                    FORMHASH: '<?=$formhash;?>'
+                }
+
+                $.ajax({
+                    url: 'd.php',
+                    data: data,
+                    type: 'POST',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            parent.reload(res.data)
+                            parent.layer.close(index)
+                           
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

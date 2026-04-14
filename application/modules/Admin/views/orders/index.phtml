@@ -1,0 +1,318 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+<?php
+$uuid = $_GET['uuid']??'';
+if($uuid){
+    $ajaxUrl = url_backend('listAjax', ['where[uuid]' =>$uuid,'is_user'=>1]);
+}else{
+    $ajaxUrl = url_backend("listAjax");
+}
+
+?>
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理 <span style="color: orangered" class="layui-inline"
+                                                        id="total-id"></span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="order-search">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">uuid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uuid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <!-- <div class="layui-inline">
+                             <label class="layui-form-label">三方订号</label>
+                             <div class="layui-input-block">
+                                 <input type="text" name="where[app_order]" placeholder="请输入" autocomplete="off"
+                                        class="layui-input">
+                             </div>
+                         </div>-->
+                        <div class="layui-inline">
+                            <label class="layui-form-label">单号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[order_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">产品ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[product_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">订单金额</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::between('amount', '请输入，分') ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">支付时间</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('updated_at', date("Y-m-d", TIMESTAMP)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[oauth_type]',
+                                    ['' => '全部', 'ios' => 'ios', 'android' => 'android']) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[order_type]',
+                                    merge_array(['' => '全部'], OrdersModel::TYPE)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]',
+                                    merge_array(['' => '全部'], OrdersModel::STATUS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">代理</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[channel]', $channelAll) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                                <label class="layui-form-label">推广渠道</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[build_id]" placeholder="推广渠道 eg xb0099" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" data-h="600" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend><span style="color:red;font-weight: bold">订单信息更新！！！</span><span
+                    style="color: #1E9FFF;font-weight: bold">慎重！！！</span></legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">订单金额：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="订单金额，单位分" name="amount"
+                           value="{{=d.amount }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">实付金额：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="实付金额,单位分" name="pay_amount"
+                           value="{{=d.pay_amount }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">三方订号：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="三方订号" name="app_order"
+                           value="{{=d.app_order }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">备注：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="后台备注" name="msg"
+                           value="{{=d.msg }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">支付方式：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('payway', $payWay, ['data-value' => '{{=d.payway}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">订单状态: </label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('status', OrdersModel::STATUS, ['data-value' => '{{=d.status}}']) ?>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">订单渠道：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('channel', $channelAll, ['data-value' => '{{=d.channel}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" id="search-total">
+    <p style="font-size: medium">
+        找到：{{=d.count}}，条数据, 成功支付条数:{{=d.payedCount}}, 成功率:{{=d.payedRate}}%, 订单金额: {{=d.orderTotal}}, 成功支付金额:
+        {{=d.payedTotal}}
+    </p>
+</script>
+<script>
+    xx.use({
+        url: '<?php echo $ajaxUrl ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: undefined,
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        'toolbar': undefined,
+        title: '订单列表',
+        pk: 'id',
+        cols: [[
+            //id	用户uuid	产品id	唯一订单号	支付渠道订单号	订单说明	支付渠道	设备类型	订单金额（元）	实付金额（元）	状态	设备	更新时间	创建时间	操作
+            //{type: 'checkbox', fixed: 'left'} ,
+            {field: 'id', title: 'id', width: 80}
+            , {field: 'uuid', title: 'uuid', width: 240}
+            , {
+                field: 'order_type', title: '类型', templet: function (d) {
+                    if (d.order_type == '1') {
+                        return "<span style='color: #FF5722'>vip</span>";
+                    }else if (d.order_type == '2') {
+                        return "<span style='color: #00F7DE'>金币</span>";
+                    }
+                    return "<span style='color: #242bff'>游戏</span>";
+                }
+            }
+            , {
+                field: 'order_id', title: '订单号', width: 200, templet: function (d) {
+                    return "<span style='color: #00C1B3'>" + d.order_id + "</span>";
+                }
+            }
+
+            /*, {field: 'product_name', title: '订单说明'}*/
+
+            , {field: 'amount_yuan', title: '订单金额'}
+            , {
+                field: 'pay_amount_yuan', title: '实付金额', templet: function (d) {
+                    if (d.pay_amount_yuan > 0) {
+                        return "<span style='color:orangered;font-weight: bold'>" + d.pay_amount_yuan + "</span>";
+                    }
+                    return d.pay_amount_yuan;
+                }
+            }
+            , {field: 'status', title: '状态', 'type': 'enum', 'value': <?php echo json_encode(OrdersModel::STATUS)  ?>}
+            , {field: 'channel', title: '支付代理'}
+            , {field: 'oauth_type', title: '设备类型'}
+            , {field: 'descp', title: '订单信息'}
+            , {field: 'product_id', title: '产品id', width: 80}
+            , {field: 'updated_str', title: '更新时间'}
+            , {field: 'created_str', title: '创建时间'}
+            , {field: 'build_id', title: '渠道'}
+            , {field: 'app_order', title: '第三方单号'}
+            // , {field: 'created_at', title: 'created_at'}
+            // , {field: 'desc_img', title: '上传成功截图'}
+
+            // , {field: 'expired_at', title: '过期时间'}
+            , {field: 'msg', title: '备注'}
+            // , {field: 'order_type', title: '订单类型 同商品类型'}
+            // , {field: 'pay_amount', title: '实付金额,单位分'}
+            // , {field: 'pay_type', title: 'online线上充值/agent代理充值'}
+            // , {field: 'pay_url', title: '支付链接'}
+            // , {field: 'payway', title: '支付方式'}
+
+
+            , {fixed: 'right', width: 120, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            search: function (ajax, laytpl, where) {
+                ajax.get("<?php echo url_backend('total')?>&" + xx.queryEncode(where)).then(function (json) {
+                    if (json.code == '0') {
+                        let data = json.data, $ = layui.$;
+                        $('#total-id').html(laytpl($('#search-total').html()).render(data));
+                    }
+                });
+            }
+        }
+    });
+
+    layui.use(['form', 'jquery', 'laytpl'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let laytpl = layui.laytpl;
+        let data = form.val('order-search');
+        //console.log('order-search'+xx.queryEncode(data))
+        $.ajax({
+            url: "<?php echo url_backend('total')?>&" + xx.queryEncode(data),
+            dataType: 'json',
+            success: function (json) {
+                //console.log(json.code)
+                if (json.code == '0') {
+                    let response = json.data;
+                    $('#total-id').html(laytpl($('#search-total').html()).render(response));
+                }
+            }
+        });
+    })
+
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

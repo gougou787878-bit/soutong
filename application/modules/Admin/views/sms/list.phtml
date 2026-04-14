@@ -1,0 +1,129 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>短信发送日志</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <form action="d.php?mod=msg" method="post">
+                                <div class="col-sm-3">
+                                    <input type="text" name="flag" placeholder="手机号/IP/uuid" class="input-sm form-control">
+                                </div>
+                                <div class="col-sm-3">
+                                    <select name="status" class="input-sm form-control">
+                                        <option value="-1">全部</option>
+                                        <option value="1">已使用</option>
+                                        <option value="0">未使用</option>
+                                    </select>  
+                                </div>
+                                <div class="col-sm-3">
+                                    <button type="submit" class="btn btn-sm btn-primary"> 搜索</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>uuid</th>
+                                        <th>国家码</th>
+                                        <th>手机号</th>
+                                        <th>验证码</th>
+                                        <th>状态</th>
+                                        <th>类型</th>
+                                        <th>IP地址</th>
+                                        <th>发送时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($topic):?>
+                                    <!--<?php foreach ($topic as $k=>$v) :?>-->
+                                    <tr>
+                                        <td><?=$v['id'];?></td>
+                                        <td><?=$v['uuid'];?></td>
+                                        <td><?=$v['prefix'];?></td>
+                                        <td><?=$v['mobile'];?></td>
+                                        <td><?=$v['code'];?></td>
+                                        <td>
+                                            <?php if($v['status']==0):?>未使用<?php endif;?>
+                                            <?php if($v['status']==1):?>已使用<?php endif;?>
+                                        </td>
+                                        <td>
+                                            <?php if($v['type']==1):?>绑定手机<?php endif;?>
+                                            <?php if($v['type']==2):?>解绑手机<?php endif;?>
+                                            <?php if($v['type']==3):?>找回账号<?php endif;?>
+                                            <?php if($v['type']==4):?>重置安全码<?php endif;?>
+                                        </td>
+                                        <td><a href="http://ip.zxinc.org/ipquery/?ip=<?=$v['ip'];?>&action=2" target="_blank"><?=$v['ip'];?></a></td>
+                                        <td><?=$v['created_at'];?></td>
+                                        <td>
+                                            <a onclick="handleDel('<?=$v['id'];?>')" class="btn btn-xs btn-danger">删除</a>
+                                        </td>
+                                    </tr>
+                                    <!--<?php endforeach; ?>-->
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="8">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            function handleDel(id) {
+                var url = "d.php?mod=msg&code=del&id=" + id
+                layer.confirm('确定要删除这条数据吗？', {
+                    btn: ['确定', '取消']
+                    }, function () {
+                        getAjax(url, function (res) {
+                            reload(res)
+                        })
+                    }
+                )
+            }
+
+            function layerOpen(url, title) {
+                layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['800px', '800px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url, call) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            //layer.msg(res.data, {icon: 1})
+                            call(res.data)
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                parent.layer.msg(msg, {icon: 1})
+                window.location.reload()
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

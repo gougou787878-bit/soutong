@@ -1,0 +1,139 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>广告推广统计</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    
+                    <div class="ibox-content">
+                        <div class="row">
+                            <a href="d.php?mod=static&code=advert&times=yestoday" class="btn btn-xs btn-success">昨日</a>
+                            <a href="d.php?mod=static&code=advert&times=week" class="btn btn-xs btn-success">本周</a>
+                            <a href="d.php?mod=static&code=advert&times=month" class="btn btn-xs btn-success">本月</a>
+                            直推邀请：<?=$countStat['level1'];?> , 裂变邀请：<?=$moreCount;?> , 合计 <?=$countStat['all'];?>
+                        </div>
+                        <div class="row">
+                            <form action="d.php" method="get">
+                                <input type="hidden" name="mod" value="static">
+                                <input type="hidden" name="code" value="advert">
+                                <div class="col-sm-2">
+                                    <input class="input-sm form-control input-s-sm inline" placeholder="aff" type="text" name="aff">
+                                </div>
+                                <div class="col-sm-2">
+                                    <select  class="input-sm form-control input-s-sm inline" placeholder="aff" type="text" name="recharge">
+                                        <option value="">充值</option>
+                                        <option value="1">有充值</option>
+                                        <option value="2">无充值</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select  class="input-sm form-control input-s-sm inline" placeholder="aff" type="text" name="invited_num">
+                                        <option value="">是否有邀请</option>
+                                        <option value="1">有邀请</option>
+                                        <option value="2">无邀请</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="input-sm form-control input-s-sm inline" placeholder="开始时间" id="start" type="text" name="start">
+                                </div>
+                                <div class="col-sm-2">
+                                    <input class="input-sm form-control input-s-sm inline" placeholder="结束时间" id="end" type="text" name="end">
+                                </div>
+                                <div class="col-sm-1"><button type="submit" class="btn btn-sm btn-primary"> 搜索</button> </span></div>
+                            </form>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>推广aff</th>
+                                        <th>新增用户</th>
+                                        <th>绑定手机</th>
+                                        <th>2级新增</th>
+                                        <th>3级新增</th>
+                                        <th>4级新增</th>
+                                        <th>活跃用户</th>
+                                        <th>总充值</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($items):?>
+                                        <!--  <?php foreach ($items as $v) :?>-->
+                                    <tr>
+                                        <td><?=$v['date'];?></td>
+                                        <td><a href="javascript:;" onclick="showUser('<?=$v['aff'];?>')"><?=$v['aff'];?></a></td>
+                                        <td>
+                                            <?=$v['level_1'];?>(<?=$v['recharge_1']?>)
+                                        </td>
+                                        <td><?=$v['bind_phone_count'];?></td>
+                                        <td><?=$v['level_2'];?>(<?=$v['recharge_2']?>)</td>
+                                        <td><?=$v['level_3'];?>(<?=$v['recharge_3']?>)</td>
+                                        <td><?=$v['level_4'];?>(<?=$v['recharge_4']?>)</td>
+                                        <td><?=$v['invited_count'];?></td>
+                                        <td><?=$v['payment_count'];?></td>
+                                    </tr>
+                                    <!--<?php endforeach; ?>-->
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="16">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            layui.laydate.render({
+                elem: '#start'
+            })
+            layui.laydate.render({
+                elem: '#end'
+            })
+            function showUser(aff) {
+                var url = "d.php?mod=user&code=index&aff=" + aff
+                layerOpen(url, '用户详情')
+            }
+
+            function layerOpen(url, title) {
+                parent.layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['1200px', '500px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                layer.msg(msg, {icon: 1})
+                setTimeout(function () {
+                    window.location.reload()
+                }, 3000)
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

@@ -1,0 +1,214 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space5">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">视频id</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="where[mv_id]" placeholder="请输入" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">视频用户id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[mv_uid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[type]',MvPayModel::TYPE) ?>
+                            </div>
+                        </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label">时间</label>
+                        <div class="layui-input-block">
+                            <?php echo Layui::datetimeBetween('created_at') ?>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-inline">
+                        <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                        </button>
+                    </div>
+                        <div style="color: orangered" class="layui-inline" id="total-id">
+
+                        </div>
+                </div>
+            </div>
+
+            <div class="layui-card-body">
+                <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+               <script type="text/html" id="toolbar">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-sm" lay-event="all-refund">
+                            批量退款
+                        </button>
+<!--                        <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>-->
+                    </div>
+                </script>
+                <script type="text/html" id="operate-toolbar">
+                    <div class="operate-toolbar">
+                        {{# if(d.is_refund == 0) { }}
+                        <a lay-event="refund" data-pk="{{=d.id}}">退款</a>
+                        {{# } else { }}
+                        <span style="color: red">已退款</span>
+                        {{# } }}
+                    </div>
+                </script>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/html" id="search-total">
+    <p style="font-size: 16px">累计购买视频次数：{{=d.total_number}}，累计钻石数量：{{=d.total_gold}}，折现（¥）：{{d.total_money||0}}
+<span style="color:green">以当前查询条件统计</span>
+    </p>
+
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: undefined,
+        delUrl: undefined,
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id', width: 100}
+            , {
+                field: 'uid', title: '用户', width: 150, templet: function (d) {
+                    d = d.user;
+                    if (d){
+                        return "<span style='color: orangered'>[" + d.uid + "] " + d.nickname + "</span>&nbsp;"
+                    }else{
+                        return '';
+                    }
+                }
+            }
+            , {field: 'coins', title: '购买钻', width: 100}
+            , {field: 'type', title: '类型',type: "enum", value:<?php echo json_encode(MvPayModel::TYPE) ?>}
+            , {
+                field: 'mv_id', title: '视频id', templet: function (d) {
+                    d = d.mv;
+                    if (d){
+                        return  "<a class='layui-btn layui-btn-sm layui-btn-xs' onclick=\"previewVideo('" + d.m3u8 + "')\"><i class='layui-icon layui-icon-play'></i>Play</a>&nbsp;"
+                            + "<span style='color: orangered'>[" + d.id + "] " + d.title + "</span>";
+                    }
+                }
+            }
+            , {field: 'created_at', title: '购买时间', width: 200}
+            , {fixed: 'right', width: 100, title: '操作',align:'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            "toolbar":{
+                "all-refund":function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus('gridTab'),
+                        data = checkStatus.data,
+                        pkValAry = [];
+
+                    for (let i = 0; i < data.length; i++) {
+                        if (typeof (data[i]['id']) !== "undefined") {
+                            pkValAry.push(data[i]['id'])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    layer.confirm('确定要批量退款吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('refund')?>", {"id": pkValAry.join(',')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                }
+            },
+            "operate": {
+                refund: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('确定要退款吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('refund')?>", {"id": $this.data('pk')})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                },
+                reject: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn(undefined, function (layerIndex) {
+                        Util.formSubmit("<?php echo url_backend('refuseUserUpload')?>", form, ajax, 'refuseUserUpload', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                }
+            },
+            search: function (ajax, laytpl, where) {
+                ajax.get("<?php echo url_backend('total')?>&" + xx.queryEncode(where)).then(function (json) {
+                    let data = json.data,$ = layui.$;
+                    $('#total-id').html(laytpl($('#search-total').html()).render(data));
+                });
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

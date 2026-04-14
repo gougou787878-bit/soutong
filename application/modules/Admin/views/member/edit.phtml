@@ -1,0 +1,146 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="uid" value="<?=$data['uid'];?>">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">用户名：</label>
+
+                            <div class="col-sm-8">
+                                <input type="text" placeholder="用户名" class="form-control" id="username" value="<?=$data['username'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">密码：</label>
+
+                            <div class="col-sm-8">
+                                <input type="text" placeholder="密码" class="form-control" id="password" value="<?=$data['password'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">角色：</label>
+
+                            <div class="col-sm-8">
+                                    <select class="form-control m-b" id="role_id">
+                                        <?php foreach ($user_roles as $k=>$v) :?>
+                                        <option value="<?=$k;?>" <?php if($data['role_id']==$k):?> selected<?php endif;?>><?=$v;?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">邀请数：</label>
+
+                            <div class="col-sm-8">
+                                <input type="text" placeholder="邀请数" class="form-control" id="invited_num" value="<?=$data['invited_num'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                                <label class="col-sm-3 control-label">被邀请：</label>
+    
+                                <div class="col-sm-8">
+                                    <input type="text" placeholder="被邀请" class="form-control" id="invited_by" value="<?=$data['invited_by'];?>">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">aff：</label>
+        
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="" class="form-control" id="aff" value="<?=$data['aff'];?>">
+                                    </div>
+                                </div>
+
+                                    <!--<div class="form-group">
+                                        <label class="col-sm-3 control-label">经验值：</label>
+            
+                                        <div class="col-sm-8">
+                                            <input type="text" placeholder="经验值" class="form-control" id="empiric" value="<?/*=$data['empiric'];*/?>">
+                                        </div>
+                                    </div>-->
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">金币余额：</label>
+            
+                                        <div class="col-sm-8">
+                                            <input type="text" placeholder="金币余额" class="form-control" id="coins" value="<?=$data['coins'];?>">
+                                        </div>
+                                    </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">过期时间(针对限时VIP)：：</label>
+
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="过期时间,针对限时VIP" class="form-control" name="expired_at" id="expired_at" value="<?=$data['expired_at'];?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">昵称：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="" class="form-control"  id="nickname" value="<?=$data['nickname'];?>">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">修改备注：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" placeholder="" class="form-control"  id="extra" value="">
+                                    </div>
+                                </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-8">
+                                <button class="btn btn-sm btn-white" type="button" onclick="handleEdit()">保存</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            var index = parent.layer.getFrameIndex(window.name);
+            function handleEdit() {
+               /* if($("#extra").val() == ''){
+                    layer.msg('备注必填以备审计复核查', {icon: 5})
+                    return false;
+                }*/
+                var data = {
+                    mod: 'user',
+                    code: 'doEdituser',
+                    extra: $("#extra").val(),
+                    data: {
+                        uid: $('#uid').val(),
+                        username: $('#username').val(),
+                        password: $('#password').val(),
+                        role_id: $('#role_id').val(),
+                        invited_num: $('#invited_num').val(),
+                        invited_by: $('#invited_by').val(),
+                        expired_at: $('#expired_at').val(),
+                        aff: $('#aff').val(),
+                        uuid: $('#uuid').val(),
+                        empiric: $('#empiric').val(),
+                        nickname: $('#nickname').val(),
+                        coins: $('#coins').val()
+                    }
+                }
+
+                $.ajax({
+                    url: 'd.php?mod=user&a=doEditUser',
+                    data: data,
+                    type: 'POST',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            parent.reload(res.data)
+                            parent.layer.close(index)
+                           
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            layui.laydate.render({
+                elem: '#expired_at',
+                event: 'click', //触发事件
+                istime: true, //是否开启时间选择
+                type:'datetime'
+            })
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

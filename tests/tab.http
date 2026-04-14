@@ -1,0 +1,138 @@
+### 3620fa7115d77258ead6ad8cd8a9ffc5 14115520
+### b0b284963c352cb885ae992e7f65835d 14115521
+### dd6537bf016a6c09741a95b5590275ca 141155
+
+### 求片
+POST {{host}}/api/tabnew/hotRank
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 产品列表
+POST {{host}}/api/product/list
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "type": 1
+}
+
+### 首页导航
+POST {{host}}/api/tabnew/index
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 视频列表
+POST {{host}}/api/tabnew/list_construct
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "nag_id": 3,
+  "sort": "new"
+}
+
+### 发现页面
+POST {{host}}/api/tabnew/list_discovery
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "nag_id": 2,
+  "page": 1
+}
+
+### 结构列表
+POST {{host}}/api/tabnew/list_tab_mv
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "construct_id": 4,
+  "page": 1,
+  "sort": "new"
+}
+
+### 结构视频列表2
+POST {{host}}/api/tabnew/list_find
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "nag_id": 2,
+  "page": 1,
+  "type": "vip",
+  "sort": "new"
+}
+
+### 排行榜配置
+POST {{host}}/api/tabnew/rankConf
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 原创热榜
+POST {{host}}/api/tabnew/hotRank
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 原创热榜
+POST {{host}}/api/tabnew/construct_list
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "b0b284963c352cb885ae992e7f65835d",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "nag_id": 3
+}
+
+

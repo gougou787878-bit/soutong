@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>搜同片-真人一对多/一对一视频交友APP官网_搜同片APP安卓版/IOS版/官方下载站</title>
+    <meta name="keywords" content="快手,快手直播,快手app,快手下载,快手社交,快手交友,快手一对多,一对一,快手官网,快手安卓版,快手Android版,快手IOS版,快手苹果版">
+    <meta name="description" content="快手app主打美女主播直播社交，直奔主题是宗旨，不玩虚的是态度，让海量美女伺候你到满足。下载快手APP安卓及IOS版,请认准快手官网">
+    <link rel="Shortcut Icon" href="favicon.ico">
+    <link rel="Bookmark" href="favicon.ico">
+    <script src="/default/js/jquery.min.js?v=1"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .main-min img {
+            width: 100%;
+            height: 100%;
+        }
+        .tf-btn {
+            background: url('/default/images/tf-btn.png') no-repeat;
+            background-size: 100%;
+            width: 160px;
+            height: 45px;
+            margin: 0 auto;
+            padding-bottom: 10px;
+        }
+        .ios-download {
+            background: url("/default/images/ios-download.png") no-repeat;
+            background-size: 100%;
+            width: 280px;
+            height: 65px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+<div class="main-min">
+    <img src="/default/images/1-1.png" alt="">
+    <div class="tf-btn" onclick="window.location.href='https://testflight.apple.com'"></div>
+    <img src="/default/images/2-1.png" alt="">
+    <div class="ios-download" onclick="window.location.href='<?php echo $version_ios ?>'"></div>
+    <img src="/default/images/3.png" alt="">
+</div>
+<script>
+    // 手机机型判断
+    function PhoneType() {
+        let u = navigator.userAgent;
+        let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+        if (u.indexOf('Android') > -1 || u.indexOf('Adr') > -1) {
+            return 'isAndroid'
+        } else {
+            return 'isIOS'
+        }
+    }
+
+    var browser={
+        versions:function(){
+            var u = navigator.userAgent, app = navigator.appVersion;
+            return {//移动终端浏览器版本信息
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                iPhone: u.indexOf('iPhone') > -1 , //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+                weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+                qq: u.match(/\sQQ/i) == " qq" //是否QQ
+            };
+        }(),
+        language:(navigator.browserLanguage || navigator.language).toLowerCase()
+    }
+</script>
+
+<script type="text/javascript">
+    // 计算rem单位
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            isIOS = navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+            dpr = isIOS ? Math.min(win.devicePixelRatio, 3) : 1,
+            dpr = window.top === window.self ? dpr : 1, //被iframe引用时，禁止缩放
+            dpr = 1,
+            scale = 1 / dpr,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+        docEl.dataset.dpr = dpr;
+        var metaEl = doc.createElement('meta');
+        metaEl.name = 'viewport';
+        metaEl.content = 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale;
+        docEl.firstElementChild.appendChild(metaEl);
+        var recalc = function () {
+            var width = docEl.clientWidth;
+            if (width / dpr > 750) {
+                width = 750 * dpr;
+            }
+            // 乘以100，px : rem = 100 : 1
+            docEl.style.fontSize = 100 * (width / 750) + 'px';
+        };
+        recalc()
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+    })(document, window);
+</script>
+<!--剪切板-->
+<!--<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>-->
+<script>
+    window.onload = function(){
+
+    }
+</script>
+</body>
+
+</html>

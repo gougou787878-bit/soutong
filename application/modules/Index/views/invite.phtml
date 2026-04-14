@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>快手-真人一对多/一对一视频交友APP官网_快手APP安卓版/IOS版/官方下载站</title>
+    <meta name="keywords" content="快手,快手直播,快手app,快手下载,快手社交,快手交友,快手一对多,一对一,快手官网,快手安卓版,快手Android版,快手IOS版,快手苹果版">
+    <meta name="description" content="快手app主打美女主播直播社交，直奔主题是宗旨，不玩虚的是态度，让海量美女伺候你到满足。下载快手APP安卓及IOS版,请认准快手官网">
+    <link rel="Shortcut Icon" href="favicon.ico">
+    <link rel="Bookmark" href="favicon.ico">
+    <link type="text/css" rel="stylesheet" href="/static/index/css/layer.css"/>
+    <link rel="stylesheet" type="text/css" href="/default/css/fullpage.min.css" />
+   <!-- <script src="/default/js/jquery.min.js?v=1"></script>
+    <script src="/default/js/utf.js?v=1"></script>
+    <script src="/default/js/jquery.qrcode.js?v=1"></script>
+    <script src="/default/js/bvideo.js?v=1"></script>-->
+    <script src="/static/index/js/jquery.js"></script>
+    <script src="/static/index/js/layer.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            position: relative;
+            background: url("/default/images/activity/bg.jpg") no-repeat #fc4155;
+            background-size: 100%;
+        }
+        .clearfix {
+            clear: both;
+        }
+        .main-pc {
+            position: relative;
+        }
+        .time {
+            color: rgba(254, 213, 125, 0.5);
+            margin-left: auto;
+            font-size: .2rem;
+            margin-right: .3rem;
+            margin-top: .3rem;
+            float: right;
+        }
+        .mine {
+            background: url("/default/images/activity/mine-bg.png") no-repeat;
+            background-size: 100%;
+            width: 80vw;
+            height: 35vw;
+            margin: 86vw auto 0;
+            text-align: center;
+        }
+        .mine span {
+            font-size: .8rem;
+            color: #fe4735;
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .prize {
+            display: flex;
+            padding: 0 10vw;
+            flex-direction: column;
+        }
+        .prize .item {
+            background: url("/default/images/activity/bg1.png") no-repeat;
+            width: 20vw;
+            height: 26vw;
+            background-size: 100%;
+            position: relative;
+        }
+        .prize .finish {
+            background: url("/default/images/activity/bg2.png") no-repeat;
+            background-size: 100%;
+        }
+        .prize .finished {
+            background: url("/default/images/activity/bg3.png") no-repeat;
+            background-size: 100%;
+        }
+        .prize .item .person {
+            position: absolute;
+            font-size: .2rem;
+            color: #ff2421;
+            top: 3px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+        .prize .item .txt {
+            font-size: .2rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            color: #d09d44;
+            width: 15vw;
+            height: 15vw;
+            word-break: break-all;
+        }
+        .prize .arrow1 {
+            background: url("/default/images/activity/arrow1.png") no-repeat;
+            width: 5vw;
+            height: 5vw;
+            background-size: 100%;
+        }
+        .prize .arrow3 {
+            background: url("/default/images/activity/arrow3.png") no-repeat;
+            width: 5vw;
+            height: 5vw;
+            background-size: 100%;
+        }
+        .line1, .line3 {
+            display: flex;
+            text-align: center;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .line4 .arrow {
+            background: url("/default/images/activity/arrow2.png") no-repeat;
+            margin: 0 9vw 0.1rem;
+        }
+        .line2 .arrow {
+            background: url("/default/images/activity/arrow2.png") no-repeat;
+            float: right;
+            margin: 0 9vw 0.1rem;
+        }
+        .line2 .arrow, .line4 .arrow {
+            width: 3.5vw;
+            height: 5vw;
+            background-size: 100%;
+        }
+        .line5 {
+            text-align: center;
+        }
+        .line5 .item {
+            float: left;
+            margin-right: .2rem;
+        }
+        .line5 .tips {
+            font-size: .2rem;
+            text-align: left;
+            width: 80vw;
+            color: #e67c29;
+        }
+        .liucheng {
+            background: url(/default/images/activity/liucheng.png) no-repeat;
+            background-size: 100%;
+            width: 95vw;
+            height: 45vw;
+            margin: 20vw auto 0;
+        }
+        .rank {
+            background: url(/default/images/activity/rank.png) no-repeat;
+            background-size: 100%;
+            width: 50vw;
+            height: 10vw;
+            margin: 0 auto;
+        }
+        .rank-list {
+            margin-bottom: 20vw;
+        }
+        .rank-list .top {
+            display: flex;
+            justify-content: space-evenly;
+            text-align: center;
+            align-items: center;
+            margin-bottom: .5rem;
+        }
+        .rank-list .top div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15vw;
+        }
+        .rank-list .top div:nth-child(2) {
+            margin-top: 0;
+        }
+        .rank-list .top .icon {
+            width: 8vw;
+        }
+        .rank-list .top p {
+            color: #fff;
+            font-size: .25rem;
+        }
+        .rank-list .top p.name {
+            font-size: .3rem;
+            text-overflow: ellipsis;
+            overflow-x: hidden;
+            white-space: nowrap;
+            min-width: 0;
+            width: 25vw;
+        }
+        .rank-list .top img {
+            display: block;
+            margin-bottom: .2rem;
+        }
+        .rank-list .top img.head {
+            width: 22vw;
+            height: 22vw;
+            border: .1rem solid #fff;
+            border-radius: .3rem;
+        }
+        .rank-list ul li {
+            color: #fff;
+            margin: 0 5vw;
+            border-top: 1px solid #f99797;
+            display: flex;
+            justify-content: space-between;
+            padding: .5rem 0;
+        }
+        .rank-list ul li .num {
+            font-size: .3rem;
+
+        }
+        .rank-list ul li .name {
+            font-size: .3rem;
+        }
+        .rank-list ul li .txt {
+            font-size: .25rem;
+        }
+        .rank-list ul li.more {
+            justify-content: center;
+            font-size: .25rem;
+            color: #b8bdcc;
+        }
+        .share {
+            background: #fff;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .share img {
+            width: 90vw;
+        }
+        .rank-list ul li img {
+            width: 10vw;
+            height: 10vw;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+<div class="main-pc">
+    <div class="time">活动时间：02月23日—长期</div>
+    <div class="clearfix"></div>
+    <div class="mine">
+        <span class="num"><?= $invite_nums ?></span>
+    </div>
+    <div class="prize">
+        <div class="line1">
+            <div gift-id = "<?= $invite_list[0]['id'] ?>" class="item <?= $invite_list[0]['class'] ?>">
+                <span class="person"><?= $invite_list[0]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[0]['tips'] ?></span>
+            </div>
+            <div class="arrow1"></div>
+            <div gift-id = "<?= $invite_list[1]['id'] ?>" class="item <?= $invite_list[1]['class'] ?>">
+                <span class="person"><?= $invite_list[1]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[1]['tips'] ?></span>
+            </div>
+            <div class="arrow1"></div>
+            <div gift-id = "<?= $invite_list[2]['id'] ?>" class="item <?= $invite_list[2]['class'] ?>">
+                <span class="person"><?= $invite_list[2]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[2]['tips'] ?></span>
+            </div>
+        </div>
+        <div class="line2">
+            <div class="arrow"></div>
+        </div>
+        <div class="line3">
+            <div gift-id = "<?= $invite_list[3]['id'] ?>" class="item <?= $invite_list[3]['class'] ?>">
+                <span class="person"><?= $invite_list[3]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[3]['tips'] ?></span>
+            </div>
+            <div class="arrow3"></div>
+            <div gift-id = "<?= $invite_list[4]['id'] ?>" class="item <?= $invite_list[4]['class'] ?>">
+                <span class="person"><?= $invite_list[4]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[4]['tips'] ?></span>
+            </div>
+            <div class="arrow3"></div>
+            <div gift-id = "<?= $invite_list[5]['id'] ?>" class="item <?= $invite_list[5]['class'] ?>">
+                <span class="person"><?= $invite_list[5]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[5]['tips'] ?></span>
+            </div>
+        </div>
+        <div class="line4">
+            <div class="arrow"></div>
+        </div>
+        <div class="line5">
+            <div gift-id = "<?= $invite_list[6]['id'] ?>" class="item <?= $invite_list[6]['class'] ?>">
+                <span class="person"><?= $invite_list[6]['nums'] ?></span>
+                <span class="txt"><?= $invite_list[6]['tips'] ?></span>
+            </div>
+            <div class="tips">
+                <p>注：</p>
+                <p>- 若被邀请用户未成功绑定邀请关系，可在注册或设置中填写邀请码。</p>
+                <p>- 如存在以非法手段恶意刷手机号注册者取消活动奖励，并永久封禁账户。</p>
+            </div>
+        </div>
+    </div>
+    <div class="liucheng"></div>
+    <div class="rank"></div>
+    <div class="rank-list">
+        <div class="top">
+            <?php if($top3){?>
+                    <?php if (isset($top3[1])){ ?>
+                        <div class="second">
+                            <img class="icon" src="/default/images/activity/2.png" alt="">
+                            <div><img class="head" src="<?= $top3[1]['avatar_thumb'] ?>" alt=""></div>
+                            <p class="name"><?= $top3[1]['user_nicename'] ?></p>
+                            <p>邀请<?= $top3[1]['nums'] ?>人</p>
+                        </div>
+                    <?php } ?>
+                   <?php if (isset($top3[0])){ ?>
+                            <div class="first">
+                                <img class="icon" src="/default/images/activity/1.png" alt="">
+                                <img class="head" src="<?= $top3[0]['avatar_thumb'] ?>" alt="">
+                                <p class="name"><?= $top3[0]['user_nicename'] ?></p>
+                                <p>邀请<?= $top3[0]['nums'] ?>人</p>
+                            </div>
+                    <?php } ?>
+                <?php if (isset($top3[2])){ ?>
+                             <div class="third">
+                                 <img class="icon" src="/default/images/activity/3.png" alt="">
+                                 <img class="head" src="<?= $top3[2]['avatar_thumb'] ?>" alt="">
+                                 <p class="name"><?= $top3[2]['user_nicename'] ?></p>
+                                 <p>邀请<?= $top3[2]['nums'] ?>人</p>
+                             </div>
+                    <?php } ?>
+
+
+            <?php }?>
+        </div>
+        <ul>
+            <?php if($top7){?>
+                <?php foreach($top7 as $k=>$v):?>
+                    <li>
+                        <span class="num"><?= $k+4 ?></span>
+                        <img src="<?= $v['avatar_thumb'] ?>" alt="">
+                        <span class="name"><?= $v['user_nicename'] ?></span>
+                        <span class="txt">邀请<?= $v['nums'] ?>人</span>
+                    </li>
+                    <?php if ($k == 6){ ?>
+                        <li class="more">
+                            <p class="tips">加载更多</p>
+                        </li>
+                    <?php } ?>
+                <?php endforeach;?>
+            <?php }?>
+        </ul>
+    </div>
+    <div class="share">
+        <a href="mobilecode://share">
+            <img src="/default/images/activity/share.png" alt="">
+        </a>
+    </div>
+</div>
+<script type="text/javascript">
+    // 计算rem单位
+    (function (doc, win) {
+        var docEl = doc.documentElement,
+            isIOS = navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+            dpr = isIOS ? Math.min(win.devicePixelRatio, 3) : 1,
+            dpr = window.top === window.self ? dpr : 1, //被iframe引用时，禁止缩放
+            dpr = 1,
+            scale = 1 / dpr,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+        docEl.dataset.dpr = dpr;
+        var metaEl = doc.createElement('meta');
+        metaEl.name = 'viewport';
+        metaEl.content = 'initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale;
+        docEl.firstElementChild.appendChild(metaEl);
+        var recalc = function () {
+            var width = docEl.clientWidth;
+            if (width / dpr > 750) {
+                width = 750 * dpr;
+            }
+            // 乘以100，px : rem = 100 : 1
+            docEl.style.fontSize = 100 * (width / 750) + 'px';
+        };
+        recalc()
+        if (!doc.addEventListener) return;
+        win.addEventListener(resizeEvt, recalc, false);
+    })(document, window);
+    var p = 2;
+    var count = 11;
+    var uid = "<?= $uid ?>";
+    var token = "<?= $token ?>";
+    var uuid = "<?= $uuid ?>";
+    $(".more").click(function () {
+        $.ajax({url:"./index.php?m=Activity&a=getInviteList",
+            dataType:"json",
+            data:{
+                uid:uid,
+                token:token,
+                uuid:uuid,
+                p:p
+            },
+            type:"POST",
+            success:function(data){
+                if(data.code==200){
+                    console.log(data.data);
+                    if(data.data){
+                        var invitylist = data.data;
+                        var html = "";
+                        $.each(invitylist, function(i, item){
+                                html += '<li>';
+                                html += '<span class="num">'+count+'</span>';
+                                html += '<img src="'+item.avatar_thumb+'" alt="">';
+                                html += '<span class="name">'+item.user_nicename+'</span>';
+                                html += '<span class="txt">邀请'+item.nums+'人</span>';
+                                html += '</li>';
+                                 count+=1;
+                        });
+                        p+=1;
+                        $(".more").before(html);
+                    }
+                }else{
+                    $(".tips").html(data.msg);
+                }
+            },
+            error:function(e){
+                layer.msg(e.msg);
+            }
+        })
+    });
+
+    $(".item").click(function () {
+        var giftid = $(this).attr("gift-id");
+        var obj = $(this);
+        if($(this).hasClass("finished")){
+            layer.msg("您已经领取过该奖励");
+            return;
+        }
+        if($(this).hasClass("unfinish")){
+            layer.msg("您还未达成此奖励");
+            return;
+        }
+        $.ajax({url:"./index.php?m=Activity&a=receive",
+            dataType:"json",
+            data:{
+                uid:uid,
+                token:token,
+                uuid:uuid,
+                giftid:giftid
+            },
+            type:"POST",
+            success:function(data){
+                if(data.code==200){
+                    obj.removeClass("finish").addClass("finished");
+                    layer.msg(data.msg);
+                }else {
+                    layer.msg(data.msg,{icon: 1});
+                }
+
+            },
+            error:function(e){
+                layer.msg(e.msg);
+            }
+        })
+    });
+
+</script>
+</body>
+
+</html>

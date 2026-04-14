@@ -1,0 +1,154 @@
+<?php echo '<?php importView("header.phtml"); ?>'?>
+<body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {margin-right: 30px}</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><?php echo $tableName ?>管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <?php foreach ($cols as $item) : ?>
+                            <div class="layui-inline">
+                                <label class="layui-form-label"><?php echo $item['name'] ?></label>
+                                <div class="layui-input-block">
+                                    <?php if (!empty($searchArray[$item['key']])) : ?>
+                                    <select name="where[<?php echo $item['key'] ?>]">
+                                        <option value="">不限</option>
+                                        <?php foreach ($searchArray[$item['key']] as $v) : ?>
+                                            <option value="<?php echo $v ?>"><?php echo $v?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <?php else: ?>
+                                        <input type="text" name="search[<?php echo $item['key'] ?>]" placeholder="请输入" autocomplete="off" class="layui-input">
+                                    <?php endif;?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="<?php echo $pkVal;?>">删除所选</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.<?php echo $pkVal;?>}}"  lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <?php foreach ($cols as $item) : ?>
+            <?php if ($item['key'] == $pkVal){ continue; }?>
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><?php echo $item['name'] ?>：</label>
+                    <div class="layui-input-inline">
+
+                        <?php if (!empty($selectArray[$item['key']])) : ?>
+                            <select name="<?php echo $item['key'] ?>">
+                                <?php foreach ($selectArray[$item['key']] as $k=>$v) : ?>
+                                <?php if($k==0):?>
+                                        <option value="<?php echo $v ?>"  {{=(d.<?php echo $item['key'] ?>=='<?php echo $v ?>'||!d.<?php echo $item['key'] ?>?'selected="true"':'')}}><?php echo $v ?></option>
+                                <?php continue;endif;?>
+                                    <option value="<?php echo $v ?>"  {{=(d.<?php echo $item['key'] ?>=='<?php echo $v ?>'?'selected="true"':'')}}><?php echo $v ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php elseif (!empty($switchArray[$item['key']])) : foreach ($switchArray[$item['key']] as $k=>$v) :?>
+                            <?php if($k==0):?>
+                                <input type="radio" name="<?php echo $item['key'] ?>" value="<?php echo $v ?>" title="<?php echo $v ?>" {{=(d.<?php echo $item['key'] ?>=='<?php echo $v ?>'||!d.<?php echo $item['key'] ?>?'checked="true"':'')}}>
+                            <?php else:?>
+                                <input type="radio" name="<?php echo $item['key'] ?>" value="<?php echo $v ?>" title="<?php echo $v ?>" {{=(d.<?php echo $item['key'] ?>=='<?php echo $v ?>'?'checked="true"':'')}}>
+                            <?php endif;?>
+                        <?php endforeach;else: ?>
+                            <input <?php echo !$item['allowNull'] ? 'lay-verify="required"' : '' ?> placeholder="<?php echo $item['name'] ?>" name="<?php echo $item['key'] ?>"
+                                                                                                    value="{{=d.<?php echo $item['key'] ?> }}" class="layui-input">
+                        <?php endif;?>
+
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.<?php echo $pkVal ?>}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <?php foreach ($cols as $item) : ?>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><?php echo $item['name'] ?>：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.<?php echo $item['key'] ?> }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo "<?php echo url_backend(\"listAjax\") ?>" ?>',
+        saveUrl: '<?php echo "<?php echo url_backend(\"save\") ?>" ?>',
+        delUrl: '<?php echo "<?php echo url_backend(\"del\") ?>" ?>',
+        delALlUrl: '<?php echo "<?php echo url_backend(\"delAll\") ?>" ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: '<?php echo $pkVal ?>',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            <?php foreach ($cols as $item) : ?>
+            , {field: '<?php  echo addslashes($item['key'])?>', title: '<?php  echo addslashes($item['name'])?>'}
+            <?php endforeach; ?>
+            , {fixed: 'right', width: 200, title: '操作',align:'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo '<?php echo \Layui::renderJs() ?>' ?>
+<?php echo '<?php importView("fooler.phtml"); ?>' ?>

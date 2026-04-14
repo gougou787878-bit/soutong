@@ -1,0 +1,156 @@
+html{
+    background-color: #FFFFFF;
+}
+.video-root-container {
+    padding: 10px;
+}
+.video-search-form {
+    padding: 20px 0;
+}
+.video-detail-container{
+    background-color: #eeeeee;
+    width: 95%;
+    height: 100%;
+    max-width: 500px;
+    max-height: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(51, 51, 51, 0.1);
+}
+
+.video-detail-container video {
+    width: 100%;
+    height: 410px;
+    outline: none;
+}
+
+
+.video-play-container {
+    background-color: #1d1d1d;
+    position: relative;
+}
+
+
+.video-play-container .video-cover-pic-container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #1d1d1d;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.video-play-container .video-cover-pic-container > img {
+    width: 100%;
+    opacity: 0.6;
+}
+
+.video-play-container .layui-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    cursor: pointer;
+    font-size: 30px;
+    color: white;
+    z-index: 4;
+}
+
+.video-play-container .video-play-id {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    z-index: 5;
+    text-align: center;
+    padding: 5px;
+    box-sizing: border-box;
+    background-image: -webkit-linear-gradient(bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+    background-image: -moz-linear-gradient(bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+    background-image: -o-linear-gradient(bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+    background-image: linear-gradient(bottom,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+}
+
+.video-information {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    background-color: white;
+}
+
+.video-information h4 {
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.video-information p {
+    font-size: 12px;
+    color: #666666;
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.video-option-button {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-evenly;
+    background-color: white;
+}
+
+.layui-col-md2 {
+    width: 20%!important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pass-video-content {
+    padding: 20px;
+    box-sizing: border-box;
+    min-width: 300px;
+}
+
+.pass-video-content-text {
+    margin-top: 10px;
+}
+
+.refuse-container {
+    padding: 20px;
+    min-width: 300px;
+    box-sizing: border-box;
+}
+.refuse-container .refuse-title-container{
+    margin-bottom: 10px;
+}
+.refuse-container .layui-form-label {
+    padding: 0;
+    text-align: left;
+}
+
+.refuse-container .refuse-item-box{
+    display: flex;
+    flex-direction: column;
+}
+
+.refuse-container .refuse-item-box .layui-input-block{
+    margin-left: 0;
+}
+
+.refuse-container .refuse-item-box .layui-form-label{
+    min-width: 150px;
+}

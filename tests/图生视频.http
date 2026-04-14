@@ -1,0 +1,77 @@
+### 用户个人中心
+POST {{host}}/api/aimagic/list_material
+Content-Type: application/json
+User-Agent: idea
+
+{
+
+
+}
+
+### 用户个人中心
+POST {{host}}/api/aimagic/pre_magic
+Content-Type: application/json
+
+{
+  "type": "video",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/aimagic/generate_video
+Content-Type: application/json
+
+{
+  "material_id": 8,
+  "thumb": "/upload/ads/20240416/2024041620214356903.png",
+  "thumb_w": "120",
+  "thumb_h": "120",
+  "type": "video",
+  "total": true
+}
+
+
+### 用户个人中心
+POST {{host}}/api/aimagic/my_generate_video
+Content-Type: application/json
+
+{
+  "status": 1,
+  "total": true
+}
+
+
+
+
+### 用户个人中心
+POST {{host}}/api/ai/pre_strip
+Content-Type: application/json
+
+{
+  "status": 1,
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/ai/strip
+Content-Type: application/json
+
+{
+  "thumb": "/static/index/img/add.png",
+  "thumb_w": 120,
+  "thumb_h": 120,
+  "status": 1,
+  "total": true
+}
+
+
+### 用户个人中心
+POST {{host}}/api/ai/my_strip
+Content-Type: application/json
+
+{
+  "status": 1,
+  "total": true
+}
+
+

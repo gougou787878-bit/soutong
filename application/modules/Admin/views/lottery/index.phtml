@@ -1,0 +1,364 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">奖品类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]',
+                                    merge_array(['' => '请选着'], LotteryBaseModel::TYPE_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="generate_lottery">生成奖池</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delete_lottery">删除奖池</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delete_lucky">清理中奖列表</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">名称：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="名称" name="title"
+                           value="{{=d.title }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品名称：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="奖品名称" name="hint"
+                           value="{{=d.hint }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">下标(不能动)：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="下标" name="index" value="{{=d.index }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图标：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('icon', 'icon') ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品类型：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('type',LotteryBaseModel::TYPE_TIPS, ['data-value' => '{{=d.type}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">参与奖：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('is_win',LotteryBaseModel::WIN_TIPS, ['data-value' => '{{=d.is_win}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">展示中奖记录：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('is_show',LotteryBaseModel::SHOW_TIPS, ['data-value' => '{{=d.is_show}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品数量(金币数/VIP产品ID/随机金币开始数)：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="金币数/VIP产品ID/随机金币开始数" name="exp" value="{{=d.exp }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">随机金币结束数：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="随机金币结束数" name="exp_end" value="{{=d.exp_end }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">奖品数：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="奖品数" name="rate"
+                           value="{{=d.rate }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序越大越前：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="排序越大越前" name="sort"
+                           value="{{=d.sort }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">主键：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">积分：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.exp }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">提示：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.hint }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">概率 基数100：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.rate }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序越大越前：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.sort }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否中奖：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_win }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">是否显示在中奖列表中：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_show }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">更新时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图标：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.icon }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="attr3-xx">
+    <div style="line-height: normal">
+        <img style="display: inline-block;width: 25px;height: 25px;margin-bottom: 3px;" onclick="clickShowImage(this)" src="{{=d.icon}}">
+    </div>
+</script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'title', title: '名称'}
+            , {field: 'hint', title: '奖品名称'}
+            , {field: 'index', title: '下标'}
+            , {field: 'icon', title: '图标',templet:'#attr3-xx',width:160}
+            , {field: 'type_str', title: '奖品类型'}
+            , {field: 'exp', title: "金币(开始)数/VIP产品ID"}
+            , {field: 'exp_end', title: '金币结束数'}
+            , {field: 'rate', title: '奖品数'}
+            , {field: 'win_str', title: '参与奖'}
+            , {field: 'show_str', title: '展示中奖记录'}
+            , {field: 'total_lucky', title: '中奖数'}
+            , {field: 'sort', title: '排序'}
+            , {field: 'created_at', title: '创建时间'}
+            , {field: 'updated_at', title: '更新时间'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event:{
+            'toolbar': {
+                generate_lottery: function (obj, table, ajax, laytpl, layerEle, form, $) {
+                    var $this = $(this);
+                    layer.confirm('确定要生成奖池吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('generate_lottery')?>", {})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    });
+                },
+                delete_lottery: function (obj, table, ajax, laytpl, layerEle, form, $) {
+                    var $this = $(this);
+                    layer.confirm('确定要删除奖池吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('delete_lottery')?>", {})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    });
+                },
+                delete_lucky: function (obj, table, ajax, laytpl, layerEle, form, $) {
+                    var $this = $(this);
+                    layer.confirm('确定要清理中奖列表吗?', function (index2) {
+                        ajax.post("<?php echo url_backend('delete_lucky')?>", {})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    });
+                },
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

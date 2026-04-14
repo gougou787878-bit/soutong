@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+    {SEO_META}
+    <meta charset="UTF-8">
+    <meta name="author" content="cba070693319e07a7280e8741388dd31">
+    <meta name="referrer" content="same-origin">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1,minimum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/swiper-bundle.min.css" />
+    <link rel="stylesheet" media="screen and (min-width: 750px)" href="/css/index.css?v=1">
+    <link rel="stylesheet" media="screen and (max-width: 750px)" href="/css/mobile.css?v=2">
+    <link href="/image/modal/androidModal.css" media="(max-width: 768px)" rel="stylesheet" />
+    <script src="/js/jquery.js"></script>
+    <script src="/js/main.js?v=4"></script>
+    <script src="/js/clipboard.min.js"></script>
+    <script src="/js/qrcode.js" media="(min-width: 768px)"></script>
+    <script type="text/javascript" src="/js/swiper-bundle.min.js"></script>
+    <meta name="author" content="">
+    <script src="/js/crypto-js.min.js"></script>
+    <script src="/js/tracker_DX.min.js" data-report-url="/index.php?m=index&a=report_enc"></script>
+</head>
+
+<body>
+    <div class="desktop">
+        <div class="container">
+            <div class="header">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="/image/logo.png" alt="">
+                    </div>
+                </div>
+                <div class="contact-container">
+                    <a class="nav-item business-links" onclick="onAddress('link1')">
+                        <div class="contact-us">
+                            <a href="javascript:;" id="business">
+                                <img src="/image/desktop/busines.png" alt="">
+                            </a>
+                        </div>
+                    </a>
+                    <a class="nav-item tg-links" onclick="onAddress('link2')">
+                        <div class="contact-us">
+                            <a href="javascript:;" id="contact">
+                                <img src="/image/desktop/contact.png" alt="">
+                            </a>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="main">
+                <div class="theme-content">
+                    <img src="/image/desktop/st.webp" alt class="imgg" />
+                </div>
+                <div class="title-container">
+                    <div class="decs-container">
+                        <div class="titlee">
+                            <img src="/image/desktop/pic.png" alt />
+                        </div>
+                        <div class="info-activity">
+                            <div class="qrcode">
+                                <div id="qr"></div>
+                            </div>
+                            <div class="cont">
+                                <div class="txt_">
+                                    <a href="javascript:;" class="clipboard-btn" id="iphone-web">
+                                        <img src="/image/desktop/ios.png" alt /></a>
+                                </div>
+                                <div class="title_">
+                                    <a href="javascript:;" id="android-web"><img src="/image/desktop/android.png" alt /></a>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrap-body" id="blur">
+        <div class="main-content">
+            <div class="header-area btn_down">
+                <div class="header-activity">
+                    <div class="logo-container">
+                        <div class="logo">
+                            <img src="/image/logo.png" alt="">
+                        </div>
+                    </div>
+                    <div class="contact-container">
+                        <div class="contact-us">
+                            <a href="javascript:;" id="business-mb">
+                                <img src="/image/mobile/businesss.png" alt="">
+                            </a>
+                        </div>
+                        <div class="contact-us">
+                            <a href="javascript:;" id="contact-mb">
+                                <img src="/image/mobile/contact.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-area">
+                <div class="swiper mySwiper2">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="photo">
+                                <img src="/image/mobile/s-1.png?v=2" alt="">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="photo">
+                                <img src="/image/mobile/s-2.webp?v=1" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="footer-area btn_down">
+                <div class="app">
+                    <div class="app-logo-ios">
+                        <div class="ios-btn">
+                            <a href="/page/ios.html" id="iphone">
+                                <img src="/image/mobile/ios.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="app-logo-android">
+                        <div class="android-btn">
+                            <a href="javascript:;" class="clipboard-btn" id="android">
+                                <img src="/image/mobile/android1.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="app-logo-android">
+                        <div class="android-btn">
+                            <a href="javascript:;" class="clipboard-btn" id="android2">
+                                <img src="/image/mobile/android2.png" alt="">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="set-up-tip">
+                    下载后开启飞行模式安装
+                </div>
+            </div>
+        </div>
+
+        <div class="android-modal" id="platform-list">
+            <div class="header">
+                <div class="android-modal-arrow" data-type="1"><img src="/image/modal/back-black.webp" alt=""></div>
+                <div class="title" id="show-platform-tips"><img src="/image/mobile/tips_1.webp" alt=""></div>
+                <div>&nbsp;&nbsp;</div>
+            </div>
+            <div class="content">
+                <div class="platform-item" data-src="/image/modal//cell1-detail.webp"><img src="/image/modal/cell1.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell2-detail.webp"><img src="/image/modal/cell2.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell3-detail1.webp"
+                    data-src2="/image/modal/cell3-detail2.webp"><img src="/image/modal/cell3.webp" alt=""></div>
+                <div class="platform-item" data-src="/image/modal/cell4-detail.webp"><img src="/image/modal/cell4.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell5-detail.webp"><img src="/image/modal/cell5.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell6-detail.webp"><img src="/image/modal/cell6.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell7-detail.webp"><img src="/image/modal/cell7.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell8-detail.webp"><img src="/image/modal/cell8.webp" alt="">
+                </div>
+                <div class="platform-item" data-src="/image/modal/cell9-detail.webp"><img src="/image/modal/cell9.webp" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="android-modal two" id="platform-detail">
+            <div class="header">
+                <div class="android-modal-arrow" data-type="2"><img src="/image/modal/back-black.webp" alt=""></div>
+                <div class="title"><img src="/image/mobile/tips_1.webp" alt=""></div>
+                <div>&nbsp;&nbsp;</div>
+            </div>
+            <div class="content">
+            </div>
+        </div>
+        <div class="android-modal two" id="ios-detail">
+            <div class="header">
+                <div class="android-modal-arrow" data-type="3"><img src="/image/modal/back-black.webp" alt=""></div>
+                <div class="title"><img src="/image/mobile/tips_2.webp" alt=""></div>
+                <div>&nbsp;&nbsp;</div>
+            </div>
+            <div class="content">
+                <img class="modal-common-img" src="/image/modal/doc-ios-1.webp">
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+</body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let swiper1 = new Swiper(".mySwiper2", {
+            direction: "horizontal",
+            spaceBetween: 50,
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false, 
+            },
+            loop: true,
+        });
+    });
+
+</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RKYFQ0WHY5"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RKYFQ0WHY5');
+</script>

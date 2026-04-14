@@ -1,0 +1,96 @@
+### 配置接口
+POST {{host}}/wapi/home/config
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275ca",
+  "oauth_type": "pc",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 点击上报
+POST {{host}}/wapi/home/report
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "id": "2",
+  "version": "5.2.0"
+}
+
+### 注册接口
+POST {{host}}/wapi/account/register
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "username": "ws123456",
+  "password": "123456"
+}
+
+### 登陆接口
+POST {{host}}/wapi/account/login
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "username": "ws123456",
+  "password": "123456"
+}
+
+### 个人信息
+POST {{host}}/wapi/user/info
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "token": "5CD7C8328E8463DB9B206EB0B082F998546B64807E5C982E21ED969A3FDE8A0DCD4E2149538739DA31A728EB5CE9E4AC44020EA92D5B99E505798C37853E7EBFA4517C031F40875D5DE0E24DD2336CFDBA447169C1EB59FC5B78821FD17809"
+}
+
+### 个人信息
+POST {{host}}/wapi/user/update
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "nickname": "燕王朱棣",
+  "token": "5CD7C8328E8463DB9B206EB0B082F998546B64807E5C982E21ED969A3FDE8A0DCD4E2149538739DA31A728EB5CE9E4AC44020EA92D5B99E505798C37853E7EBFA4517C031F40875D5DE0E24DD2336CFDBA447169C1EB59FC5B78821FD17809"
+}
+
+### 用户-他人信息
+POST {{host}}/wapi/user/user_detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "aff": "14115159"
+}
+
+### 用户-获取R2上传地址
+POST {{host}}/wapi/user/r2upload_info
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a8id9741a95b5590275gx",
+  "oauth_type": "pc",
+  "token": "5CD7C8328E8463DB9B206EB0B082F998546B64807E5C982E21ED969A3FDE8A0DCD4E2149538739DA31A728EB5CE9E4AC44020EA92D5B99E505798C37853E7EBFA4517C031F40875D5DE0E24DD2336CFDBA447169C1EB59FC5B78821FD17809"
+}

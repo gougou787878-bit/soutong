@@ -1,0 +1,529 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>
+    .layui-form.form-dialog .layui-input-block {
+        margin-right: 5px
+    }
+
+    .layui-form-item .layui-inline {
+        margin-right: 0px
+    }
+    .layui-xtree-item {
+        display: inline-block;
+        width: 200px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">种子管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[title]" placeholder="请输入"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]', merge_array(['' => '全部'], SeedPostModel::TYPE_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">资源状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_finished]', merge_array(['' => '全部'], PostModel::FINISH_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], PostModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">排序</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[sort]">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">浏览</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[view_ct]">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">点赞</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[like_ct]">
+                                    <option value="">无</option>
+                                    <option value="desc">降序</option>
+                                    <option value="asc">升序</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">置顶</label>
+                            <div class="layui-input-block">
+                                <select name="orderBy[set_top]" id="">
+                                    <option value="">全部</option>
+                                    <option value="asc">顺序</option>
+                                    <option value="desc">倒序</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">创建时间</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('created_at') ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">添加</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddPay" data-pk="id" lay-form="batch-add-pay">付费设置</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddDelete" data-pk="id" lay-form="batch-add-delete">发布设置</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="batchAddRefresh" data-pk="id">刷新</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a lay-event="edit" lay-form="user-edit-dialog" style="color: blue">修改</a> |
+                        <a data-pk="{{=d.id}}" lay-event="del" style="color: red">删除</a>
+                        <hr/>
+                        {{# if(d.photo_ct > 0){ }}
+                        <a href="javascript:;" lay-event="img"
+                           lay-form="img-dialog">图片</a> |
+                        {{# } }}
+
+                        {{# if(d.video_ct > 0){ }}
+                        <a href="javascript:;" lay-event="video" lay-form="video-dialog">视频</a> |
+                        {{# } }}
+
+                        <a href="javascript:;" lay-event="element" lay-form="element-dialog">
+                            评论</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题：</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" placeholder="标题" name="title"
+                       value="{{=d.title }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容：</label>
+            <div class="layui-input-block">
+                <textarea rows="20" name="content" class="layui-textarea">{{d.content || '' }}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片：</label>
+            <div class="layui-input-block">
+                {{# layui.each(new Array(17), function(index, item){ }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">资源图{{index+1||0}}：</label>
+                    <div class="layui-input-block">
+                        <img src="{{d.imgs ? d.imgs[index]['media_url']:''}}" id="img-img_url_{{index}}" width="50" height="50">
+                        <button type="button" class="but-upload-img layui-btn"
+                                data-img="#img-img_url_{{index}}" data-input="#input-img_url_{{index}}"><i class="layui-icon">&#xe67c;</i>上传
+                        </button>
+                        <input placeholder="删除资源可以清空文本框保存" class="layui-input" name="img_url[]" id="input-img_url_{{index}}" value="{{ d.imgs ? d.imgs[index]['ori_media_url']:'' }}">
+                    </div>
+                </div>
+                {{# }); }}
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">下载地址：</label>
+                <div class="layui-input-inline" style="width: 514px">
+                    <input placeholder="下载地址" name="link" value="{{d.link || ''}}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">解压密码：</label>
+                <div class="layui-input-inline" style="width: 514px">
+                    <input placeholder="解压密码" name="secret" value="{{d.secret || ''}}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">封面：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('video_img', 'video_img') ?>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">视频时长：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="视频时长" name="video_duration" value="{{d.video_duration || ''}}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频地址：</label>
+                <div class="layui-input-inline" style="width: 514px">
+                    <input placeholder="视频地址" name="video_url" value="{{d.media_url || ''}}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">置顶值：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="置顶值" name="set_top"
+                           value="{{d.set_top ||0 }}" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="排序" name="sort" value="{{d.sort||0}}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类型：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('type', SeedPostModel::TYPE_TIPS, ['data-value' => '{{=d.type}}']) ?>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">解锁金币：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="解锁金币" name="coins" value="{{d.coins || 0 }}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">资源状态：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('is_finished', SeedPostModel::FINISHED_TIPS, ['data-value' => '{{=d.is_finished}}']) ?>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('status', SeedPostModel::STATUS_TIPS, ['data-value' => '{{=d.status}}']) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script type="text/html" id="a5">
+    类型：{{d.type_str}}  <br>
+    金币：{{d.coins}}  <br>
+    次数：{{d.payed_ct}}  <br>
+    金额：{{d.payed_coins}}
+</script>
+<script type="text/html" id="a3">
+    图片：{{d.photo_ct}} &nbsp;|&nbsp;
+    视频：{{d.video_ct}} <br>
+    点赞：{{d.like_ct}} &nbsp;|&nbsp;
+    评论：{{d.comment_ct}} <br>
+    浏览：{{d.view_ct}} <br>
+    创建时间：{{d.created_at}}<br>
+    刷新时间：{{d.updated_at}}
+</script>
+<script type="text/html" id="a2">
+    <h3 style="white-space: pre-wrap;">{{d.title}}</h3>
+    <hr/>
+    <h4 style="white-space: pre-wrap;">{{d.content}}</h4>
+    <hr>
+    <h3 style="white-space: pre-wrap;">{{d.link}}</h3>
+    <hr/>
+    <h3 style="white-space: pre-wrap;">提取码:{{d.extract_code}}</h3>
+    <hr/>
+    <h3 style="white-space: pre-wrap;">解压密码:{{d.secret}}</h3>
+    <hr/>
+</script>
+<script type="text/html" id="attr3-xx">
+    <div style="line-height: normal">
+        图片:
+        {{# layui.each(d.show_imgs, function(index, item){ }}
+        <img style="display: inline-block;width: 25px;height: 25px;margin-bottom: 3px;" onclick="clickShowImage(this)" src="{{=item.media_url}}">
+        {{# }); }}
+    </div>
+    <div style="line-height: normal;margin-top: 10px;">
+        视频:
+        {{# layui.each(d.videos, function(index, item){ }}
+        <a style="color: red" target="_blank" href="{{=d.media_url}}">
+            <img style="display: inline-block;width: 25px;height: 25px;margin-bottom: 3px;" src="{{=d.media_url}}">
+        </a>&nbsp;&nbsp;&nbsp;
+        {{# }); }}
+
+    </div>
+</script>
+
+<script type="text/html" class="data-dialog" id="img-dialog" data-h="780" data-w="900"
+        data-iframe="<?php echo url_backend('seedpostmedia/index') ?>&pid={{=d.id}}" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+
+</script>
+
+<script type="text/html" class="data-dialog" id="video-dialog" data-h="780" data-w="900"
+        data-iframe="<?php echo url_backend('seedpostmedia/index') ?>&pid={{=d.id}}" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+
+</script>
+<script type="text/html" class="data-dialog" id="element-dialog" data-h="780" data-w="900"
+        data-iframe="<?php echo url_backend('seedpostcomment/index') ?>&post_id={{=d.id}}" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-add-pay" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'付费设置',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">付费设置</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('type', SeedPostModel::TYPE_TIPS) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">金币</label>
+            <div class="layui-input-inline">
+                <input name="coins" value="" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="post_ids">
+            <button class="layui-btn submit" lay-submit="" lay-filter="addBatchPay"></button>
+        </div>
+    </form>
+</script>
+
+<script type="text/html" class="data-dialog" id="batch-add-delete" data-h="500" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:'付费设置',closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: orangered">隐藏设置</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否隐藏</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('status', SeedPostModel::STATUS_TIPS) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="post_ids">
+            <button class="layui-btn submit" lay-submit="" lay-filter="addBatchDelete"></button>
+        </div>
+    </form>
+</script>
+
+<script src="<?php echo LAY_UI_STATIC ?>layuiadmin/layui-xtree.js?t=<?php echo time(); ?>"></script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id',sort:true,width:100}
+            , {field: 'content', title: '内容',templet:'#a2',width:300}
+            , {field: 'coins', title: '金币',templet:'#a5',width:100}
+            , {field: 'media', title: '资源',templet:'#attr3-xx',width:300}
+            , {field: 'like_num', title: '属性',templet:'#a3',width:200}
+            , {field: 'status', title: '状态',type:"switch",value: "1|0", edit: true, width: 120}
+            , {field: 'set_top', title: '置顶值',sort:true,edit: true, width: 80}
+            , {field: 'sort', title: '排序',sort:true,edit:true, width: 80}
+            , {field: 'view_ct', title: '浏览',sort:true, width: 80}
+            , {field: 'like_ct', title: '点赞',sort:true, width: 80}
+            , {field: 'comment_ct', title: '评论',sort:true, width: 80}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event:{
+            'toolbar': {
+                addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    // xx.config('event.renderTree', xx.emptyFn()).call(this, obj, table, ajax, laytpl, layerEle, form, $, nextFn)
+                },
+                batchAddPay: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "post_ids": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('addBatchPay')?>", form, ajax, 'addBatchPay', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchAddDelete: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    nextFn(undefined, function (layerIndex) {
+                        form.val("form-save", {
+                            "post_ids": pkValAry.join(',')
+                        });
+                        form.render(null, 'form-save');
+                        Util.formSubmit("<?php echo url_backend('addBatchDelete')?>", form, ajax, 'addBatchDelete', function (json) {
+                            layer.close(layerIndex);
+                            if (json.code == '0') {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            } else {
+                                Util.msgErr(json.msg);
+                            }
+                        });
+                    });
+                },
+                batchAddRefresh: function (obj, table, ajax, laytpl, layerEle, form, $) {
+                    var checkStatus = table.checkStatus(obj.config.id), data = checkStatus.data,
+                        pkValAry = [],
+                        pkName = $(this).data('pk');
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (typeof (data[i][pkName]) !== "undefined") {
+                            pkValAry.push(data[i][pkName])
+                        }
+                    }
+                    if (pkValAry.length === 0) {
+                        return Util.msgErr('请先选择行');
+                    }
+                    ajax.post("<?php echo url_backend('addBatchRefresh')?>", {"ids": pkValAry.join(',')})
+                        .then(function (json) {
+                            if (json.code) {
+                                Util.msgErr(json.msg);
+                            } else {
+                                Util.msgOk(json.msg, function () {
+                                    table.reload("gridTab");
+                                });
+                            }
+                        })
+                },
+            },
+            operate:{
+            },
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

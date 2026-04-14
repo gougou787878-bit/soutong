@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<style>
+    body{
+        color: #676a6c;
+        line-height: 24px;
+        font: 14px Helvetica Neue,Helvetica,PingFang SC,Tahoma,Arial,sans-serif;
+    }
+    .gray-bg {
+        background-color: #f3f3f4;
+    }
+
+    .chat {
+        background: #1ab394;
+        color: #fff;
+        border-radius: 6px;
+        line-height: 24px;
+        max-width: 50%;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        display: block;
+        word-wrap: break-word;
+    }
+
+    .txxtRight {
+        text-align: right;
+        clear: both;
+        float: right
+    }
+
+    .txxtRight .chat {
+        float: right;
+        background: #f3f3f4;
+        color: #676a6c;
+    }
+
+    .seed {
+        margin-bottom: 20px;
+    }
+
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+</style>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+    <div class="row" style="background: #fff; padding: 20px">
+        <?php if (!empty($items)): ?>
+            <?php foreach ($items as $v): ?>
+                <div class="col-xs-12">
+                    <div><?php echo $v['id'] ?>:=><?php echo $v['member']['nickname'] ?> <span
+                                style="color: #0e9aef">#(<?php echo $v['uuid'] ?>)</span>
+                        &nbsp;:&nbsp;<?php echo $v['created_str'] ?>
+                    </div>
+                    <div style="padding: 10px">
+                        <span class="chat" style="padding: 10px"><?php echo $v['comment'] ?></span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</div>
+</body>
+
+</html>

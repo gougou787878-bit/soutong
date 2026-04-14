@@ -1,0 +1,530 @@
+
+.dialog-mobile-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+/* Alert Confirm */
+.dialog-mobile {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    z-index: 10001;
+    width: 20em;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.dialog-mobile .dialog-content {
+    padding: 2.5em 1em;
+    text-align: center;
+    color: #333333;
+    border-radius: 5px 5px 0 0;
+    word-break: break-word;
+    position: relative;
+}
+
+.dialog-mobile .dialog-title {
+    padding: 0.8em 1em 0.5em;
+    text-align: center;
+    color: #333333;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
+}
+
+.dialog-mobile .dialog-title + .dialog-content {
+    padding: 1.5em 1em 2em;
+}
+
+.dialog-mobile .dialog-content:after {
+    content: "";
+    position: absolute;
+    z-index: 10002;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #CCCCCC;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+}
+
+.dialog-mobile .dialog-button {
+    height: 3em;
+    line-height: 3em;
+    text-align: center;
+    border-radius: 0 0 5px 5px;
+    color: #f55354;
+    background: #EEEEEE;
+}
+
+.dialog-mobile .dialog-sure-button,
+.dialog-mobile .dialog-cancel-button {
+    float: left;
+    height: 3em;
+    width: 50%;
+    line-height: 3em;
+    text-align: center;
+    background: #EEEEEE;
+}
+
+.dialog-mobile .dialog-sure-button {
+    color: #1C86EE;
+    border-radius: 0 0 5px 0;
+    position: relative;
+}
+
+.dialog-mobile .dialog-sure-button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #CCCCCC;
+    -webkit-transform: scaleX(.5);
+    transform: scaleX(.5);
+}
+
+.dialog-mobile .dialog-cancel-button {
+    color: #000000;
+    border-radius: 0 0 0 5px;
+}
+
+/* Bottom Dialog */
+.dialog-mobile-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 10001;
+    width: 100%;
+    color: #333333;
+    background-color: white;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    padding-bottom: 1em;
+    overflow: hidden;
+}
+
+.dialog-mobile-bottom .bottom-btn-title {
+    background: #FFFFFF;
+    padding: 1.5em 0 1em;
+    text-align: center;
+    margin-bottom: 0.1em;
+    font-weight: bold;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.dialog-mobile-bottom .bottom-btn-item {
+    text-align: center;
+}
+
+.dialog-mobile-bottom .bottom-btn-item.flex-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.bottom-btn-item .dialog-item-btn {
+    background: #FFFFFF;
+    padding: 0.5em 0;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.bottom-btn-item .dialog-item-btn .dialog-item-img {
+    width: 100%;
+    padding: 0 0.5em;
+    box-sizing: border-box;
+}
+
+.bottom-btn-item .dialog-item-btn:last-child {
+    border-bottom: none;
+}
+
+.dialog-mobile-bottom .dialog-cancel-btn {
+    text-align: center;
+    position: absolute;
+    top: 1.5em;
+    right: 1em;
+    color: transparent;
+    background-image: url("../assets/close_button.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 1em;
+    height: 1em;
+}
+
+/* Toast */
+.dialog-mobile-toast {
+    position: fixed;
+    bottom: 5em;
+    z-index: 10;
+}
+
+.dialog-mobile-toast .toast-content {
+    padding: 0.5em 1em;
+    color: #FFFFFF;
+    border-radius: 2px;
+    background-color: #333333;
+}
+
+/* Loading */
+.mobile-loading-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.mobile-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10001;
+    min-width: 2em;
+    min-height: 2em;
+    padding: 1em 1.6em;
+    text-align: center;
+    color: #FFFFF0;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+/* bonus */
+.mobile-bonus-bg, .mobile-record-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.mobile-bonus {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10001;
+    min-width: 100vw;
+    min-height: 90vw;
+    padding: 0.8em 1.6em;
+    text-align: center;
+    border-radius: 2px;
+    color: #FFFFF0;
+    background-color: transparent;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.mobile-record {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10001;
+    min-width: 100vw;
+    min-height: 90vw;
+    text-align: center;
+    border-radius: 2px;
+    color: #FFFFF0;
+    background-image: url("../assets/bg-repeat.png");
+    background-size: 100%;
+    background-repeat: repeat-y;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-record-header {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 1em;
+}
+
+.mobile-record-header-back {
+    height: 6vw;
+}
+
+.mobile-record-content {
+    flex: 1;
+    padding:0 1em 25vw;
+    overflow-y: auto;
+}
+
+.mobile-record-content-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #9d4c04;
+    padding: 1em 0;
+    border-bottom: 1px solid #d99a41;
+}
+
+.mobile-record-item-img{
+    width: 10vw;
+}
+
+.mobile-record-content-text{
+    margin: 0 2vw;
+}
+
+.mobile-record-content-time{
+    margin-left: auto !important;
+}
+
+.mobile-record-content-empty {
+    padding: 1em 0;
+    text-align: center;
+    color: rgba(157, 76, 4, 0.74);
+    font-size: 4vw;
+}
+
+.mobile-record-foot {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.mobile-record-foot-img {
+    width: 100%;
+    vertical-align: top;
+}
+
+
+.mobile-bonus-picture-container {
+    position: absolute;
+    top: 24vw;
+    width: calc(100% - 3.2em);;
+    height: 23vw;
+    text-align: center;
+    padding: 0.8em 1.6em;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mobile-bonus-text-container {
+    margin-top: 0.7em;
+    color: #f24849;
+}
+
+.mobile-bonus-picture {
+    height: 100%;
+}
+
+.mobile-bonus-bg-img {
+    width: 100%;
+}
+
+.mobile-bonus-button {
+    position: absolute;
+    width: 42vw;
+    bottom: 8vw;
+    left: 50%;
+    margin-left: -21vw;
+}
+
+/* Animation */
+.animation-zoom-in, .animation-zoom-out,
+.animation-bottom-in, .animation-bottom-out,
+.animation-bg-fadeIn {
+    -webkit-animation-duration: 0.3s;
+    -webkit-animation-fill-mode: both;
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+}
+
+.animation-fade-in, .animation-fade-out {
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: ease-out;
+    -webkit-animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+}
+
+.animation-zoom-in {
+    -webkit-animation-name: zoomIn;
+    animation-name: zoomIn;
+}
+
+.animation-zoom-out {
+    -webkit-animation-name: zoomOut;
+    animation-name: zoomOut;
+}
+
+.animation-fade-in {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+.animation-fade-out {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+}
+
+.animation-bottom-in {
+    -webkit-animation-name: bottomIn;
+    /* animation-name: bottomIn; */
+}
+
+.animation-bottom-out {
+    -webkit-animation-name: bottomOut;
+    animation-name: bottomOut;
+}
+
+.animation-bg-fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+@-webkit-keyframes zoomIn {
+    from {
+        opacity: 0;
+        -webkit-transform: scale(0, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: scale(1, 1);
+    }
+}
+
+@-webkit-keyframes zoomOut {
+    from {
+        opacity: 1;
+        -webkit-transform: scale(1, 1);
+    }
+    90% {
+        -webkit-transform: scale(0.3, 0.3);
+    }
+    to {
+        opacity: 0;
+        -webkit-transform: scale(0, 0);
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+}
+
+@keyframes zoomOut {
+    from {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+    90% {
+        transform: scale(0.3, 0.3);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0, 0);
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes bottomIn {
+    from {
+        bottom: -1000px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+@-webkit-keyframes bottomOut {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: -1000px;
+    }
+}
+
+@keyframes bottomIn {
+    from {
+        bottom: -1000px;
+    }
+    to {
+        bottom: 0;
+    }
+}
+
+@keyframes bottomOut {
+    from {
+        bottom: 0;
+    }
+    to {
+        bottom: -1000px;
+    }
+}

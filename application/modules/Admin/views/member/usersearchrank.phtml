@@ -1,0 +1,32 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>关键字</td>
+        <td>
+            次数
+            (
+            <a href="<?=$query_link;?>&sort=countasc">升序</a>
+            |
+            <a href="<?=$query_link;?>&sort=countdesc">降序</a>
+            )
+        </td>
+    </tr>
+    <?php if($topic):?>
+    <!--<?php foreach ($topic as $k=>$v) :?>-->
+    <tr>
+        <td><?=$v['keywords'];?></td>
+        <td><?=$v['count'];?></td>
+    </tr>
+    <!--<?php endforeach; ?>-->
+    <?php else:?>
+    <tr>
+        <td colspan="15">暂无数据</td>
+    </tr>
+    <?php endif;?>
+</table>
+<br>
+<?=$page_arr['html'];?>
+<br>
+<br>
+</body>
+</html>

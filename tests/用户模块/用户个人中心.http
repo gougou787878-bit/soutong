@@ -1,0 +1,47 @@
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "all",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "video",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "live",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "live",
+  "total": true
+}
+
+### 用户个人中心
+POST {{host}}/api/users/index
+Content-Type: application/json
+
+{
+  "type": "like",
+  "total": true
+}
+
+###
+

@@ -1,0 +1,128 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<script src="/static/admin/js/plugins/echarts/echarts.min.js"></script>
+<div class="row">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-8">
+        <button type="button" class="btn btn-sm btn-primary right" onclick="toExport('week')">本周</button>
+        <button type="button" class="btn btn-sm btn-info right" onclick="toExport('preweek')">上周</button>
+        <button type="button" class="btn btn-sm btn-success right" onclick="toExport('month')">本月</button>
+        <button type="button" class="btn btn-sm btn-danger right" onclick="toExport('year')">本年</button>
+        <input class="input-sm form-control input-s-sm inline"  style="width: 250px" readonly placeholder="开始时间" id="start" >
+        至
+        <input class="input-sm form-control input-s-sm inline"  style="width: 250px" readonly placeholder="开始时间" id="end"><button type="button" class="btn btn-sm btn-danger right" onclick="toExport('range')">查看</button>
+    </div>
+</div>
+<div class="row">
+    <div id="gold" style="width: 100%; height:400px;"></div>
+</div>
+<hr/>
+<script type="text/javascript">
+    layui.laydate.render({
+        elem: '#start',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd HH:mm:ss', //日期格式
+        istime: true, //是否开启时间选择
+        type:'datetime'
+    })
+    layui.laydate.render({
+        elem: '#end',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd HH:mm:ss', //日期格式
+        istime: true, //是否开启时间选择
+        type:'datetime'
+    })
+
+    var gold = echarts.init(document.getElementById('gold'));
+option = {
+    title: {// 图表标题，可以通过show:true/false控制显示与否，还有subtext:'二级标题',link:'http://www.baidu.com'等
+        text: ''
+    },
+    tooltip : {// 这个是鼠标浮动时的工具条，显示鼠标所在区域的数据，trigger这个地方每种图有不同的设置，见官网吧，一两句说不清楚
+        trigger: 'axis'
+    },
+    legend: {// 这个就是图例，也就是每条折线或者项对应的示例，就是这个<a target=_blank href="http://img.blog.csdn.net/20160622094820180?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">图例</a>
+        data:[]
+    },
+    toolbox: {
+        feature: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',// 这几个属性可以控制图表上下左右的空白尺寸，可以自己试试。
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : false,
+            data : []// X轴的定义
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'// Y轴的定义
+        }
+    ],
+    series : []// 这里就是数据了
+};
+function toExport(datetype) {
+    var start = $("#start").val();
+    var end = $("#end").val();
+    var data = {
+        mod: 'static',
+        code: 'recharge',
+        getdata: 'getdata',
+        start: start,
+        end: end,
+        datetype: datetype,
+        FORMHASH: '<?=$formhash;?>',
+    }
+    $.ajax({
+        url: 'd.php',
+        type: 'POST',
+        data: data,
+        success: function (res) {
+            if (res.status == 1) {
+                var legends = [];
+                var serdata = [] , xAxisdata = [];
+                var data = res.data;
+                $.each(data,function(i,val){  //遍历二维数组
+                    serdata.push(val.recharge_amount);
+                    xAxisdata.push(val.date);
+                })
+                console.log(['5','6'])
+                console.log(xAxisdata)
+                var Series =  [
+                    {
+                        type:'line',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}, label:{show: true}}},
+                        data:serdata
+                    },
+                ]; // 准备存放图表数据
+                option.xAxis[0].data = xAxisdata;// 这一步是设置X轴数据了，需要注意：option.xAxis.data = json.xcontent这样不行
+                option.legend.data = legends;// 设置图例
+                option.series = Series; // 设置图表
+                option.series = Series; // 设置图表
+                gold.setOption(option)
+            } else {
+                layer.msg(res.data, {icon: 5})
+            }
+        }
+    })
+}
+
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

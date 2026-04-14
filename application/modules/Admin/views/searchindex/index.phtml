@@ -1,0 +1,147 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">热门搜索击中结果设置管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">搜索词</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[word]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <p>热搜索词: <?php echo $hotKeyword;?></p>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="refreshHotSearch">刷新热搜词</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="setHotSearch">设置热搜榜</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-h="780" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>热门搜索击中结果设置</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">搜索使用的词：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="搜索使用的词" name="word"
+                           value="{{=d.word }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">数据绑定：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::textarea('results','{{=d.results}}') ; ?>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <input type="hidden" name="num" value="{{d.num|0 }}">
+            <input type="hidden" name="total" value="{{d.total|0 }}">
+            <input type="hidden" name="keyword" value="{{=d.keyword }}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id', width: 100,sort:true}
+            , {field: 'word', title: '搜索词', width: 200}
+            , {field: 'results', title: '搜索视频的id的结果，多个使用,分割',edit:true}
+            //, {field: 'keyword', title: '关键词'}
+            , {field: 'num', title: '搜索次数', width: 100, sort:true }
+            //, {field: 'total', title: '匹配结果', width: 100}
+            //, {field: 'created_at', title: '初次搜索时间', width: 180}
+            //, {field: 'updated_at', title: '自后搜索时间', width: 180}
+            , {fixed: 'right', width: 100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        "event": {
+            /**
+             * 表格左侧事件
+             */
+            "toolbar": {
+                "refreshHotSearch": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.confirm('确认操作', function (index) {
+                        layer.close(index);
+                        Util.msgOk('请求已发送');
+                        ajax.post("<?php echo url_backend('refreshHotSearch')?>")
+                            .then(function (json) {
+
+                            })
+                    });
+                },
+                "setHotSearch": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var index = layer.prompt({formType: 2, area: ['250px', '80px']}, function (val) {
+                        console.log(val);
+                        layer.close(index);
+                        Util.msgOk('请求已发送');
+                        ajax.post("<?php echo url_backend('setHotSearch')?>", {"data": val})
+                            .then(function (json) {
+
+                            })
+                    });
+                }
+            }
+        }
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

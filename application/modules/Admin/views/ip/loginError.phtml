@@ -1,0 +1,26 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>ip地址</td>
+        <td>失败次数</td>
+        <td>最后更新时间</td>
+    </tr>
+    <?php if($topic):?>
+    <!--<?php foreach ($topic as $k=>$v) :?>-->
+    <tr>
+        <td> <a href="http://ip.zxinc.org/ipquery/?ip=<?=$v['ip'];?>&action=2" target="_blank"><?=$v['ip'];?></a></td>
+        <td><?=$v['count'];?></td>
+        <td><?=$v['lastupdate'];?></td>
+    </tr>
+    <!--<?php endforeach; ?>-->
+    <?php else:?>
+    <tr>
+        <td colspan="15">暂无数据</td>
+    </tr>
+    <?php endif;?>
+</table>
+<br>
+<?=$page_arr['html'];?>
+<br>
+<br>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

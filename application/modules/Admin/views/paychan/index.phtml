@@ -1,0 +1,134 @@
+<?php importView("header.phtml"); ?>
+    <body>
+<style>
+    .order-span {
+        color: orangered;
+        font-weight: bold;
+    }
+</style>
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">支付通道统计 <span style="color: orangered" class="layui-inline" id="total-id"></span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="order-search">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">支付渠道</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[channel]',
+                                    merge_array(['' => '不限'], SettingModel::getOrderChannelData())) ?>
+                            </div>
+                        </div>
+
+
+                      <div class="layui-inline">
+                            <label class="layui-form-label">订单类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[order_type]', merge_array(['' => '不限'], OrdersModel::TYPE)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">支付时间</label>
+                            <?php echo Layui::dateBetween('updated_at',date("Y-m-d",TIMESTAMP)) ?>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+
+                        </a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="search-total">
+    <p style="font-size: medium">
+        总计：成功支付条数:{{=d.payedCount}},  订单金额: {{=d.orderTotal}}, 成功支付金额: {{=d.payedTotal}}
+    </p>
+</script>
+<?php echo Html::css(LAY_UI_STATIC . 'table-member.css') ?>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: undefined,
+        delUrl: undefined,
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+
+             {field: 'channel', title: '支付渠道'}
+            , {field: 'total_number', title: '交易笔数',sort:true,templet:function (d) {
+                    return "<span style='color: #029789;font-weight: bold'>"+d.total_number+"</span>"
+                }}
+            , {field: 'amount', title: '订单金额'}
+            , {field: 'pay_amount', title: '实付金额',sort:true,templet:function (d) {
+                    return "<span style='color:orangered;font-weight: bold'>"+d.pay_amount+"</span>"
+                }}
+
+        ]],
+        event: {
+            search: function (ajax, laytpl, where) {
+                ajax.get("<?php echo url_backend('total')?>&" + xx.queryEncode(where)).then(function (json) {
+                    if(json.code =='0'){
+                        let data = json.data,$ = layui.$;
+                        $('#total-id').html(laytpl($('#search-total').html()).render(data));
+                    }
+                });
+            }
+        }
+    });
+
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<script type="text/javascript">
+
+    layui.use(['form', 'jquery', 'laytpl'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let laytpl = layui.laytpl;
+        let data = form.val('order-search');
+        //console.log('order-search'+xx.queryEncode(data))
+        $.ajax({
+            url: "<?php echo url_backend('total')?>&" + xx.queryEncode(data),
+            dataType: 'json',
+            success: function (json) {
+                //console.log(json.code)
+                if (json.code == '0') {
+                    let response = json.data;
+                    $('#total-id').html(laytpl($('#search-total').html()).render(response));
+                }
+            }
+        });
+    })
+
+</script>
+<?php importView("fooler.phtml"); ?>

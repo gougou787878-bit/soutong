@@ -1,0 +1,189 @@
+### json请求 公公配置
+POST {{host}}/api/tab/tuwen
+Content-Type: application/json
+
+{
+    "bundle_id": "tips.yc.bs",
+    "version": "5.2.0",
+    "oauth_type": "pwa",
+    "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/index
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/search
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "kwy": "2215"
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/manhua/filter
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1,
+  "order": "",
+  "type": "",
+  "tab": ""
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/manhua/cat_list
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1,
+  "tab": 13
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/detail
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 15
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/manhua/read
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 13,
+  "s_id": 1
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/recommend
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 2215
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/liking
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 2215
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/manhua/liking
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 2215
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/buy
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "id": 1
+}
+
+###
+
+### json请求 公公配置
+POST {{host}}/api/manhua/my_liking
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1
+}
+
+###
+
+
+### json请求 公公配置
+POST {{host}}/api/manhua/my_buy
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "page": 1
+}
+
+###

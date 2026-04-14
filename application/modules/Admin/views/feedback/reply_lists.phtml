@@ -1,0 +1,88 @@
+<style>
+    body table {
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        padding: 0px;
+    }
+
+    tr {
+        border-bottom: 1px solid salmon;
+    }
+
+    th {
+        color: orangered;
+    }
+
+    .p-1 {
+
+    }
+    .time{
+        margin-right: 20px;
+    }
+    .p-1 .time{
+        color: grey;
+        font-size: 12px;
+    }
+    .p-2 {
+        color: green;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .p-2 .time {
+        color: green;
+        font-size: 12px;
+    }
+    .content{
+
+        font-size: 14px;
+        font-weight: bold;
+
+    }
+</style>
+<table class="table">
+    <tr>
+
+        <th>历史问答处理</th>
+    </tr>
+    <?php if ($list) { ?>
+        <?php foreach ($list as $v) {
+            $v = (array)$v; ?>
+            <tr>
+                <td>
+                    <p class="p-1">
+                        <span class="time"><?php echo $v['addtime'] ? date('Y-m-d H:i', $v['addtime']) : ''; ?></span>
+                        <span class="content">Q：<?php echo htmlspecialchars($v['content']) ?>
+                            <?php if ($v["thumb"]) { ?>
+                                <img style="max-width:100px;max-height:100px;"
+                                     onclick="show_img('<?php echo url_live($v["thumb"]) ?>')"
+                                     src="<?php echo url_live($v['thumb']) ?>">
+                            <?php } ?>
+                        </span>
+                    </p>
+                    <p class="p-2">
+                        <?php if($v['reply_content']){ ?>
+                        <span class="time">
+                            <?php echo $v['created_at'] ? date('Y-m-d H:i',
+                                $v['created_at']) : '' ?>
+                        </span>
+                       <span class="content"> A：<?php echo $v['reply_content'] ?></span>
+                        <?php }else{ ?>
+                            <span class="content" style="color: orangered"> A： 未处理，未回复</span>
+                        <?php } ?>
+                    </p>
+                    <hr style="border: 1px dashed salmon">
+                </td>
+            </tr>
+        <?php } ?>
+    <?php } else { ?>
+        <tr>
+            <td>
+                <P>时间：</P>
+                <P>问题：无</P>
+                <P>处理：无</P>
+            </td>
+        </tr>
+    <?php } ?>
+</table>

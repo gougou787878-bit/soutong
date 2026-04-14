@@ -1,0 +1,308 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">兑换码类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]', merge_array([''=>'全部'],ExchangeCodeModel::TYPE)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">有效期</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('validity') ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="generateVip" lay-form="generate-vip">生成会员</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="generateGold" lay-form="generate-gold">生成金币</button>
+                            <button class="layui-btn layui-btn-sm" lay-event="generateCar" lay-form="generate-car">生成座驾</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="recall">
+                            <i class="layui-icon layui-icon-delete"></i>
+                            召回</a>
+                        <a class="layui-btn layui-btn-xs" data-pk="{{=d.id}}" lay-event="clone">
+                            <i class="layui-icon layui-icon-tree"></i>
+                            克隆</a>
+                        <a class="layui-btn layui-btn-xs" data-pk="{{=d.id}}" lay-event="down" title="下载本次批号可用的邀请码">
+                            <i class="layui-icon layui-icon-down"></i>
+                            下载</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/html" class="data-dialog" id="generate-vip" data-h="480" data-w="500" layer-dialog="确认,取消"
+        data-option="{title:'批量生成vip兑换码',shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>批量生成vip兑换码</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">有效期到：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="有效期如:2022-02-02" name="validity" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">会员时长：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="会员时长，单位小时" name="number" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">会员类型：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('ext' ,MemberModel::USER_VIP_TYPE) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">生成数量：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="一次不要生成太多了" name="num" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">操作记录：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="操作记录" name="memo" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input name="status" value="<?php echo ExchangeCodeModel::STATUS_SUCCESS ?>" class="layui-input">
+            <input name="type" value="<?php echo ExchangeCodeModel::TYPE_VIP ?>">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="generate-gold" data-h="480" data-w="500" layer-dialog="确认,取消"
+        data-option="{title:'批量生成钻石兑换码',shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>批量生成钻石兑换码</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">有效期到：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="有效期如:2022-02-02" name="validity" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">钻石数量：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="钻石数量" name="number" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">生成个数：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="一次不要生成太多了" name="num" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">操作记录：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="操作记录" name="memo" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input name="status" value="<?php echo ExchangeCodeModel::STATUS_SUCCESS ?>">
+            <input name="type" value="<?php echo ExchangeCodeModel::TYPE_COINS ?>">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="generate-car" data-h="480" data-w="500" layer-dialog="确认,取消"
+        data-option="{title:'批量生成座驾兑换码',shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>批量生成座驾兑换码</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">有效期到：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="有效期如:2022-02-02" name="validity" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">座驾id：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="座驾id" name="number" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">使用时长：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="使用时长,单位小时" name="ext" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">生成个数：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="一次不要生成太多了" name="num" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">操作记录：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="操作记录" name="memo" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input name="status" value="<?php echo ExchangeCodeModel::STATUS_SUCCESS ?>">
+            <input name="type" value="<?php echo ExchangeCodeModel::TYPE_CAR ?>">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            //{type: 'checkbox', fixed: 'left'},
+             {field: 'id', title: '批号'}
+            , {field: 'admin_id', title: '操作账号'}
+            , {field: 'ext', title: '扩展'}
+            , {field: 'memo', title: '操作记录'}
+            , {field: 'num', title: '生成的数量'}
+            , {field: 'number', title: '值'}
+            , {field: 'type', title: '类型', type: 'enum', 'value':<?php echo json_encode(ExchangeCodeModel::TYPE)?>}
+            , {field: 'status', title: '状态', type: 'enum', 'value':<?php echo json_encode(ExchangeGenerateModel::STATUS)?>}
+            , {field: 'created_at', title: '生成时间'}
+            , {field: 'validity', title: '有效期', type: 'datetime'}
+            , {fixed: 'right', width: 270, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+        ,
+        'event':{
+            'operate':{
+                'recall': function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.confirm('确认要召回?召回后，被批号兑换码不可用', function (index2) {
+                        ajax.post("<?php echo url_backend('recall')?>", {"id": obj.data.id})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,function () {
+                                        obj.del();
+                                    });
+                                }
+                            })
+                    });
+                },
+                'clone': function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.confirm('确认要克隆吗?克隆后，将会生成一批同样的兑换码', function (index2) {
+                        ajax.post("<?php echo url_backend('clone')?>", {"id": obj.data.id})
+                            .then(function (json) {
+                                layer.close(index2);
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg,xx.reload);
+                                }
+                            })
+                    });
+                },
+                'down': function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    window.open('<?php echo url_backend('down')?>&id=' + obj.data.id)
+                }
+            }
+        }
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

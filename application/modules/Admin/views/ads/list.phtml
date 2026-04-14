@@ -1,0 +1,133 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>广告列表    </h5>
+                <h5><a  onclick="handleEdit(0);">         &nbsp;&nbsp;&nbsp;添加广告</a></h5>
+            </div>
+            <div class="ibox-content">
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>标题</th>
+                        <th>图片</th>
+                        <th>广告类型</th>
+                        <th>广告地址</th>
+                        <th>渠道标识</th>
+                        <!--   <th>外部Url | APP下载地址</th>-->
+                        <th>广告位置</th>
+                        <th>状态</th>
+                        <th>增加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($topic as $key => $v) { ?>
+                        <tr id="ad_<?php echo $v['id'] ?>">
+                            <td><?php echo $v['id'] ?></td>
+                            <td><?php echo $v['title'] ?></td>
+                            <td>
+                                <img onclick="show_img('<?= $v['img_url'] ?>')" src="<?php echo $v['img_url'] ?>" style="width: 100px;max-height: 120px" >
+                            </td>
+                            <td>
+                                <?php echo $v['type_name'] ?>
+                            </td>
+                            <td><a href="<?php echo $v['url'] ?>" target="_blank"><?php echo $v['url'] ?></a></td>
+                            <td style="color:orangered;font-weight: bold"><?php echo $v['channel'] ?></td>
+
+                            <td>
+                                <?php echo $v['position_name'] ?>
+                            </td>
+
+                            <td>
+                                <?php if ($v['status']==0){ ?><a class="btn btn-xs btn-danger">禁用</a><?php } ?>
+                                <?php if ($v['status']==1){ ?><a class="btn btn-xs btn-success">启用</a><?php } ?>
+                            </td>
+                            <td><?php echo $v['created_at'] ?></td>
+                            <td>
+                                <a onclick="handleEdit(<?php echo $v['id'] ?>)" class="btn btn-xs btn-primary">编辑</a>
+                                <a href="javascript:;" onclick="handleDel(<?php echo $v['id'] ?>)" class="btn btn-xs btn-danger">删除</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+                <?= $page_arr['html']; ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--<script src="/static/admin/js/jquery.md5.js"></script>-->
+<script>
+
+
+    function handleAdd() {
+        var url = "d.php?mod=ads&code=edit"
+        layerOpen(url, '增加广告')
+    }
+
+    function layerOpen(url, title) {
+        layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['800px', '800px'],
+            content: url
+        })
+    }
+
+    function getAjax(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (res) {
+                if (res.status == 1) {
+                    layer.msg(res.data, {icon: 1})
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+            }
+        })
+    }
+
+    function reload(msg) {
+        parent.layer.msg(msg, {icon: 1})
+        window.location.reload()
+    }
+
+
+    function handleEdit(id) {
+        var url = "d.php?mod=ads&code=edit&id=" + id;
+        layerOpen(url, '添加/编辑广告')
+    }
+
+    function handleDel(id) {
+        url = 'd.php?mod=ads&code=del&id=' + id
+        layer.confirm('您确定要删除吗？', {
+                btn: ['确定', '取消']
+            }, function (index) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            //reload(res.data, 1)
+                            $("#ad_"+id).hide();
+                        } else {
+                            reload(res.data, 5)
+                        }
+                    }
+                });
+                layer.close(index)
+            }
+        )
+    }
+
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

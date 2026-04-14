@@ -1,0 +1,378 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[oauth_type]',
+                                    ['' => '请选着', 'ios' => 'ios', 'android' => 'android']) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">昵称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[nickname]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">手机</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[username]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">uid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">uuid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uuid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">aff</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[aff]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">被谁aff邀请</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[invited_by]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">房间管理</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_live_super]',
+                                    merge_array(['' => '请选着'], MemberModel::LIVE_SUPER)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">角色</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[role_id]', merge_array(['' => '请选着'], $roleArray)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">VIP等级</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[vip_level]', merge_array(['' => '请选着'], MemberModel::USER_VIP_TYPE)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" lay-form="user-vip-dialog">
+                            <i class="layui-icon layui-icon-username"></i>vip&房管</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.uid}}" lay-event="up-recommend">
+                            <i class="layui-icon layui-icon-top"></i>推荐</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-vip-dialog" data-h="580" data-w="600" layer-dialog="确认,取消"
+        data-option="{closeBtn:false,shadeClose:true,anim:3}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户id：</label>
+            <div class="layui-input-inline">
+                <input disabled value="{{=d.uid }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">房间管理：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('is_live_super', MemberModel::LIVE_SUPER,
+                    ['data-value' => '{{=d.is_live_super}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">VIP类型：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('vip_level', MemberModel::USER_VIP_TYPE,
+                    ['data-value' => '{{=d.vip_level}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">到期时间：</label>
+            <div class="layui-input-block">
+                <input type="text" name="expired_at" value="{{=d.expired_at}}" placeholder="请输入过期日期，格式：2020-02-02"
+                       autocomplete="off"
+                       class="layui-input x-date">
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.uid}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-h="600" data-w="800" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户名：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="username" name="username"
+                           value="{{=d.username }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">密码：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="password" name="password" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">头像：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::uploadPos('thumb_url' , 'thumb' , 50,50 , 'head') ?>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">角色：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('role_id', $roleArray, ['data-value' => '{{=d.role_id}}']) ?>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">过期时间：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="过期时间 2022-02-02" name="expired_at" value="{{=d.expired_at }}" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">针对限时VIP</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">aff：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="aff" name="aff" value="{{=d.aff }}" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">被谁aff邀请：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="被谁 aff 邀请" name="invited_by" value="{{=d.invited_by }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">直播认证：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::radioMulti('auth_status', MemberModel::AUTH_STATUS) ?>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">金币余额：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="金币余额" name="coins" value="{{d.coins }}"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户昵称：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="用户昵称" name="nickname"
+                           value="{{=d.nickname }}" class="layui-input">
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作备注：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::textarea('extra' ,'{{=d.extra}}',['placeholder'=>'操作备注']) ?>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.uid}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax" , ['where'=>$where]) ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'uid',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'uid', title: 'uid'}
+            , {field: 'oauth_type', title: '设备'}
+            , {field: 'oauth_id', title: 'oauth_id'}
+            , {field: 'uuid', title: 'uuid'}
+            , {field: 'nickname', title: '别名', width: 140}
+            , {field: 'username', title: '用户名'}
+            // , {field: 'password', title: 'password'}
+            // , {field: 'is_reg', title: '是否注册， 0为游客  1为注册用户'}
+            // , {field: 'role_id', title: 'role_id'}
+            , {field: 'role_id', title: '权限', "type": "enum", "value":<?php echo json_encode($roleArray) ?>, width: 85}
+            //, {field: 'role_type', title: 'role_type'}
+            // , {field: 'gender', title: 'gender'}
+            // , {field: 'regip', title: 'regip'}
+            , {field: 'aff', title: 'aff', sort: true,templet:function (d) {
+                    return d.aff + '('+d.aff_str+')'
+                }}
+            , {field: 'invited_by', title: '被谁aff邀请',templet:function (d) {
+                    return d.invited_by + '('+d.invited_by_str+')'
+                }}
+            , {field: 'invited_num', title: '邀请安装'}
+            , {
+                field: 'vip_level',
+                title: 'vip级别',
+                "type": "enum",
+                "value":<?php echo json_encode(MemberModel::USER_VIP_TYPE) ?>}
+            , {field: 'expired_at', title: '会员到期', width: 100}
+            , {field: 'regdate', title: '注册时间',  width: 150}
+            // , {field: 'lastip', title: 'lastip'}
+            , {field: 'lastvisit', title: '最后访问',  width: 150}
+            , {field: 'build_id', title: '渠道'}
+            // , {field: 'new_topic_reply', title: 'new_topic_reply'}
+            // , {field: 'login_count', title: 'login_count'}
+            , {field: 'app_version', title: 'app版本号'}
+            // , {field: 'validate', title: 'validate'}
+            // , {field: 'share', title: '分享'}
+
+            // , {field: 'thumb', title: '用户头像'}
+             , {field: 'coins', title: '钻石余额'}
+            // , {field: 'fans_count', title: '粉丝数'}
+            // , {field: 'followed_count', title: '关注数'}
+            // , {field: 'videos_count', title: '作品数'}
+            // , {field: 'live_count', title: 'live_count'}
+            // , {field: 'fabulous_count', title: '获赞数'}
+            // , {field: 'likes_count', title: '喜欢数'}
+            // , {field: 'sexType', title: '0未设置1男2女'}
+            // , {field: 'person_signnatrue', title: '个人签名'}
+            // , {field: 'level', title: '等级', sort: true}
+            //, {field: 'build_id', title: 'build_id 超级签名标识'}
+             , {field: 'auth_status', title: '直播认证', "type": "enum",
+                "value":<?php echo json_encode(MemberModel::AUTH_STATUS) ?>}
+            //, {field: 'exp', title: '经验值'}
+            // , {field: 'chat_uid', title: '聊天标识'}
+            // , {field: 'birthday', title: '生日'}
+            // , {field: 'live_supper', title: '直播超管  0 1'}
+            // , {field: 'consumption', title: '消费总额'}
+             , {field: 'votes', title: '钻石收益'}
+            // , {field: 'votes_total', title: '映票总额'}
+            , {
+                field: 'is_live_super',
+                title: '直播管理',
+                'type': "enum",
+                "value": <?php echo json_encode(MemberModel::LIVE_SUPER)?>}
+            // , {field: 'user_activation_key', title: '激活码'}
+            // , {field: 'phone', title: 'phone'}
+            // , {field: 'level_anchor', title: '直播等级'}
+            , {field: 'coins_total', title: '累计金币'}
+            , {field: 'is_recommend', title: '是否推荐'}
+            , {fixed: 'right', width: 250, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        'event':{
+            'operate':{
+                'up-recommend': function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('真的删除吗?', function (index) {
+                        layer.close(index);
+                        let data = {"id": $this.data('pk'), 'recommend': event.data.is_recommend};
+                        ajax.post('<?php echo url_backend('setRecommend')?>',data)
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    });
+                }
+            }
+        }
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

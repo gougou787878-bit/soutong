@@ -1,0 +1,110 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>每日任务/签到统计</h5>
+                <div class="ibox-tools">
+                </div>
+            </div>
+
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>日期</th>
+                            <th>类型</th>
+                            <th>观看漫画</th>
+                            <th>观看动漫</th>
+                            <th>漫画点赞</th>
+                            <th>动漫点赞</th>
+                            <th>漫画消费</th>
+                            <th>动漫消费</th>
+                            <th>广告点击</th>
+                            <th>每日领取</th>
+                            <th>全部完成</th>
+                            <th>签到人数</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php if ($items): ?>
+                            <?php foreach ($items as $k => $v) : ?>
+                                <tr>
+                                    <td><?= $v['id']; ?></td>
+                                    <td><?= $v['date']; ?></td>
+                                    <td><?php if ($v['type'] == 1): ?>今日注册<?php else: ?>活跃用户<?php endif; ?></td>
+                                    <td><?= $v['watch_mh']; ?></td>
+                                    <td><?= $v['watch_dm']; ?></td>
+                                    <td><?= $v['likes_mh']; ?></td>
+                                    <td><?= $v['likes_dm']; ?></td>
+                                    <td><?= $v['spend_mh']; ?></td>
+                                    <td><?= $v['spend_dm']; ?></td>
+                                    <td><?= $v['ad_click']; ?></td>
+                                    <td><?= $v['get_gold']; ?></td>
+                                    <td><?= $v['off_count']; ?></td>
+                                    <td><?= $v['sign_count']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="16">暂无数据</td>
+                            </tr>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?= $page_arr['html']; ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    layui.laydate.render({
+        elem: '#start'
+    })
+    layui.laydate.render({
+        elem: '#end'
+    })
+
+    function showUser(aff) {
+        var url = "d.php?mod=user&code=index&aff=" + aff
+        layerOpen(url, '用户详情')
+    }
+
+    function layerOpen(url, title) {
+        parent.layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['1200px', '500px'],
+            content: url
+        })
+    }
+
+    function getAjax(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (res) {
+                if (res.status == 1) {
+                    layer.msg(res.data, {icon: 1})
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+            }
+        })
+    }
+
+    function reload(msg) {
+        layer.msg(msg, {icon: 1})
+        setTimeout(function () {
+            window.location.reload()
+        }, 3000)
+    }
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

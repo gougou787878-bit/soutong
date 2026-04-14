@@ -1,0 +1,87 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+    <tbody>
+    <tr class="header">
+        <form action="d.php?mod=proxy&code=proxy" method="post">
+            <td class="altbg2">
+                <div class="col-sm-2">
+                    <input type="text" class="input-sm form-control input-s-sm inline" name="aff" size="45"
+                           placeholder="aff" value="{$aff}">
+                </div>
+                <div class="col-sm-2">
+                    <input class="button lf btn-sm btn-primary" type="submit" name="setting_submit" id="setting_submit" value="搜索">
+                </div>
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td>id</td>
+        <td>用户uuid</td>
+        <td>产品id</td>
+        <td>唯一订单号</td>
+        <td>支付渠道订单号</td>
+        <td>订单说明</td>
+        <td>支付渠道</td>
+        <td>订单金额（元）</td>
+        <td>实付金额（元）</td>
+        <td>状态</td>
+        <td>状态说明</td>
+        <td>更新时间</td>
+        <td>创建时间</td>
+        <td>操作</td>
+    </tr>
+    {if $topic}
+    <!--{loop $topic $k $v}-->
+    <tr>
+        <td>{$v['id']}</td>
+        <td>{$v['uuid']}</td>
+        <td><a href="d.php?mod=product&code=index&flag={$v['product_id']}">{$v['product_id']}</a></td>
+        <td>{$v['order_id']}</td>
+        <td>{$v['app_order']}</td>
+        <td>{$v['descp']}</td>
+        <td>{$v['channel']}</td>
+        <td>{$v['amount']}</td>
+        <td>{$v['pay_amount']}</td>
+        <td>
+            {if $v['status']==0}<a class="btn btn-xs btn-default">未支付</a>{/if}
+            {if $v['status']==2}<a class="btn btn-xs btn-warning">支付中</a>{/if}
+            {if $v['status']==3}<a class="btn btn-xs btn-success">支付完成</a>{/if}
+            {if $v['status']==99}<a class="btn btn-xs btn-danger">交易失败</a>{/if}
+        </td>
+        <td>{$v['msg']}</td>
+        <td>{$v['updated_at']}</td>
+        <td>{$v['created_at']}</td>
+        <td><a class="btn btn-xs btn-primary" href="d.php?mod=product&code=editOrder&id={$v['id']}">编辑</a></td>
+    </tr>
+    <!--{/loop}-->
+    {else}
+    <tr>
+        <td colspan="15">暂无数据</td>
+    </tr>
+    {/if}
+</table>
+<br>
+{$page_arr['html']}
+<br>
+<br>
+</body>
+<script>
+    layui.laydate.render({
+        elem: '#start',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd', //日期格式
+        istime: true, //是否开启时间选择
+        type: 'date'
+    });
+    layui.laydate.render({
+        elem: '#end',
+        event: 'click', //触发事件
+        format: 'yyyy-MM-dd', //日期格式
+        istime: true, //是否开启时间选择
+        type: 'date'
+    });
+</script>
+</html>

@@ -1,0 +1,90 @@
+<?php
+
+/**
+ * Class StorypayController
+ * @author xiongba
+ * @date 2022-06-28 20:55:35
+ */
+class StorypayController extends BackendBaseController
+{
+    /**
+     * 列表数据过滤
+     * @return Closure
+     * @author xiongba
+     * @date 2019-12-02 17:08:03
+     */
+    protected function listAjaxIteration()
+    {
+        return function ($item) {
+            return $item;
+        };
+    }
+
+    /**
+     * 试图渲染
+     * @return string
+     * @author xiongba
+     * @date 2022-06-28 20:55:35
+     */
+    public function indexAction()
+    {
+        $this->display();
+    }
+
+
+    /**
+     * 获取对应的model名称
+     * @return string
+     * @author xiongba
+     * @date 2022-06-28 20:55:35
+     */
+    protected function getModelClass(): string
+    {
+       return StoryPayModel::class;
+    }
+
+    /**
+     * 定义数据操作的表主键名称
+     * @return string
+     * @author xiongba
+     * @date 2022-06-28 20:55:35
+     */
+    protected function getPkName(): string
+    {
+        return 'id';
+    }
+
+    /**
+     * 定义数据操作日志
+     * @return string
+     * @author xiongba
+     * @date 2019-11-04 17:19:41
+     */
+    protected function getLogDesc(): string {
+        // TODO: Implement getLogDesc() method.
+        return '';
+    }
+    /**
+     *
+     * 订单统计
+     *
+     * @return bool
+     */
+    public function totalAction()
+    {
+        $where = array_merge(
+            $this->getSearchLikeParam(),
+            $this->getSearchWhereParam(),
+            $this->getSearchBetweenParam()
+        );
+        $query = StoryPayModel::query()->where($where);
+        $payed = clone $query;
+        $count = $query->count('id');
+        $payedTotal = $payed->sum('coins')  / HT_JE_BEI;
+        $data = [
+            'count'      => $count,//订单数
+            'payedTotal' => $payedTotal,//成交订单总额
+        ];
+        return $this->ajaxSuccess($data);
+    }
+}

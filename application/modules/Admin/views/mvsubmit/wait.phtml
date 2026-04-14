@@ -1,0 +1,243 @@
+<?php importView("header.phtml"); ?>
+<?php echo Layui::css('/static/admin/css/revideo-wait.css?v='.time()) ?>
+<body>
+<div class="video-root-container">
+    <div class="video-search-form" style="display: none">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">uuid</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="uuid" lay-verify="uuid" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">uid</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="uid" lay-verify="uid" placeholder="请输入" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <select id="statusChoice" name="status" lay-verify="status">
+                            <option value="">请选择</option>
+                            <option value="0">审核中</option>
+                            <option value="1">已通过</option>
+                            <option value="2">已拒绝</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="search">搜索</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="layui-row layui-col-space20" id="review-video">
+
+        <?php if (empty($list)) : ?>
+        <h1>暂无待审核视频</h1>
+        <?php endif;  ?>
+
+        <?php foreach ($list as $index => $item) : ?>
+            <div class="layui-col-md2" id="vvv<?php echo $item['id'] ; ?>">
+                <div class="video-detail-container">
+                    <div class="video-play-container">
+                        <div class="video-play-id">ID：<?php echo $item['id'] ; ?></div>
+                        <i class="layui-icon layui-icon-play"></i>
+                        <div class="video-cover-pic-container">
+                            <img class="video-cover-pic" style="max-height: 100%;" src="<?php echo $item['cover_thumb_url'] ; ?>" alt="">
+                        </div>
+                        <video id="vd<?php echo $item['id'] ; ?>" class="video-item-player" src="<?php echo $item['href'] ; ?>" controls></video>
+                    </div>
+                    <div class="video-information">
+                        <h4 title="<?php echo $item['title'] ; ?>">【<?php echo $item['coins'] ; ?>金币】<?php echo $item['title'] ; ?></h4>
+                        <p>标签：<?php echo $item['tags'] ; ?></p>
+                        <p>作者：<?php echo $item['user']['nickname'] ; ?>[<?php echo $item['user']['uid'] ; ?>]</p>
+                        <p>总审核：<?php echo $item['video_count'] ; ?>，被拒绝：<?php echo $item['refuse_rate'] ; ?></p>
+                        <p><?php echo date('Y-m-d H:i' , $item['created_at']) ; ?></p>
+                    </div>
+                    <div class="video-option-button">
+                        <button data-method="refuse" data-value="<?php echo $item['id'] ; ?>" data-title="<?php echo $item['title'] ; ?>" type="button"
+                                class="layui-btn layui-btn-fluid layui-btn-danger layui-btn-sm">拒绝
+                        </button>
+                        <button data-method="pass" data-value="<?php echo $item['id'] ; ?>" data-title="<?php echo $item['title'] ; ?>" type="button"
+                                class="layui-btn layui-btn-fluid layui-btn-normal layui-btn-sm">通过
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<script src="/static/backend/layuiadmin/HTTPUtil.js"></script>
+<script>
+    layui.use(['form','jquery'], function () {
+        var form = layui.form
+            , layer = layui.layer, $ = layui.jquery
+
+        //自定义验证规则
+        form.verify({
+            uuid: function (value) {
+                if (!value) {
+                    return '请输入uuid';
+                }
+            }
+            , uid: function (value) {
+                if (!value) {
+                    return '请输入uid';
+                }
+            }
+            , status: function (value) {
+                if (!value) {
+                    return '请选择状态';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(search)', function (data) {
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            })
+            return false;
+        });
+
+        var refuseHtml = function () {
+            let html = '<div class="layui-form refuse-container" action="" lay-filter="refuse">' +
+                '    <div class="layui-form-item refuse-item-box" pane="">' +
+                '        <label class="layui-form-label">选择拒绝的理由:</label>' +
+                '        <div class="layui-input-block">';
+            let refuse_text = ['您上传的视频含有水印，语音，道具植入等广告或联系方式。'
+                , '您上传的视频可能是重复的，如果是原创请加上手势或小卡片再次上传'
+                , '您上传的视频质量、清晰度还不够好，建议在丰富一下内容再次上传'
+                , '您上传的视频过短，看不到内容/没有声音/主题，请上传新的内容'
+                , '您上传的视频的内容标题和主题不符，请修改后上传'
+                , '您上传的视频,标签与视频内容不符'
+                , '您上传的内容与定价不符，请调整定价后重新上传'
+                , '您上传的内容与搜同定位不符,请更换其他内容上传'
+                , '您上传的封面图质量、清晰度还不够好'
+                , '传的视频未添加官方水印，请添加搜同社区官方水印'
+            ];
+            for (let i = 0; i < refuse_text.length; i++) {
+                if (i === 0){
+                    html += '<div><input type="radio" checked name="refuseDetail" value="' + refuse_text[i] + '" title="' + (i + 1) + '.' + refuse_text[i] + '"></div>'
+                }else{
+                    html += '<div><input type="radio" name="refuseDetail" value="' + refuse_text[i] + '" title="' + (i + 1) + '.' + refuse_text[i] + '"></div>'
+                }
+            }
+            html += '</div></div></div>';
+            return html;
+        }
+
+        var active = {
+            refuse: function (othis) {
+                // 获取自定义属性
+                var value = othis.data('value')
+                var title = othis.data('title')
+                console.log(value)
+                layer.open({
+                    type: 1
+                    , title: '拒绝申请['+title+']'
+                    , offset: 'auto'
+                    , id: 'checkVideo' //防止重复弹出
+                    , content: refuseHtml(title)
+                    , btn: ['确认', '取消']
+                    , btnAlign: 'r'
+                    , area: ['550px', '500px' ]
+                    , shade: 0 //不显示遮罩
+                    , yes: function () {
+                        layer.closeAll();
+                        var refusedata = form.val('refuse');
+                        var refused = refusedata['refuseDetail'];
+                        $('#vd' + value).trigger('pause');
+                        ajax.post("<?php echo url_backend('refuseUserUpload')?>", {"_pk": value, 'refused': refused})
+                            .then(function (json) {
+                                layer.closeAll();
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    $('#vvv' + value).fadeOut(200);
+                                    setTimeout(checkRefresh , 220);
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    }
+                    , btn2: function () {
+                        layer.closeAll();
+                    }
+                });
+            },
+            pass: function (othis) {
+                var value = othis.data('value');
+                var title = othis.data('title');
+                layer.open({type: 1
+                    , title: '通过申请'
+                    , offset: 'auto'
+                    , id: 'checkVideo'
+                    , content: '<div class="pass-video-content"><div>标题:<span style="color: red">'+title+'</span></div><div class="pass-video-content-text">是否通过该视频的审核</div></div>'
+                    , btn: ['通过', '取消']
+                    , btnAlign: 'r'
+                    , shade: 0
+                    , yes: function () {
+                        $('#vd' + value).trigger('pause');
+                        ajax.post("<?php echo url_backend('pass')?>", {"_pk": value})
+                            .then(function (json) {
+                                layer.closeAll();
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    $('#vvv' + value).fadeOut(200);
+                                    setTimeout(checkRefresh , 220);
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    }
+                    , btn2: function () {
+                        layer.closeAll();
+                    }
+                });
+            }
+        }
+
+
+        function checkRefresh() {
+            let s = $('#review-video>.layui-col-md2');
+            let yes = true;
+            for (let i = 0; i < s.length; i++) {
+                if (s.eq(i).is(':visible')) {
+                    yes = false;
+                    break;
+                }
+            }
+            if (yes) {
+                location.reload();
+            }
+        }
+
+
+        $('.video-option-button .layui-btn').on('click', function () {
+            var othis = $(this), method = othis.data('method');
+            active[method] ? active[method].call(this, othis) : '';
+            form.render();
+        });
+
+        // 点击封面 播放
+        $('.video-play-container').on('click', '.video-cover-pic-container', function () {
+            $(this).hide()
+            $(this).siblings('.layui-icon').hide()
+            $(this).siblings('.video-item-player').trigger('play');
+        })
+        // 点击播放图标 播放
+        $('.video-play-container').on('click', '.layui-icon-play', function () {
+            $(this).hide()
+            $(this).siblings('.video-cover-pic-container').hide()
+            $(this).siblings('.video-item-player').trigger('play');
+        })
+
+        form.render();
+    });
+</script>
+</body>
+</html>

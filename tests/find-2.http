@@ -1,0 +1,293 @@
+### 3620fa7115d77258ead6ad8cd8a9ffc5 14115520
+### b0b284963c352cb885ae992e7f65835d 14115521
+### dd6537bf016a6c09741a95b5590275ca 14115117
+
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.yc.bs",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "version": "5.2.0"
+}
+
+### 对回复评论
+POST {{host}}/api/find/commentReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "reply_id": 1,
+  "comment": "好啊好啊"
+}
+
+### 求片详情
+POST {{host}}/api/find/detail
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "find_id": 3
+}
+
+### 求片推荐列表
+POST {{host}}/api/find/replyByFind
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "find_id": 3
+}
+
+### 推片评论列表
+POST {{host}}/api/find/commentByReply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "reply_id": 2
+}
+
+### 求片列表
+POST {{host}}/api/find/list
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "type": "new",
+  "is_match": 0,
+  "has_coins": 0
+}
+
+### 榜单
+POST {{host}}/api/find/rank
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 推片
+POST {{host}}/api/find/reply
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "find_id": 5,
+  "vid": "40249"
+}
+
+### 举报
+POST {{host}}/api/find/post_report
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "find_reply_id": 5,
+  "content": "乱来。。。。。。。。。。。。。。。。"
+}
+
+
+### 首页配置
+POST {{host}}/api/find/home
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 排行榜配置
+POST {{host}}/api/community/rankConf
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 排行榜接口
+POST {{host}}/api/community/rank
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "rank_by": "praize",
+  "rank_time": "week"
+}
+
+### 社区点赞
+POST {{host}}/api/community/like_post
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "id": "16689"
+}
+
+### 排行榜接口
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 社区首页
+POST {{host}}/api/community/home
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+### 热搜榜
+POST {{host}}/api/search/index_new
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+
+### json请求  提现
+POST {{host}}/api/proxy/withdraw
+Content-Type: application/json
+
+{
+  "version": "5.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "withdraw_account": "521483740295012912",
+  "withdraw_name": "孙策",
+  "withdraw_amount": "1000",
+  "withdraw_type": "1",
+  "withdraw_from": "5"
+}
+
+### 社区首页
+POST {{host}}/api/community/list_commentsnew
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "id":16696
+}
+
+### 评论(新)
+POST {{host}}/api/community/commentnew
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "post_id":16696,
+  "content": "期待中"
+}
+
+### 社区首页
+POST {{host}}/api/community/comments
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "comment_id":614306
+}
+
+### 社区首页
+POST {{host}}/api/community/listPost
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0",
+  "aff": 14115151,
+  "kwy": "柔姐姐"
+}
+
+### r2上传
+POST {{host}}/api/home/r2upload_info
+Content-Type: application/json
+User-Agent: idea
+
+{
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "oauth_type": "android",
+  "bundle_id": "tips.ks",
+  "version": "5.2.0"
+}
+
+

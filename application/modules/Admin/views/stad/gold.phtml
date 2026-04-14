@@ -1,0 +1,107 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>金币统计</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>日期</th>
+                                        <th>新增污妖币</th>
+                                        <th>福利任务</th>
+                                        <th>每日任务</th>
+                                        <th>邀请赠送</th>
+                                        <th>签到</th>
+                                        <th>周任务</th>
+                                        <th>兑换码</th>
+                                        <th>总花费</th>
+                                        <th>漫画花费</th>
+                                        <th>动漫花费</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($items):?>
+                                    <?php foreach ($items as $k=>$v) :?>
+                                    <tr>
+                                        <td><?=$v['id'];?></td>
+                                        <td><?=$v['date'];?></td>
+                                        <td><?=$v['total'];?></td>
+                                        <td><?=$v['task'];?></td>
+                                        <td><?=$v['task_today'];?></td>
+                                        <td><?=$v['invited'];?></td>
+                                        <td><?=$v['sign'];?></td>
+                                        <td><?=$v['week'];?></td>
+                                        <td><?=$v['exchange'];?></td>
+                                        <td><?=$v['spend'];?></td>
+                                        <td><?=$v['spend_mh'];?></td>
+                                        <td><?=$v['spend_dm'];?></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="16">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            layui.laydate.render({
+                elem: '#start'
+            })
+            layui.laydate.render({
+                elem: '#end'
+            })
+            function showUser(aff) {
+                var url = "d.php?mod=user&code=index&aff=" + aff
+                layerOpen(url, '用户详情')
+            }
+
+            function layerOpen(url, title) {
+                parent.layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['1200px', '500px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                layer.msg(msg, {icon: 1})
+                setTimeout(function () {
+                    window.location.reload()
+                }, 3000)
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

@@ -1,0 +1,780 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">帖子管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户AFF</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[aff]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">删除 </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_deleted]', merge_array(['' => '请选着'], PostModel::DELETED_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">置顶 </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[set_top]', merge_array(['' => '请选着'], PostModel::TOP_TIPS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">置精</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_best]', merge_array(['' => '请选着'], PostModel::BEST_TIPS)) ?>
+
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">帖子类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[category]', merge_array(['' => '请选着'], PostModel::TYPE_TIPS)) ?>
+
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">话题ID</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[topic_id]', merge_array(['' => '请选着'], $topicArr)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">标题</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[title]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                       <!-- <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>-->
+                        <!--<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>-->
+                       <a href="javascript:;" lay-event="audit" data-id="{{d.id}}">审核</a> |
+                       {{# if(d.photo_num > 0){ }}
+                       <a href="javascript:;" lay-event="img" data-id="{{d.id}}">图片</a> |
+                       {{# } }}
+
+                       {{# if(d.video_num > 0){ }}
+                       <a href="javascript:;" lay-event="video" data-id="{{d.id}}">视频</a>  |
+                       {{# } }}
+
+                       <a href="javascript:;" lay-event="element" data-id="{{d.id}}">
+                           评论</a>
+                       <br>
+                       <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">
+                           <i class="layui-icon layui-icon-edit"></i>修改</a>
+                       <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail" data-pk="{{=d.id}}">
+                           <i class="layui-icon layui-icon-edit"></i>内容</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户AFF：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户AFF" name="aff"
+                           value="{{=d.aff }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">内容：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="内容" name="content"
+                           value="{{=d.content }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户删除标识 0否 1是 ：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户删除标识 0否 1是 " name="is_deleted"
+                           value="{{=d.is_deleted }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">点赞数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="点赞数量" name="like_num"
+                           value="{{=d.like_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="评论数量" name="comment_num"
+                           value="{{=d.comment_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">置精 0否 1是：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="置精 0否 1是" name="is_best"
+                           value="{{=d.is_best }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帖子类型 1图片 2视频 3图文：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="帖子类型 1图片 2视频 3图文" name="category"
+                           value="{{=d.category }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">拒绝通过的原因：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="拒绝通过的原因" name="refuse_reason"
+                           value="{{=d.refuse_reason }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="图片数量" name="photo_num"
+                           value="{{=d.photo_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="视频数量" name="video_num"
+                           value="{{=d.video_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">资源是否完成 0否1是：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="资源是否完成 0否1是" name="is_finished"
+                           value="{{=d.is_finished }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户ip：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="用户ip" name="ipstr"
+                           value="{{=d.ipstr }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">定位城市：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="定位城市" name="cityname"
+                           value="{{=d.cityname }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">话题ID：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="话题ID" name="topic_id"
+                           value="{{=d.topic_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">浏览数量：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="浏览数量" name="view_num"
+                           value="{{=d.view_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">刷新时间：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="刷新时间" name="refresh_at"
+                           value="{{=d.refresh_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标题：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="标题" name="title"
+                           value="{{=d.title }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏金币：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="打赏金币" name="reward_amount"
+                           value="{{=d.reward_amount }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0:待审核 1:审核中 2.审核通过 3.未通过 4.被举报：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="0:待审核 1:审核中 2.审核通过 3.未通过 4.被举报"
+                           name="status"
+                           value="{{=d.status }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="创建时间" name="created_at"
+                           value="{{=d.created_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">修改时间：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="修改时间" name="updated_at"
+                           value="{{=d.updated_at }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序 越大越前：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="排序 越大越前" name="sort"
+                           value="{{=d.sort }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">收藏数：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="收藏数" name="favorite_num"
+                           value="{{=d.favorite_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏次数：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="打赏次数" name="reward_num"
+                           value="{{=d.reward_num }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">set_top：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="set_top" name="set_top"
+                           value="{{=d.set_top }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">_id：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="_id" name="_id"
+                           value="{{=d._id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户AFF：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.aff }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">内容：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.content }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户删除标识 0否 1是 ：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_deleted }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">点赞数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.like_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">评论数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.comment_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">置精 0否 1是：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_best }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帖子类型 1图片 2视频 3图文：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.category }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">拒绝通过的原因：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.refuse_reason }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">图片数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.photo_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">视频数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.video_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">资源是否完成 0否1是：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.is_finished }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户ip：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.ipstr }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">定位城市：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.cityname }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">话题ID：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.topic_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">浏览数量：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.view_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">刷新时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.refresh_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">标题：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.title }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏金币：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.reward_amount }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">0:待审核 1:审核中 2.审核通过 3.未通过 4.被举报：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.status }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">创建时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">修改时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序 越大越前：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.sort }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">收藏数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.favorite_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">打赏次数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.reward_num }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">set_top：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.set_top }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">_id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d._id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="a6">
+    <div style="display: inline-block;flex-direction: row;align-items:center;">
+        <img style="width: 50px;height:50px;" title="头像"
+             alt="头像" src="{{d.user_thumb}}" onclick="show_img('{{d.user_thumb}}')">
+        <hr/>
+        <div>
+            会员AFF：{{d.user_aff}}<br>
+            会员等级：{{d.user_vip_level_str}}<br>
+            会员到期：{{d.user_expired_at_str}}
+        </div>
+    </div>
+</script>
+<script type="text/html" id="a5">
+    数：{{d.reward_num}}  <br>
+    额：{{d.reward_amount}}
+</script>
+<script type="text/html" id="a4">
+    ip：{{d.ipstr}}  <br>
+    城市：{{d.cityname}}
+</script>
+<script type="text/html" id="a3">
+    图片：{{d.photo_num}} &nbsp;|&nbsp;
+    视频：{{d.video_num}} <br>
+    点赞：{{d.like_num}} &nbsp;|&nbsp;
+    评论：{{d.comment_num}} <br>
+    浏览：{{d.view_num}} <br>
+    收藏：{{d.favorite_num}}<br>
+    创建:{{d.created_at}}<br>
+    涮新:{{d.refresh_at}}
+</script>
+<script type="text/html" id="a2">
+    <span style="color:blue">话题:{{d.topic_str}}</span>&nbsp;&nbsp;<span style="color: darkgreen">类型:{{d.category_str}}</span>
+    <hr/>
+    <h3 style="white-space: pre-wrap;">{{d.title}}</h3>
+    <hr/>
+    <h4 style="white-space: pre-wrap;">{{d.content}}</h4>
+</script>
+<script type="text/html" id="a1">
+    <span style="color: green;font-weight: bold;">状态：{{d.status_str}}</span><br>
+    置顶：{{d.set_top_str}}<br>
+    置精：{{d.bast_str}}<br>
+    删除：{{d.deleted_str}}<br>
+    IP：{{d.ipstr}}  <br>
+    城市：{{d.cityname}}
+</script>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax",['where[status]'=>PostModel::STATUS_PASS]) ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id',sort:true,width:100}
+            , {field: 'aff', title: '用户',templet:'#a6',width:200}
+            , {field: 'content', title: '内容',templet:'#a2',width:400}
+            //, {field: 'category_str', title: '类型'}
+            , {field: 'like_num', title: '属性',templet:'#a3',width:200}
+
+            , {field: 'is_best', title: '状态',templet:'#a1',width:160}
+            //, {field: 'category', title: '帖子类型 1图片 2视频 3图文'}
+            //, {field: 'refuse_reason', title: '拒绝通过的原因'}
+            //, {field: 'photo_num', title: '图片数量'}
+            //, {field: 'video_num', title: '视频数量'}
+            //, {field: 'is_finished', title: '资源是否完成 0否1是'}
+            , {field: 'sort', title: '排序',sort:true,edit:true}
+            , {field: 'set_top', title: '置顶',type:"switch",value: "1|0", edit: true, width: 120}
+            , {field: 'is_best', title: '置精',type:"switch",value: "1|0", edit: true, width: 120}
+            , {field: 'is_deleted', title: '隐藏',type:"switch",value: "1|0", edit: true, width: 120}
+            //, {field: 'ipstr', title: 'ip',templet:'#a4', width: 220}
+            //, {field: 'cityname', title: '时间',templet:'#time-attr'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

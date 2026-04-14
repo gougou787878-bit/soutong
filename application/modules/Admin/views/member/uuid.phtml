@@ -1,0 +1,104 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户设备更换日志</h5>
+                        <div class="ibox-tools">
+                        </div>
+                    </div>
+                    
+                    <div class="ibox-content">
+                        <div class="row">
+                            <form action="d.php?mod=user&code=listUuid" method="post">
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                            <input type="text" name="flag" placeholder="原uuid / 新uuid" class="input-sm form-control"> <span class="input-group-btn">
+                                            <button type="submit" class="btn btn-sm btn-primary"> 搜索</button> </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>增加时间</th>
+                                        <th>用户ID</th>
+                                        <th>设备类型</th>
+                                        <th>设备ID</th>
+                                        <th>原uuid</th>
+                                        <th>新uuid</th>
+                                        <th>原邀请数</th>
+                                        <th>新邀请数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($topic):?>
+                                    <!--<?php foreach ($topic as $k=>$v) :?>-->
+                                    <tr>
+                                        <td><?=$v['created_at'];?></td>
+                                        <td><?=$v['uid'];?></a></td>
+                                        <td><?=$v['oauth_type'];?></a></td>
+                                        <td><?=$v['oauth_id'];?></td>
+                                        <td><?=$v['old_uuid'];?></td>
+                                        <td><?=$v['new_uuid'];?></td>
+                                        <td><?=$v['old_invited_num'];?></td>
+                                        <td><?=$v['new_invited_num'];?></td>
+                                    </tr>
+                                    <!--<?php endforeach; ?>-->
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="15">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            function handleBan(ip) {
+                var url = "d.php?mod=ip&code=doAdd&ip=" + ip
+                getAjax(url)
+            }
+
+            function layerOpen(url, title) {
+                layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['800px', '800px'],
+                    content: url
+                })
+            }
+
+            function getAjax(url) {
+                alert('123')
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            layer.msg(res.data, {icon: 1})
+                        } else {
+                            layer.msg(res.data, {icon: 5})
+                        }
+                    }
+                })
+            }
+
+            function reload(msg) {
+                layer.msg(msg, {icon: 1})
+                setTimeout(function () {
+                    window.location.reload()
+                }, 3000)
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

@@ -1,0 +1,131 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<style>
+.max40{
+   width:200px;
+}
+</style>
+<script>
+    function handleComment(id,action=''){
+        let url = '/d.php?mod=comment&code=setstatus&id='+id;
+        if(action =='del'){
+            url = '/d.php?mod=comment&code=del&id='+id;
+        } else if(action=='ban724' || action=='forever'){
+            url = '/d.php?mod=comment&code=setban&id='+id+'&action='+action;
+        }
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (res) {
+                if (res.status == 1) {
+                    layer.msg(res.data, {icon: 1})
+                    $('#trd-'+id).css('display','none');
+                    if(action =='ban724'){
+                       $('ban724_'+id).hide();
+                    }
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+
+            }
+        })
+    }
+
+</script>
+
+	<div class="wrap">
+		<form class="well form-search" method="get" action="/d.php">
+            <input type="hidden" name="mod" value="comment">
+            <input type="hidden" name="code" value="index">
+		  状态：
+			<select class="select_2" name="status">
+				<option value="">全部</option>
+				<option value="0" <?php if ($formget['status'] == '0'): ?> selected<?php endif;?> >隐藏</option>
+				<option value="1" <?php if ($formget['status'] == '1'): ?> selected<?php endif;?> >正常</option>
+                <option value="1" <?php if ($formget['status'] == '1'): ?> selected<?php endif;?> >举报</option>
+			</select>
+			提交时间：
+			<input type="text" class="input-sm form-control input-s-sm inline" readonly id="start_time" name="start_time"  value="<?=$formget['start_time']??'';?>" style="width: 150px;" autocomplete="off">-
+			<input type="text" class="input-sm form-control input-s-sm inline" readonly id="end_time" name="end_time" value="<?=$formget['end_time']??'';?>" style="width: 150px;" autocomplete="off"> &nbsp; &nbsp;
+			UID:
+			<input type="text" name="uid" style="width: 200px;" value="<?=$formget['uid']??'';?>" placeholder="uid">
+			MVID:
+            <input type="text" name="mv_id" style="width: 200px;" value="<?=$formget['mv_id']??'';?>" placeholder="uuid">
+			<input type="submit" class="btn btn-primary" value="搜索">
+		</form>				
+		<form method="post" class="js-ajax-form" >
+
+		
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<th align="center">ID</th>
+						<th>视频</th>
+						<th>用户</th>
+						<th class="max40">内容</th>
+						<th>点赞</th>
+                        <th>举报</th>
+                        <th>IP</th>
+                        <th>城市</th>
+						<th>状态</th>
+						<th>时间</th>
+						<th align="center">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $status=array("0"=>"隐藏","1"=>"正常", "2"=>"举报");?>
+                        <?php foreach ($data as $vo):?>
+					<tr id="trd-<?=$vo->id;?>">
+						<td align="center"><?=$vo->id;?></td>
+                        <td align="center"><?=$vo->mv_id;?></td>
+						<td align="center"><?=$vo->uid;?></td>
+						<td><?=nl2br(htmlspecialchars($vo->comment));?></td>
+						<td><?=$vo->like_num?></td>
+                        <td><?=$vo->complain_num?></td>
+                        <td><?=$vo->ipstr?></td>
+                        <td><?=$vo->cityname?></td>
+						<td><?=$status[$vo['status']]?></td>
+						<td><?=$vo['created_at']?></td>
+
+
+						<td align="center">
+                            <?php if($vo->status == 1 || $vo->status == 2): ?>
+                            <a onclick="handleComment('<?=$vo['id']?>','hide')">隐藏</a>  |
+                            <?php endif; ?>
+							<a onclick="handleComment('<?=$vo['id']?>','del')">删除</a>   |
+                            <a style="color: red" onclick="handleComment('<?=$vo['id']?>','forever')">永久禁言并删除所有评论</a> |
+                            <?php if( \tools\RedisService::get(CommentModel::REDIS_COMMENT_BAN.$vo->uid) != 'ban724'): ?>
+                            <a id="ban724_<?=$vo->id;?>" onclick="handleComment('<?=$vo['id']?>','ban724')">禁言7*24小时</a>
+                            <?php endif; ?>
+
+						</td>
+					</tr>
+                        <?php endforeach;?>
+				</tbody>
+			</table>
+            <div class="pagination"><?= $page_arr['html'] ?></div>
+
+		</form>
+	</div>
+<script type="text/javascript">
+
+    $(function(){
+
+        layui.laydate.render({
+            elem: '#end_time',
+            event: 'click', //触发事件
+            format: 'yyyy-MM-dd', //日期格式
+            istime: true, //是否开启时间选择
+            type: 'date'
+        });
+        layui.laydate.render({
+            elem: '#start_time',
+            event: 'click', //触发事件
+            format: 'yyyy-MM-dd', //日期格式
+            istime: true, //是否开启时间选择
+            type: 'date'
+        });
+
+
+    })
+
+</script>

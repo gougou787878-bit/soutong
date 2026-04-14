@@ -1,0 +1,117 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+
+    <div class="wrap">
+        <ul class="nav nav-tabs">
+            <li class="active"><a>钻石日志流水,没有全量统计</a></li>
+            <li style="padding-left: 10px;font-size: medium;color: orangered;display: none"  id="tongji" >Loading Data ..</li>
+        </ul>
+
+        <form id="coin-log-search" class="well form-search" method="get" action="/d.php">
+            <input type="hidden" name="mod" value="active">
+            <input type="hidden" name="code" value="coin_record">
+            收支类型：
+            <select class="select_2" name="type">
+                <option value="">全部</option>
+                <?php foreach ($coin_type as $k => $v){ ?>
+                    <option value="<?= $k ?>" <?php if ($k == $type): ?> selected   <?php endif; ?> ><?= $v ?></option>
+                <?php }  ?>
+            </select> &nbsp;&nbsp;
+            收支行为：
+            <select class="select_2" name="action">
+                <option value="">全部</option>
+                <?php foreach ($gift_type as $k => $v): ?>
+                    <option value="<?= $k ?>" <?php if ($k == $action): ?> selected   <?php endif; ?> ><?= $v ?></option>
+                <?php endforeach; ?>
+            </select> &nbsp;&nbsp;
+            赠送时间：
+            <input type="text" name="start_time" id="start" class="js-date date" value="<?= $start_time ?>" style="width: 80px;" autocomplete="off">-
+            <input type="text" class="js-date date" id="end" name="end_time" value="<?= $end_time ?>" style="width: 80px;" autocomplete="off"> &nbsp; &nbsp;
+            礼物id：
+            <input type="text" name="giftid" style="width: 200px;" value="<?= $giftid ?>" placeholder="请输入礼物id...">
+            from用户：
+            <input type="text" name="uid" style="width: 200px;" value="<?= $uid ?>" placeholder="请输入会员ID值...">
+            to 用户：
+            <input type="text" name="touid" style="width: 200px;" value="<?= $touid ?>" placeholder="请输入主播ID值...">
+            <input type="submit" class="btn btn-primary" value="搜索">
+        </form>
+        <form method="post" class="js-ajax-form" >
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th align="center">编号</th>
+                    <th>收支类型</th>
+                    <th>收支行为</th>
+                    <th>发送者（ID）</th>
+                    <th>接收者（ID）</th>
+
+                  <!--  <th>行为说明 (ID)</th>-->
+
+                    <th>描述</th>
+                    <th>总价</th>
+                    <th>扣量</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if ($data): ?>
+                    <?php foreach ($data as $v): ?>
+                        <tr>
+                            <td align="center"><?= $v->id ?></td>
+                            <td ><?= $coin_type[$v->type] ?></td>
+                           <!-- <td ><?/*= $gift_type[$v->action] */?></td>-->
+                            <td ><?= $v->action?></td>
+                            <td ><?= $v->withMember->username ?>(<?= $v->withMember->uid ?>)</td>
+                            <td ><?= $v->withLiveMember->username ?>(<?= $v->withLiveMember->uid ?>)</td>
+                          <!--  <td ><?/*= $v->giftname */?>(<?/*= $v->giftid */?>)</td>-->
+                            <td style="color: darkorchid"><?= $v->desc ?></td>
+                            <td><?= $v->totalcoin ?></td>
+                           <td ><?= $v->mark ?></td>
+                            <td ><?= date('Y-m-d H:i:s',$v->addtime) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="16">暂无数据</td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+            <div class="pagination">  <?= $page_arr['html'] ?? ''; ?></div>
+
+        </form>
+    </div>
+    <script>
+        layui.laydate.render({
+            elem: '#start',
+            event: 'click', //触发事件
+            format: 'yyyy-MM-dd', //日期格式
+            istime: true, //是否开启时间选择
+            type: 'date'
+        });
+        layui.laydate.render({
+            elem: '#end',
+            event: 'click', //触发事件
+            format: 'yyyy-MM-dd', //日期格式
+            istime: true, //是否开启时间选择
+            type: 'date'
+        });
+
+        $(function () {
+            var data = $('#coin-log-search').serializeArray();
+            //console.log(data);
+            $('#tongji').fadeIn(10);
+            $.post('d.php?mod=active&code=tongji', data).then(function (json) {
+                if (json.status == '1') {
+                    let html = "累计查询记录：" + json.data.number + " 累计钻石数量:" + json.data.total
+                    $('#tongji').html(html);
+                } else {
+                    $('#tongji').html('Nothing').fadeOut(4000);
+                }
+
+            })
+
+        })
+
+    </script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

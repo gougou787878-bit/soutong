@@ -1,0 +1,107 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>广告样本库    </h5>
+                <h5><a  onclick="handleEdit(0);">         &nbsp;&nbsp;&nbsp;添加</a></h5>
+            </div>
+            <div class="ibox-content">
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>内容</th>
+                        <th>增加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($data as $key => $v) { ?>
+                        <tr>
+                            <td><?php echo $v['id'] ?></td>
+                            <td><?php echo $v['content'] ?></td>
+
+                            <td><?php echo date('Y-m-d',$v['created_at']) ?></td>
+                            <td>
+                                <a  onclick="handleEdit(<?php echo $v['id'] ?>)" class="btn btn-xs btn-primary">编辑</a>
+                                |
+                                <a onclick="handleDel(<?php echo $v['id'] ?>)" class="btn btn-xs btn-danger">删除</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                    </tbody>
+                </table>
+                <?= $page_arr['html']; ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/static/admin/js/jquery.md5.js"></script>
+<script>
+    function handleEdit(id) {
+        var url = "d.php?mod=sample&code=edit&id=" + id
+        layerOpen(url, '修改')
+    }
+
+    function handleAdd() {
+        var url = "d.php?mod=sample&code=edit"
+        layerOpen(url, '增加')
+    }
+
+    function layerOpen(url, title) {
+        layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['800px', '800px'],
+            content: url
+        })
+    }
+
+    function getAjax(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (res) {
+                if (res.status == 1) {
+                    layer.msg(res.data, {icon: 1})
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+            }
+        })
+    }
+
+    function reload(msg) {
+        parent.layer.msg(msg, {icon: 1})
+        window.location.reload()
+    }
+
+
+    function handleDel(id) {
+        url = 'd.php?mod=sample&code=del&id=' + id
+        layer.confirm('您确定要删除吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            reload(res.data, 1)
+                        } else {
+                            reload(res.data, 5)
+                        }
+                    }
+                })
+            }
+        )
+    }
+
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

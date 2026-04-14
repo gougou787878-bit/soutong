@@ -1,0 +1,209 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[uuid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">采纳状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[is_match]', FindModel::MATCH) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <!--                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">-->
+                            <!--                                添加-->
+                            <!--                            </button>-->
+                            <!--                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>-->
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <div class="operate-toolbar">
+                            <a href="javascript:;" lay-event="match_yes" data-pk="{{=d.id}}">恶意不采纳</a> |
+                            <a href="javascript:;" lay-event="match_no" data-pk="{{=d.id}}">不采纳</a> |
+                            <a href="javascript:;" lay-event="info" lay-form="replay-dialog">详情</a>
+                            {{# if(d.member.role_id == <?php echo MemberModel::ROLE_NORMAL ?>){ }}
+                            |
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.member.uid}}"
+                               data-flag="forbidden"
+                               lay-event="checkplus">封禁</a>
+                            {{# } }}
+                        </div>
+                        <!--                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">-->
+                        <!--                            <i class="layui-icon layui-icon-delete"></i>删除</a>-->
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="imt-list">
+    {{#  layui.each(d.images, function(index, item){ }}
+    <img src="{{item}}">
+    {{#  }); }}
+</script>
+
+<style>
+    .layui-table-body td .layui-table-cell {
+        height: auto !important;
+        line-height: revert !important;
+    }
+</style>
+
+<script>
+    Util.formSubmit = function (url, form, ajax, filterName, c1, c2, obj, layoutIndex) {
+        filterName = filterName || "save";
+        let ag = arguments;
+        form.on('submit(' + filterName + ')', function (data) {
+            if (url) {
+                Util.event('save', form, data, ajax);
+                let i = layer.load(0, {time: 6 * 1000, shade: [0.5, '#000']});
+                ajax.post(url, data.field).then(function (json) {
+                    layer.close(layoutIndex);
+                    layer.close(i);
+                    if (json.code) {
+                        Util.msgErr(json.msg);
+                    } else {
+                        Util.msgOk(json.msg, obj.del);
+                    }
+                });
+            }
+            return false;
+        });
+    }
+
+    function callback_json($this) {
+        return function (json) {
+            if (json.code) {
+                Util.msgErr(json.msg);
+            } else {
+                Util.msgOk(json.msg);
+                //$("tr[data-index='" + tr_index + "']").remove();
+                $this.remove();
+            }
+            layer.close(index);
+        }
+    }
+
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>&timeout=1',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: undefined,
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            /*  {type: 'checkbox', fixed: 'left'}*/
+            {field: 'id', title: 'id'}
+            , {field: 'uuid', width: 275, title: '用户', templet: "#member-basis"}
+            , {field: 'title', title: '求片描述', width: 300}
+            , {field: 'img_list', title: '图片', templet: "#imt-list"}
+            , {field: 'like', title: '喜欢'}
+            , {field: 'reply', title: '回复'}
+            , {field: 'coins', title: '赏金'}
+            , {field: 'total_coins', title: '累计总赏金'}
+            , {field: 'is_match_str', title: '是否采纳'}
+            , {
+                field: 'mv_title', width: 100, title: '视频信息', templet: function (d) {
+                    if (d.vid) {
+                        return "<a title='" + d.mv_title + "' class='layui-btn layui-btn-sm layui-btn-xs' onclick=\"previewVideo('" + d.mv_pre_href + "')\"><i class='layui-icon layui-icon-play'></i>" + d.vid + "</a>";
+                    } else {
+                        return '';
+                    }
+                }
+            }
+            , {field: 'created_str', width: 170, title: '创建时间'}
+            , {
+                //fixed: 'right',
+                width: 220, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        "event": {
+            "operate": {
+                "info": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.open({
+                        type: 2,
+                        title: '回复详情',
+                        shadeClose: true,
+                        shade: 0.4,
+                        area: ['1200px', '600px'],
+                        content: "<?php echo url_backend('reply') ?>&id=" + event.data.id
+                    });
+                },
+                "match_yes": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('采纳后，系统将会将将金额转给发布者?', function (index) {
+                        layer.close(index);
+                        let postField = {
+                            "id": $this.data('pk'),
+                            "flag": 'yes' //是否是恶意
+                        };
+                        ajax.post("<?php echo url_backend('match')?>", postField)
+                            .then(callback_json($this));
+                    });
+                },
+                "match_no": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var $this = $(this);
+                    layer.confirm('拒绝采纳后，提现将会直接扣除用户的押金', function (index) {
+                        layer.close(index);
+                        let postField = {
+                            "id": $this.data('pk'),
+                            "flag": 'no' //是否是恶意
+                        };
+                        ajax.post("<?php echo url_backend('match')?>", postField)
+                            .then(callback_json($this));
+                    });
+                },
+
+                "checkplus": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    var index = layer.load(0, {time: 3 * 1000, shade: [0.5, '#666']});
+                    var $this = $(this);
+                    //var tr_index = $this.parents("tr").attr('data-index');
+                    ajax.post("<?php echo url_backend('/members/ban')?>", {
+                        "uid": $this.data('pk')
+                    })
+                        .then(callback_json($this));
+
+                },
+            },
+        }
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js?v=2"></script>
+<?php importView("fooler.phtml"); ?>

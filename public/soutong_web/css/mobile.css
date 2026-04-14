@@ -1,0 +1,339 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.desktop {
+    display: none;
+}
+
+.wrap-body {
+    background: url('../image/mobile/background.webp');
+    background-size: 100% 100%;
+    max-width: 750px;
+    margin: 0 auto;
+    min-height: 100%;
+    height: auto;
+    align-content: center;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.header-area {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    top: 1.4%;
+    background-size: 100% 100%;
+}
+
+.header-activity {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+}
+
+.header-activity img {
+    width: 100%;
+}
+.logo-container {
+    margin: 0;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+.logo-txt img {
+    width: unset;
+}
+.logo img {
+    height: 4rem;
+    width: unset;
+}
+.txt-1 img {
+    height: 1.6rem;
+    padding-bottom: .3rem;
+}
+.txt-2 img {
+    height: .7rem;
+}
+.contact-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.contact-container img {
+    height: 5vw;
+    width: unset;
+}
+.footer-area {
+    max-width: 750px;
+    bottom: 0;
+    width: 100%;
+    padding: 0.7rem;
+    transform: translate3d(0,0,0);
+    will-change: transform;
+    z-index: 99;
+}
+
+.footer-area img {
+    width: 100%;
+    display: block;
+    margin: auto;
+    padding: 0.7rem;
+}
+
+.l-area {
+    width: 60%;
+    text-align: left;
+    padding-left: 5%;
+}
+.btt {
+    width: 40%;
+    text-align: center;
+}
+
+.l-area img {
+    height: 4.5rem;
+    width: unset !important;
+}
+.btt img {
+    width: unset !important;
+    height: 2.5rem;
+}
+
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-area img {
+    padding: 10px;
+}
+
+.content-area {
+    z-index: 1;
+}
+
+.contact-area {
+    display: block;
+    text-align: center;
+}
+
+.contact-area img {
+    width: 96%;
+    margin: auto;
+    padding: .5rem;
+}
+
+
+.tip,
+.logo-area,
+.titlee_ {
+    text-align: center;
+}
+
+.contact-container {
+    /* display: flex; */
+    flex-direction: row;
+    align-items: center;
+}
+.contact-us {
+    text-align: center;
+    margin-left: 1.2rem;
+}
+.txtt img {
+    height: .8rem;
+    margin-top: .3rem;
+}
+
+.i-img {
+    width: 70%;
+}
+
+.i-image {
+    margin-top: .45rem;
+    margin-left: .2rem;
+    width: .5rem;
+}
+
+.title_ {
+    color: rgb(255 255 255);
+    font-size: 1rem;
+}
+
+.desc {
+    color: rgb(153 153 153);
+    font-size: .8rem;
+    padding-top: .6rem;
+}
+
+.tip,
+.titlee_,
+.content-area {
+    max-width: 750px;
+    width: 100%;
+}
+
+
+.ios_,
+.android_ {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    padding: 0.7vw 2.5vw 0.7vw 2.5vw;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    width: 100%;
+}
+
+.and-btn,
+.i-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.and-btn img,
+.i-btn img {
+    height: 2rem;
+    vertical-align: middle;
+}
+
+.logo-area img {
+    width: 90%;
+}
+
+.title img {
+    width: 50%;
+}
+
+.download-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.photo img {
+    width: 100%;
+}
+.txt-slider {
+    text-align: center;
+}
+.txt-slider img {
+    width: 85%;
+    padding-top: .5rem;
+}
+
+.app {
+    display: flex;
+    width: 100%;
+    margin: auto;
+    justify-content: center;
+}
+/* .app img {
+    padding: .5rem;
+} */
+
+.set-up-tip {
+    text-align: center;
+    color: rgb(255 255 255);
+    text-decoration: underline;
+    font-size: 1.2rem;
+}
+
+.set-up-tip img {
+    height: 3vw;
+    width: unset;
+}
+
+.email {
+    padding-bottom: 7rem;
+}
+
+@media screen and (max-width: 480px) {
+    .header-activity {
+        padding: 0 1rem;
+    }
+    .swiper {
+        width: 100%;
+    }
+    .l-area img {
+        height: 3.5rem;
+    }
+    .btt img {
+        height: 2.2rem;
+    }
+    .set-up-tip img {
+        height: .75rem;
+        margin-bottom: .3rem;
+    }
+    .email {
+        padding-bottom: 5.5rem;
+    }
+    .header-area {
+        top: 2%;
+    }
+    .wrap-body {
+        height: 100%;
+    }
+    .txt-slider img {
+        margin-bottom: unset;
+    }
+    .footer-area {
+        bottom: 0;
+        position: absolute;
+    }
+    .contact-container img {
+        height: 1.6rem;
+        width: unset;
+    }
+    .logo img {
+        height: 3rem;
+    }
+    .txtt img {
+        height: .8rem;
+    }
+    .txt-slider img {
+        padding-top: .8rem;
+    }
+    .set-up-tip {
+        font-size: 1rem;
+    }
+    .footer-area img {
+        width: 100%;
+        padding: 0.3rem;
+    }
+    .contact-us {
+        margin-left: 1rem;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    
+    .logo img {
+        height: 2.5rem;
+        width: unset;
+    }
+    .contact-container img {
+        height: 1.4rem;
+        width: unset;
+    }
+    .photo {
+        text-align: center;
+    }
+    .photo img {
+        width: 80%;
+    }
+}

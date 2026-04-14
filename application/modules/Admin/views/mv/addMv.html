@@ -1,0 +1,152 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<div class="col-sm-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form id="mvEdit" class="form-horizontal" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">标题：</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="data[title]" class="form-control" id="title" value="{$data['title']}">
+                    </div>
+                   <!-- <input  type = "hidden" name="data[uuid]" value="{$uuid}" class="form-control">-->
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">标签：</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="tags" name="data[tags]" placeholder="直接填写标签,多个用','隔开" class="form-control" value="{$data['tags']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">&nbsp;</label>
+                    <div class="col-sm-8">
+                        <!--{loop $tags $k $v}-->
+                        <label style="margin-left:15px;">
+                            <input class="sel" value="{$v['name']}" type="checkbox">{$v['name']}
+                        </label>
+                        <!--{/loop}-->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">选择用户</label>
+                    <div class="col-sm-8">
+                        <select name="data[uuid]" id = "usersinfo" class="input-sm form-control input-s-sm inline">
+                            <!--{loop $users $kk $vv}-->
+                            <option  value="{$vv['uuid']}">{$vv['nickname']}</option>
+                            <!--{/loop}-->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">观看需要的金币数：</label>
+                    <div class="col-sm-8">
+                        <input type="number" id="coins" name="data[coins]" placeholder="观看需要的金币数" class="form-control" value="{$data['coins']}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-8">
+                       <!-- <input type="file" id="file" name="file" placeholder="视频文件" class="form-control">-->
+                        <input type="hidden" id="m3u8_url" name="data[m3u8_url]" class="form-control">
+                    </div>
+                </div>
+            </form>
+            <form id="fileform" class="form-horizontal" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">视频文件：</label>
+                    <div class="col-sm-8">
+                        <input  type="file" id="file" name="video" placeholder="视频文件" class="form-control">
+                        <input  type = "hidden" id = "uuid"  name="uuid" value="{$uuid}" class="form-control">
+                        <input  type = "hidden" name="timestamp" value="{$time}" class="form-control">
+                        <input  type = "hidden" name="sign" value="{$sign}" class="form-control">
+                    </div>
+                </div>
+            </form>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-8">
+                    异步上传成功后保存按钮才会出现请等-等
+                    <button id = "button" style="display: none" class="btn btn-sm btn-white" type="button" onclick="handleEdit()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    Array.prototype.remove = function(val) {
+        var index = this.indexOf(val);
+        if (index > -1) {
+            this.splice(index, 1);
+        }
+    };
+
+    var index = parent.layer.getFrameIndex(window.name);
+    var alltagstr = '{$tagsstr}';
+    var seltagstr = '{$data["tags"]}';
+    var alltagsarr = alltagstr.split(",");
+    var selarr = seltagstr.split(",");
+
+    $(".sel").click(function () {
+        if ($(this).prop("checked")) {
+            selarr.push($(this).val());
+        } else {
+            selarr.remove($(this).val());
+        }
+        var strr = selarr.join(",");
+        $("#tags").val(strr);
+    });
+
+    function handleEdit() {
+        var data = new FormData($('#mvEdit')[0]);
+        $.ajax({
+            url: 'd.php?mod=av&code=doAddMv',
+            data: data,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (res) {
+                if (res.status != 1) {
+                    layer.msg("上传失败",5);
+                }else{
+                    parent.reload(res.data);
+                    parent.layer.close(index)
+                }
+            }
+        })
+    }
+
+    $("#usersinfo").on("change",function () {
+         $("#uuid").val($("#usersinfo").val());
+    });
+
+    $("#file").on("change",doupload);
+    function doupload() {
+        var file = this.files[0];
+        if (!/video\/\w+/.test(file.type)){
+            layer.msg('视频格式必须为mp4', {icon: 1,time:200});
+            return;
+        }
+        var data = new FormData($('#fileform')[0]);
+        var url = "{$url}";
+        $.ajax({
+            url: url,
+            data: data,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (res) {
+                var obj = JSON.parse(res);
+                console.log(res)
+               if(obj.code == 1){
+                   $("#button").show();
+                   $("#m3u8_url").val(obj.msg);
+               }else{
+                   layer.msg("文件上传失败");
+               }
+
+            }
+        })
+    }
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml";?>

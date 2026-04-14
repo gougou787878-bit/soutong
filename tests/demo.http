@@ -1,0 +1,1049 @@
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/home/getConfig
+Content-Type: application/json
+
+{
+  "env": "{{env}}",
+  "bundle_id": "tips.ks",
+  "version": "3.9.0",
+  "theme": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "channel": "",
+  "oauth_id": "e3f5536a141811db40efd6400f1d0a4e"
+}
+
+
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/tab/index_aw
+Content-Type: application/json
+
+{
+  "env": "{{env}}",
+  "bundle_id": "tips.ks",
+  "version": "3.9.0",
+  "theme": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "channel": "",
+  "oauth_id": "e3f5536a141811db40efd6400f1d0a4e"
+}
+### json请求 公公配置
+POST {{host}}/api/system/resource
+Content-Type: application/json
+
+{
+   "env": "{{env}}",
+  "bundle_id": "tips.ks",
+  "version": "1.1.1",
+  "theme": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "04af7c0979bcede4f736c68501f1bdce",
+  "thumb": "http://image.ryr365.com/img.head/xj_feed20200106022102.jpeg",
+  "nickname": "遊客賬號_326413"
+}
+
+### json请求 代理首页
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/proxy/index
+Content-Type: application/json
+
+{
+  "env": "{{env}}",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "a9209a93d03c85ca071e20c7f190b543"
+}
+
+###
+
+### json请求  他人主页信息
+### "to_uid": "63042" 无
+POST {{host}}/api/users/getUserHome
+Content-Type: application/json
+
+{
+    "env": "{{env}}",
+  "to_uid": "6083449"
+}
+
+###
+
+### json请求  关注列表
+###
+POST {{host}}/api/users/followed
+Content-Type: application/json
+
+{
+    "env": "{{env}}",
+  "uid": "5682580",
+  "page": 3,
+  "limit": 1
+}
+
+###
+
+### json请求  粉丝列表
+###
+POST {{host}}/api/users/fans
+Content-Type: application/json
+
+{
+  "uid": "5624084",
+  "page": 3,
+  "limit": 1
+}
+
+###
+
+### json请求  我的关注信息
+###
+POST {{host}}/api/users/followedInfo
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "45f9f1cff21932c46a1a22f1da887bed",
+  "limit": 24,
+  "page": 1
+}
+
+###
+
+### json请求  直播
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/api/live/getPop
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "811021f5bdbf236f8c95454e24b9b9fb",
+  "live_uid": 6993071,
+  "to_uid": 6993071
+}
+
+###
+
+### json请求  进入直播
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/api/live/newEnterRoom
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "live_uid": 7487462,
+  "uid": 4805065
+}
+
+###### json请求  直播
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+### 054450A3-8B53-4AEF-BA13-AAAEB258CA79   uuid c6cded2a45e0b0a93563357eaa575ce3
+### 69FCAC7C-0804-4387-897B-326BE68A2E0D   uuid 5352f49af8527be3dd4a3d1578714f6f
+POST {{host}}/api/users/getBaseInfo
+Content-Type: application/json
+
+{
+  "version": "1.1.1",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "dd08f4e4c8ad8f2775ca5af4b73d75b1"
+}
+
+###
+
+###### json请求  直播
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/system/exchange
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "baee2c087740f2f179c7363a93ab5640",
+  "code": ""
+}
+
+###
+
+
+###### json请求  视频列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/mv/index
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+}
+
+###
+
+
+
+###### json请求  直播首页
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/home/getIndex
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca"
+}
+
+###
+
+
+###### json请求  关注取关
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/users/following
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "to_uid": 5682580,
+  "oauth_id": "19996176273999f3cffe2bd2e1c3d70c"
+}
+
+###
+###### json请求  全部直播列表   滑动
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/home/getallHot
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca"
+}
+
+###
+
+###
+###### json请求  礼物列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/live/getGiftList
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca"
+}
+
+###
+
+
+###
+###### json请求 创建直播
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/live/createRoom
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.4.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "5b8f72f23a8ab9e6d22cf6bd904686ea",
+  "title": "阴为有你",
+  "type": "",
+  "type_val": "",
+  "token": "",
+  "live_class_id": ""
+}
+
+###
+
+
+###
+###### json请求 创建直播
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###
+POST {{host}}/api/p/addAccount
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "811021f5bdbf236f8c95454e24b9b9fb",
+  "account_bank": "农业银行",
+  "account": "21212121212122",
+  "name": "人民"
+
+}
+
+###
+
+
+
+###
+###### json请求 砖石  坐骑列表  1 坐骑  2 靓号
+###
+POST {{host}}/api/p/cList
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "type": 2
+
+
+}
+###
+###### json请求 砖石  坐骑列表  1 坐骑  2 靓号
+###
+POST {{host}}/api/p/mList
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "type": 1
+
+}
+
+###
+###### json请求 砖石  坐骑列表  1 坐骑  2 靓号
+###
+POST {{host}}/v2/product/list
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "dd6537bf016a6c09741a95b5590275ca",
+  "type": 1
+
+}
+###
+
+### json请求 用户视频列表
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/users/videos
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_new_id": "ACEB1F09-7A87-43F8-A030-499751CDA0E5",
+  "channel": "",
+  "oauth_id": "ACEB1F09-7A87-43F8-A030-499751CDA0E5"
+}
+
+###
+
+### json请求 我的收益
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/users/myProfit
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+###
+
+
+### json请求 我的等级
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/users/myLevel
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.5",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "0462c2f329525bddcff88f88b2f8653e"
+}
+
+###
+
+### json请 常见问题
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/v2/helper/list
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.5",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "0462c2f329525bddcff88f88b2f8653e"
+}
+
+###
+
+
+### json请 邀请码
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/users/invitation
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.5",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_new_id": "",
+  "channel": "",
+  "oauth_id": "DF196140-81BE-4562-BE4D-D844065B1C6A",
+  "aff": "CeXG"
+}
+
+###
+
+### json请求  我的装备
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/api/equipment/getList
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_new_id": "",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+
+### json请求  我的装备
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/message/list
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "114d7daffe70738210cdb08b40e97f75",
+  "page": 1
+}
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/topic/list
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/topic/mv
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "topic_id": 1
+}
+
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/search/discover
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "topic_id": 1
+}
+
+###
+
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/mv/getFeature
+Content-Type: application/json
+
+{
+  "version": "1.5.1",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/userFollow/videoWithAnchor
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/userIncome/videoProfit
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/ranking/getRankByActor
+Content-Type: application/json
+
+{
+  "live_uid": "5671232",
+  "type": "hour",
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/api/proxy/withdraw
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC",
+  "withdraw_account": "55666777888999",
+  "withdraw_name": "曹操",
+  "withdraw_amount": "2000",
+  "withdraw_type": "1",
+  "withdraw_from": "3"
+}
+
+###
+
+### json请求 用户视频列表
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/mv/preUpload
+Content-Type: application/json
+
+{
+  "bundle_id": "tips.ks",
+  "version": "1.0.3",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_new_id": "",
+  "oauth_id": "ef6ffd2d4ccbe2f319a58b54205cc5ae"
+}
+
+###
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/dailyvideo/list
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "4F2F1EE6-3FF2-477A-83F2-F11A52D481BC"
+}
+
+###
+
+###
+### json请求  合集列表
+###   "live_uid": 5198911,
+###  "to_uid": 5682580
+###  811021f5bdbf236f8c95454e24b9b9fb  wo
+POST {{host}}/v2/user/transfer
+Content-Type: application/json
+
+{
+  "coin": 6600,
+  "to_uid":5624145,
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "24312508-CC8A-4A58-8FF9-577906DB1B61"
+}
+
+###
+POST {{host}}/v2/ChargeVideo/recommend
+Content-Type: application/json
+
+{
+  "page": 1,
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "ios",
+  "oauth_id": "24312508-CC8A-4A58-8FF9-577906DB1B61"
+}
+
+###
+###
+POST {{host}}/api/mv/upload
+Content-Type: application/json
+
+{
+
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "811021f5bdbf236f8c95454e24b9b9fb",
+  "title": "一位漂亮妹子,居然没带乳罩,奶子大大乳头粉红极品",
+  "url": "20201005/2020100515055951619/ffd828b295f50a307bdd795f5a18b39d.mp4",
+  "img_url": "/new/xiao/20201005/2020100515070635324.jpeg",
+  "tags": "美少女,高颜值"
+}
+
+###
+
+###
+###
+POST {{host}}/api/system/appcenter
+Content-Type: application/json
+
+{
+
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "811021f5bdbf236f8c95454e24b9b9fb"
+}
+
+###
+###
+POST {{host}}/api/system/appclick
+Content-Type: application/json
+
+{
+
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "811021f5bdbf236f8c95454e24b9b9fb",
+  "id": 9
+}
+
+###
+POST {{host}}/api/community/follow_user_post
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a"
+}
+
+###
+POST {{host}}/api/users/following
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "to_uid": 42442
+}
+
+###
+POST {{host}}/api/community/toggle_favorit_post
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "id": 100
+}
+
+#######
+POST {{host}}/api/community/favorit_post
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a"
+}
+
+#######
+POST {{host}}/api/community/like_post
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "id": 16693
+}
+
+#######
+POST {{host}}/api/community/post_detail_by_id
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "ed10e48f0f0f221ff9c4ce113fbeda2c",
+  "id": 16696
+}
+
+#######
+POST {{host}}/api/community/buy_post
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a"
+}
+
+#######
+POST {{host}}/api/community/search
+Content-Type: application/json
+
+{
+  "version": "1.0.3",
+  "bundle_id": "tips.ks",
+  "channel": "",
+  "via": "",
+  "build_id": "",
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "word": "你好"
+}
+
+#######
+POST {{host}}/api/community/like_comment
+Content-Type: application/json
+
+{
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "id": 100,
+  "comment_id":614300
+}
+
+#######
+POST {{host}}/api/community/list_comments
+Content-Type: application/json
+
+{
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "id": 100
+}
+
+#######
+POST {{host}}/api/community/comment
+Content-Type: application/json
+
+{
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "post_id":16696,
+  "content":"谢谢地地道道的"
+}
+
+#######
+POST {{host}}/api/community/like_comment
+Content-Type: application/json
+
+{
+  "oauth_type": "android",
+  "oauth_id": "b0adeae89c031f8a3ff697ec16daa33a",
+  "post_id":16696,
+  "content":"谢谢地地道道的"
+}

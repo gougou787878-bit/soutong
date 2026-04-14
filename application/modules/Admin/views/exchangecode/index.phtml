@@ -1,0 +1,99 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {margin-right: 30px}</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">兑换码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[code]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">使用者uid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[uid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]', merge_array([''=>'全部'],ExchangeCodeModel::TYPE)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">有效期</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::dateBetween('validity') ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态 </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[statue]', merge_array([''=>'全部'],ExchangeCodeModel::STATUS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        uploadUrl: undefined,
+        toolbar:undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+             {field: 'id', title: 'id'}
+            , {field: 'code', title: '兑换码',templet:function (d) {
+                    return "<span style='color:orangered;font-size: 13px;'>"+d.code+"</span>"
+                }}
+            , {field: 'type', title: '类型', type: 'enum', 'value':<?php echo json_encode(ExchangeCodeModel::TYPE)?>}
+            , {field: 'number', title: '值'}
+            , {field: 'validity', title: '有效期',type:'datetime'}
+            , {field: 'status', title: '状态', type: 'enum', 'value':<?php echo json_encode(ExchangeCodeModel::STATUS)?>}
+            , {field: 'uid', title: '使用者u'}
+            , {field: 'created_at', title: '创建'}
+            , {field: 'updated_at', title: '修改'}
+            //, {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+<script type="text/javascript" src="<?php echo LAY_UI_STATIC ?>/data-list.js"></script>
+<?php importView("fooler.phtml"); ?>

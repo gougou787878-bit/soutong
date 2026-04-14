@@ -1,0 +1,101 @@
+body,td{
+	margin: 0px;
+	font: 12px Arial, 微软雅黑, sans-serif;
+	text-align: left;
+}
+html, body {
+	scrollbar-face-color: #15A3D9;
+	scrollbar-highlight-color: #555555;
+	scrollbar-3dlight-color: #555555;
+	scrollbar-darkshadow-color: #60B7DE;
+	scrollbar-shadow-color: #555555;
+	scrollbar-arrow-color: #FFFFFF;
+	scrollbar-track-color: #A4D6EA;
+	background: #fff;
+}
+
+input, textarea, select {
+	margin: 5px 0px;
+	border: 1px solid #6699CC;
+	font: 12px Arial, 微软雅黑, sans-serif;
+	line-height: 1.3em;
+	color: #547BBB;
+	background: #FFFFFF;
+}
+form {
+	margin: 0px;
+}
+textarea {
+	overflow: auto;
+}
+.checkbox, .radio {
+	border: 0px;
+	background: none;
+	vertical-align: middle !important;
+	vertical-align: baseline;
+	margin-bottom: 5px !important;
+	margin-bottom: 0;
+	height: 16px;
+}
+a {
+	text-decoration: none;
+	/*color: #555;*/
+	color: #3E92CF;
+}
+a:hover {
+	text-decoration: underline;
+}
+.tableborder {
+	border: 0px !important;
+	empty-cells: show;
+	border-collapse: separate !important;
+	> border-collapse: collapse !important;
+	border-collapse: collapse;
+	margin-bottom:10px;
+}
+.tableborder tr:hover{background:#F1F5F8;}
+.tableborder td {
+	line-height: 2em;
+	height: 2em;
+	padding: 4px 0 4px 12px;
+	border-bottom:1px dashed #ccc
+}
+.tableborder td ul, .tableborder td ul li {
+	line-height: 22px;
+	margin-bottom: 0px;
+	margin-top: 0px;
+}
+.tableborder td img {
+	margin-top: 8px;
+}
+.tableborder td .smalltxt {
+	line-height: 20px;
+}
+.header td {
+
+line-height: 16px;
+height: 30px !important;
+height: 29px;
+font-weight: bold;
+color: #000;
+padding: 0px 8px;
+background: #F3F3F3;
+border-top: 1px solid #ccc;
+border-bottom: 1px solid #dfdfdf;
+}
+/*后台子导航*/
+ol, ul {list-style: none; padding:0px; margin:0px;}
+.cc{*zoom:1;}
+.cc:after{content:'\20';display:block;height:0;clear:both;}
+.nav3{ margin-top:15px;padding:0 10px;}
+.nav3 ul{}
+.nav3 li{float:left;margin-right:5px;}
+.nav3 li a{height:25px;line-height:25px;padding:0 15px; font-weight:700;display:inline-block;background:#dbe8f6;float:left;outline:none;color:#336699;}
+.nav3 li a:hover{ text-decoration:none;background:#6392c2;color:#fff;}
+.nav3 .current a{background:#336699;color:#fff;}
+/*分页样式*/
+#page {font-size: 12px;padding-left:10px;}
+#page i {font-style: normal;font-weight: 600;}
+#page b {padding: 3px 6px;background: #2E6AB1;color: white;border: solid 1px #2E6AB1;font-family: 微软雅黑 Light; }
+#page a {padding: 3px 6px;margin: 0;font-family: 微软雅黑 Light;line-height: 15px;border: solid 1px #2E6AB1;color: #369;}
+

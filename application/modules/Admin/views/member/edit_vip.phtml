@@ -1,0 +1,91 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+
+<style>
+    .controls{
+        margin-left: 180px;
+    }
+</style>
+<div class="wrap">
+    <form id="productEdit" class="form-horizontal" enctype="multipart/form-data">
+        <table cellspacing="1" cellpadding="4" width="100%" align="center" class="tableborder">
+            <tbody>
+            <input type="hidden"name="id" value="<?= $id ?>">
+            <tr>
+
+                <td  bgcolor="#F8F8F8">用户UID:</td>
+                <td  bgcolor="#FFFFFF">
+                    <input value="<?= $data->uid ?>" readonly>
+                </td>
+            </tr>
+            <tr>
+
+                <td  bgcolor="#F8F8F8">房间管理:</td>
+                <td  bgcolor="#FFFFFF">
+                    <select name="is_live_super">
+                        <option value="30" <?php if($data->is_live_super == 30): ?>selected<?php  endif;?>> 普通</option>
+                        <option value="50" <?php if($data->is_live_super == 50): ?>selected<?php  endif;?>> 房间管理</option>
+                        <option value="60" <?php if($data->is_live_super == 60): ?>selected<?php  endif;?>> 超管</option>
+
+                    </select>
+                </td>
+            </tr>
+            <tr>
+
+                <td  bgcolor="#F8F8F8">VIP类型:</td>
+                <td  bgcolor="#FFFFFF">
+
+                    <select name="vip_level">
+                        <?php foreach ($vip_type as $key => $item): ?>
+                            <option value=" <?= $key?>" <?php if($data->vip_level == $key): ?>selected<?php  endif;?>> <?= $item?></option>
+                        <?php endforeach;?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td  bgcolor="#F8F8F8">到期时间 :</td>
+                <td  bgcolor="#FFFFFF">
+                        <input type="text" class="input-sm form-control input-s-sm inline" name="expired_at"  placeholder="请填写到期时间格式如：2020-02-02" value="<?= $data->expired_at?date('Y-m-d',$data->expired_at):'' ?>">
+                </td>
+            </tr>
+            <tr>
+                <td  bgcolor="#F8F8F8"></td>
+                <td  bgcolor="#FFFFFF">
+                    <span style="color: orangered;font-weight: bolder">格式： 2020-02-02</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <center> <button class="btn btn-sm btn-white" type="button" onclick="handleEdit()">保存</button></center>
+    </form>
+</div>
+<script>
+    function reload(msg) {
+        parent.layer.msg(msg, {icon: 1,time:2000},function () {
+            parent.window.location.reload()
+        });
+    }
+    function handleEdit() {
+        var data = new FormData($('#productEdit')[0]);
+        $.ajax({
+            url: 'd.php?mod=user&code=user_edit_vip_post',
+            data: data,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (res) {
+                var icon = 1;
+                if (res.status != 1) {
+                    icon = 5;
+                }
+                layer.msg(res.data, {icon: icon,time:2000},function () {
+                    reload(res.data, 5)
+                })
+            }
+        })
+    }
+
+</script>
+
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

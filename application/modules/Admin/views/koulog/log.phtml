@@ -1,0 +1,14 @@
+<?php
+if ($result) {
+    foreach ($result as $item) {
+
+        ?>
+        <li class="layui-col-xs2">
+            <a class="layadmin-backlog-body">
+                <h3 style="color: orangered"><?php echo $item['name']; ?></h3>
+                <p style="font-weight: bolder"><cite><?php echo $item['number']; ?></cite></p>
+            </a>
+        </li>
+    <?php }
+}
+?>

@@ -1,0 +1,184 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">投诉人</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uuid]" placeholder="uuid" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">被投诉</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[to_uuid]" placeholder="uuid" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[status]' , TalkReportModel::STATUS) ; ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">-->
+<!--                                添加-->
+<!--                            </button>-->
+<!--                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>-->
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <div class="operate-toolbar">
+                            <a lay-event="close" data-pk="{{=d.id}}" >处理</a>
+                        </div>
+<!--                        <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>-->
+<!--                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">-->
+<!--                            <i class="layui-icon layui-icon-edit"></i>修改</a>-->
+<!--                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">-->
+<!--                            <i class="layui-icon layui-icon-delete"></i>删除</a>-->
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户uuid：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.uuid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">投诉人的uuid：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.to_uuid }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">投诉类型：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.value }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">投诉的消息：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.msg_list }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">投诉时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.created_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">修改时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.updated_at }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'id'}
+            , {field: 'uuid', title: '投诉人'}
+            , {field: 'to_uuid', title: '被投诉'}
+            , {field: 'value', title: '投诉类型'}
+            , {field: 'msg_list', title: '投诉的消息'}
+            , {field: 'created_str', title: '投诉时间'}
+            // , {field: 'updated_at', title: '修改时间'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        'event':{
+            'operate':{
+                "close": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    let $this = $(this),
+                        data = {"id": $this.data('pk')};
+                    layer.confirm('确认处理?', function (index) {
+                        layer.close(index);
+                        ajax.post('<?php echo url_backend('close')?>', data)
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg);
+                                }
+                            })
+                    });
+
+                }
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

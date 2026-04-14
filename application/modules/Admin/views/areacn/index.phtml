@@ -1,0 +1,261 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">城市地区管理<span style="color: orangered" class="layui-inline"
+                                                       id="total-id"></span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">栏目名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[areaname]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">父栏目</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[parentid]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline">
+                            <label class="layui-form-label">shortname</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="like[shortname]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>-->
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态 </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[status]', AreaCnModel::STATUS) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">热门 </label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::search('where[is_hot]', AreaCnModel::HOT) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">1.省 2.市 3.区 4.镇</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[level]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                        <span style="color: coral">前端展示数据只用了市级数据 2（1.省 2.市 3.区 4.镇）</span>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="search-total">
+    <p style="font-size: medium">
+        找到：{{=d.count}}，条数据
+    </p>
+</script>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">栏目名：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="栏目名" name="areaname"
+                           value="{{=d.areaname }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">父栏目：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="父栏目" name="parentid"
+                           value="{{=d.parentid }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">shortname：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="shortname" name="shortname"
+                           value="{{=d.shortname }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">lng：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="lng" name="lng"
+                           value="{{=d.lng }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">lat：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="lat" name="lat"
+                           value="{{=d.lat }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">1.省 2.市 3.区 4.镇：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="1.省 2.市 3.区 4.镇" name="level"
+                           value="{{=d.level }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">position：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="position" name="position"
+                           value="{{=d.position }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="排序" name="sort"
+                           value="{{=d.sort }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delAllUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'ID',sort:true}
+            , {field: 'areaname', title: '完整名'}
+            , {field: 'parentid', title: '父栏目'}
+            , {field: 'shortname', title: '简名'}
+            //, {field: 'lng', title: 'lng'}
+            //, {field: 'lat', title: 'lat'}
+            , {field: 'status', title: '状态', type: "switch", "value": "1|0", edit: true, width: 120}
+            , {field: 'is_hot', title: '热门', type: "switch", "value": "1|0", edit: true, width: 120}
+            , {field: 'level', title: '市|区'}
+            //, {field: 'position', title: 'position'}
+            //, {field: 'sort', title: '排序'}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        'event': {
+            'search': function (ajax, laytpl, where) {
+                ajax.get("<?php echo url_backend('total')?>&" + xx.queryEncode(where)).then(function (json) {
+                    if (json.code == '0') {
+                        let data = json.data, $ = layui.$;
+                        $('#total-id').html(laytpl($('#search-total').html()).render(data));
+                    }
+                });
+            },
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

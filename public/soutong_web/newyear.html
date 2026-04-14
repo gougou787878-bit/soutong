@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>搜同社区</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f5303b;
+    }
+
+    main img {
+      width: 100vw;
+      vertical-align: top;
+    }
+  </style>
+  <script>
+    function goto() {
+      const u = navigator.userAgent || '';
+      if (u.indexOf('Android') > -1 || u.indexOf('Adr') > -1) {
+        window.location.href = 'xlpmncode://pvv'
+      } else {
+        window.parent.postMessage('pwa::view::vip', '*');
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <main>
+    <img onclick="goto()" src="/assets-newyear/banner.png" alt="搜同社区activity">
+  </main>
+
+</body>
+
+</html>

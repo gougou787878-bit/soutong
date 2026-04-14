@@ -1,0 +1,352 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-col-md12">
+        <div class="layui-card">
+            <div class="layui-card-header" style="color: #e641ff;font-weight: bold">扣量统计面板<span style="color: grey">5分钟缓存</span></div>
+            <div class="layui-card-body">
+                <div class="layadmin-backlog" style="text-align: center">
+                    <div carousel-item>
+                        <ul id="panelData" class="layui-row layui-col-space10">
+                            <li class="layui-col-xs2">
+                                <a class="layadmin-backlog-body">
+                                    <h3 style="color: orangered">今日扣量</h3>
+                                    <p><cite><i class="layui-icon layui-icon-face-smile"></i> </cite></p>
+                                </a>
+                            </li>
+
+                            <li class="layui-col-xs2">
+                                <a class="layadmin-backlog-body">
+                                    <h3 style="color: orangered">累计扣量</h3>
+                                    <p><cite><i class="layui-icon layui-icon-face-smile" style="color: hotpink"></i>
+                                        </cite></p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><span style="color: #e641ff;font-weight: bold">扣量记录列表</span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">规则编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[kou_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[agent_id]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[day_time]" placeholder="请输入" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                          <!--  <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>-->
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">kou_id：</label>
+                <div class="layui-input-inline">
+
+                    <input placeholder="kou_id" name="kou_id"
+                           value="{{=d.kou_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道编号：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="渠道编号" name="agent_id"
+                           value="{{=d.agent_id }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道类型 cps cpa：</label>
+                <div class="layui-input-inline">
+
+                    <input type="radio" name="type" value="cps" title="cps"
+                           {{=(d.type=='cps'||!d.type?'checked="true"':'')}}>
+                    <input type="radio" name="type" value="cpa" title="cpa" {{=(d.type=='cpa'?'checked="true"':'')}}>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">日期时间：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="日期时间" name="day_time"
+                           value="{{=d.day_time }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扣量基数：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="扣量基数" name="base_number"
+                           value="{{=d.base_number }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扣量点位 比如10 即按10%扣量 浮动处理：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="扣量点位 比如10 即按10%扣量 浮动处理" name="point"
+                           value="{{=d.point }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">总量 cpa 是人数 cps 是订单：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="总量 cpa 是人数 cps 是订单" name="total_number"
+                           value="{{=d.total_number }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扣量 cpa 是人数 cps 是订单：</label>
+                <div class="layui-input-inline">
+
+                    <input lay-verify="required" placeholder="扣量 cpa 是人数 cps 是订单" name="kou_number"
+                           value="{{=d.kou_number }}" class="layui-input">
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>信息</legend>
+    </fieldset>
+    <form class="layui-form" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">kou_id：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.kou_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道编号：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.agent_id }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">渠道类型 cps cpa：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.type }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">日期时间：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.day_time }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扣量基数：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.base_number }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扣量点位 比如10 即按10%扣量 浮动处理：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.point }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">总量 cpa 是人数 cps 是订单：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.total_number }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">扣量 cpa 是人数 cps 是订单：</label>
+                <div class="layui-input-inline">
+                    <input disabled value="{{=d.kou_number }}" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: undefined,
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id',sort:true,width:100}
+            , {field: 'kou_id', title: '规则编号',sort:true,width:120}
+            , {field: 'agent_id', title: '渠道编号',sort:true,width:120}
+            , {field: 'agent_info', title: '渠道信息'}
+            , {field: 'base_number', title: '扣量基数',sort:true}
+           /* , {field: 'point', title: '扣量点位'}*/
+            , {field: 'total_number', title: '总量',sort:true}
+            , {field: 'kou_number', title: '扣量',sort:true}
+            , {field: 'rate',title: '扣量/当前点子',templet:function(d){
+                        return '<span style="color:orangered;font-weight: bold">'+d.point+'</span>&nbsp;|&nbsp;<span style="color: #e641ff;font-weight: bold">'+d.rate+'</span>';
+                }
+            }
+            , {field: 'day_time', title: '日期时间',sort:true}
+            //, {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]]
+    });
+</script>
+
+<script src="/static/admin/other/jquery.min.js"></script>
+<script type="text/javascript">
+    function getPanelDataAjax() {
+        $.ajax({
+            url: '<?php echo url_backend('agentKouAjax') ?>',
+            type: 'GET',
+            success: function (res) {
+                if (res) {
+                    $('#panelData').html(res).fadeIn(500);
+                }
+            }
+        });
+    }
+
+    $(function () {
+        setTimeout("getPanelDataAjax()", 1000); //delay 1s req
+    })
+
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

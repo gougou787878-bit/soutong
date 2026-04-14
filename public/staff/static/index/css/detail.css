@@ -1,0 +1,255 @@
+
+.tab{
+	width:100%;
+	height: 55px;
+	position: absolute;
+}
+.tab ul{
+}
+
+.tab ul li{
+	min-width: 4em;
+	height: 2.8em;
+	padding-left: 0.7em;
+	padding-right: 0.7em;
+	box-sizing: border-box;
+	font-size: 1.2em;
+	font-weight: normal;
+	font-style: normal;
+	font-stretch: normal;
+	line-height: 2.8em;
+	letter-spacing: normal;
+	color: #323232;
+	position: relative;
+	text-align: center;
+	float: left;
+}
+
+.tab ul li.on:after{
+	background-color: #ffd340!important;
+}
+.tab ul li .tab_line{
+    display:none;
+    width:2rem;
+    height:5px;
+    margin:0 auto;
+    background:#ffd340;
+    border-radius:2px;
+}
+.tab ul li.on:after{
+	content: '';
+	display: block;
+	position: absolute;
+	bottom: 0.7rem;
+	width: 50%;
+	height: 0.7rem;
+	border-radius: 4px;
+	left: 50%;
+	background-color: white;
+	-ms-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	-o-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	z-index: -1;
+}
+.tab ul li.on{
+	color: #323232;
+	font-weight: bold;
+}
+.tab ul li.on .tab_line{
+    display:block;
+}
+.tab ul li.on:after{
+	color:#ffd340;
+}
+.profit_line{
+	width:100%;
+	height: 10px;
+}
+
+.tab_b{
+    position:absolute;
+	top:105px;
+	left:0;
+    width: 100%;
+    height: calc(100% - 105px);
+}
+.profit_ul_t{
+	position:absolute;
+	width:100%;
+	height:40px;
+	top:0;
+	left:0;
+	margin-top:-40px;
+    -moz-box-sizing: border-box;  /*Firefox3.5+*/
+	-webkit-box-sizing: border-box; /*Safari3.2+*/
+	-o-box-sizing: border-box; /*Opera9.6*/
+	-ms-box-sizing: border-box; /*IE8*/
+	box-sizing: border-box;
+}
+.profit_ul_t span{
+	display:inline-block;
+	float:left;
+	width:25%;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size:1.5rem;
+    -moz-box-sizing: border-box;  /*Firefox3.5+*/
+	-webkit-box-sizing: border-box; /*Safari3.2+*/
+	-o-box-sizing: border-box; /*Opera9.6*/
+	-ms-box-sizing: border-box; /*IE8*/
+	box-sizing: border-box;
+	color: #323232;
+}
+.profit_ul_t span:first-child{
+    border:none;
+}
+
+.profit_ul_t span.name{
+    width:30%;
+}
+.profit_ul_t span.coin{
+}
+.profit_ul_t span.nums{
+    width:17%;
+}
+.profit_ul_t span.username{
+    width:28%;
+}
+
+.profit_ul{
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	overflow:auto;
+}
+
+.profit_ul ul li{
+	height:40px;
+	line-height:40px;
+}
+
+.profit_ul ul.charge-list {
+	text-align: center;
+}
+.profit_ul ul.charge-list li {
+	border-radius: 1rem;
+	display: inline-block;
+	width: 85%;
+	padding: 0 1rem;
+	height: auto;
+	line-height: normal;
+	margin-bottom: 1.2rem;
+	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+}
+.profit_ul ul.charge-list li div {
+	display: inline-block;
+	width: 100%;
+	padding: 5px 0;
+}
+.profit_ul ul.charge-list li .tit {
+	border-bottom: 1px solid #eeeeee;
+}
+.profit_ul ul.charge-list li .tit span.order{
+	color: #b4b4b4;
+	float: left;
+	width: 60%;
+	text-align: left;
+}
+.profit_ul ul.charge-list li .tit span.copy{
+	color: #6162ff;
+	float: right;
+	width: auto;
+	text-align: right;
+}
+
+.profit_ul ul.charge-list li .tit span a{
+	color: #58b4f4;
+}
+
+.profit_ul ul.charge-list li .tit span.copy img {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.profit_ul ul.charge-list li .con span{
+	color: #323232;
+	font-size: 1.6rem;
+}
+.profit_ul ul.charge-list li .con span.status {
+	float: right;
+}
+.profit_ul ul.charge-list li .foot .time {
+	float: left;
+	width: 60%;
+	text-align: left;
+	color: #b4b4b4;
+}
+.profit_ul ul.charge-list li .foot .contact {
+	float: right;
+}
+.profit_ul ul.charge-list li .foot .contact a {
+	padding: .4rem .8rem;
+	border-radius: 1rem;
+	border: 1px solid #f87b7b;
+	font-size: .8rem;
+	color: #f87b7b;
+}
+
+
+.profit_ul ul li span{
+	display:inline-block;
+	float:left;
+	width:25%;
+	height:40px;
+	line-height:40px;
+	text-align:center;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	color:#323232;
+    -moz-box-sizing: border-box;  /*Firefox3.5+*/
+	-webkit-box-sizing: border-box; /*Safari3.2+*/
+	-o-box-sizing: border-box; /*Opera9.6*/
+	-ms-box-sizing: border-box; /*IE8*/
+	box-sizing: border-box;
+}
+.profit_ul ul li span:first-child{
+    border:none;
+}
+.profit_ul ul li span.name{
+    width:30%;
+}
+.profit_ul ul li span.coin{
+    /*color:#f78186;*/
+    text-align:center;
+    /*font-weight: bold;*/
+}
+.profit_ul ul li span.coin img{
+    width: 16px;
+    vertical-align: sub;
+    margin:0 5px;
+}
+.profit_ul ul li span.nums{
+    width:17%;
+}
+.profit_ul ul li span.username{
+    width:28%;
+}
+
+.profit_ul ul.charge-list li .tit span.delete img {
+	width: 2rem;
+	height: 2rem;
+}
+
+.profit_ul ul.charge-list li .tit span.delete {
+	float: right;
+	width: auto;
+	margin-left: 1.2rem;
+}

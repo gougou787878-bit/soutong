@@ -1,0 +1,334 @@
+<?php include __DIR__ . "/../layout/header.phtml"; ?>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>视频列表</h5>
+                <div class="ibox-tools">
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <div class="row">
+                        <form action="d.php" method="get">
+                            <input type="hidden" name="mod" value="mv">
+                            <input type="hidden" name="code" value="index">
+                            <div class="col-sm-2">
+                                <input class="input-sm form-control input-s-sm inline" placeholder="MV_ID" type="text" name="id" value="<?= $id ?>">
+                            </div>
+                            <div class="col-sm-2">
+                                <input class="input-sm form-control input-s-sm inline" placeholder="标题" type="text" name="title" value="<?= $title ?>">
+                            </div>
+                            <div class="col-sm-2">
+                                <input class="input-sm form-control input-s-sm inline" placeholder="uid" type="text" name="uid" value="<?= $uid ?>">
+                            </div>
+                            <div class="col-sm-2">
+                                <select id="type" class="form-control"  name="status">
+                                    <?php foreach($status as $k=>$v) { ?>
+                                        <option <?php if ($statu == $k){ ?> selected <?php } ?> value="<?php echo $k ?>"><?php echo $v ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-2"><button type="submit" class="btn btn-sm btn-primary"> 搜索</button></div>
+                            <div class="col-sm-2"><button class="btn btn-sm btn-primary add"> 新增 </button></div>
+                            <!--<div class="col-sm-2"><button type="button" class="btn btn-sm btn-primary" onclick="handleEdit(0);"> 新增 </button></div>-->
+                        </form>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th width="180">标题</th>
+                                <td>播放源</td>
+                                <th>上传用户uid</th>
+                                <th>封面图</th>
+                                <th>标签</th>
+                                <th>评论数</th>
+                                <th>点赞量</th>
+                                <th>状态</th>
+                                <th>刷新时间</th>
+                                <th>创建时间</th>
+                                <th width="135px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php if ($topic): ?>
+                        <?php foreach ($topic as $v): ?>
+                            <tr id="tr-mv-<?= $v['id'] ?>">
+                                <td><?= $v['id'] ?></td>
+                                <td><?= $v['title'] ?></td>
+                                <td>
+                                    <a class="layui-btn layui-btn-sm layui-btn-xs" onclick="previewVideo('<?= $v['href'] ?>')"><i class="layui-icon layui-icon-play"></i>
+                                        <?php echo $v['status'] == 1 ? 'M3U8' : 'MP4'; ?></a>
+                                </td>
+                                <td><?= $v['uid'] ?></a></td>
+                                <td>
+                                    <img src="<?= $v['thumb'] ?>" style="width: 100px;height: 80px;" onclick="show_img('<?= $v['thumb'] ?>')">
+                                </td>
+                                <td><?= $v['tagsname'] ?></td>
+                                <td><a title="点我查看" style="font-weight: bolder;font-size: x-large;color: red" onclick="layerOpen('d.php?mod=comment&code=index&mv_id=<?= $v['id'] ?>','评论列表')"><?= $v['comment'] ?></a></td>
+                                <td><?= $v['like'] ?></td>
+                                <td><?= $v['statusname'] ?></td>
+                                <td><?= $v['refresh_at'] ?></td>
+                                <td><?= $v['created_at'] ?></td>
+                                <td>
+                                    <a class="btn btn-xs btn-primary" onclick="handleEdit(<?= $v['id'] ?>)">编辑</a>
+                                    <!--<a class="btn btn-xs btn-warning" onclick="handleRefrsh(<?/*= $v['id'] */?>)">置顶</a><br/>-->
+                                    <a class="btn btn-xs btn-danger" onclick="handleDel(<?= $v['id'] ?>)">删除</a>
+                                    <a class="btn btn-xs btn-danger" onclick="handleShow(<?= $v['id'] ?>,<?= $v['is_hide'] ?>)"><?php
+                                        if($v['is_hide']){
+                                            echo '显示';
+                                        }else{
+                                            echo '隐藏';
+                                        }
+                                        ?></a>
+                                    <?php if($v['status'] == 0){ ?>
+                                        <select name="refused" style="width: 120px;height: 35px;" class="refused" id= "refused" data-id="<?= $v['id'] ?>" class="input-sm form-control input-s-sm inline">
+                                            <option style="height: 30px;line-height: 30px;" value="">选择拒绝理由</option>
+                                            <option style="height: 30px;line-height: 30px;" value="您上传的视频带有有水印。">1.您上传的视频带有有水印。</option>
+                                            <option style="height: 30px;line-height: 30px;" value="您上传的视频可能是重复的，如果是原创请加上手势或小卡片再次上传">2.您上传的视频可能是重复的，如果是原创请加上手势或小卡片再次上传。</option>
+                                            <option style="height: 30px;line-height: 30px;" value="您上传的视频质量、清晰度还不够好，建议在丰富一下内容再次上传">3.您上传的视频质量、清晰度还不够好，建议在丰富一下内容再次上传</option>
+                                            <option style="height: 30px;line-height: 30px;" value="您上传的视频看不到内容或者是主题，请上传新的内容">4.您上传的视频看不到内容或者是主题，请上传新的内容</option>
+                                            <option style="height: 30px;line-height: 30px;" value="您上传的视频的内容标题和主题不符，请修改后上传。">5.您上传的视频的内容标题和主题不符，请修改后上传。</option>
+                                            <option style="height: 30px;line-height: 30px;" value="您上传的视频不适用成人搜同片，请更换内容重新上传">6.您上传的视频不适用成人搜同片，请更换内容重新上传</option>
+                                        </select>
+                                        <a class="btn btn-xs btn-primary" id="pass<?= $v['id'] ?>"  onclick="handleApproved(<?= $v['id'] ?>,0)">通过审核</a>
+                                    <?php } ?>
+
+                                    <?php if($v['status']==3){ ?>
+                                        <a class="btn btn-xs btn-primary" id="pass<?= $v['id'] ?>"  onclick="handleRetry(<?= $v['id'] ?>)">再次请求回调</a>
+                                    <?php } ?>
+
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="16">暂无数据</td>
+                            </tr>
+                        <?php endif; ?>
+                    </table>
+                    <?= $page['html']?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="col-xs-12" id='freeBody' style="display:none;">
+    <div class="form-horizontal">
+        <label class="col-sm-3 control-label">限免时间：</label>
+
+        <div class="col-sm-8">
+            <input type="hidden" id='mhID' value="">
+            <input type="text" placeholder="限免时间" class="form-control" id="free_time" value="">
+        </div>
+    </div>
+</div>
+<script>
+    layui.laydate.render({
+        elem: '#start'
+    })
+    layui.laydate.render({
+        elem: '#end'
+    })
+
+    //拒绝通过
+    $(".refused").change(function () {
+        var id = $(this).attr("data-id");
+        var refused = $(this).val();
+        $.ajax({
+            url: 'd.php?mod=mv&code=refuseUserUpload&id='+id,
+            type: 'GET',
+            success: function (res) {
+                if(res.status == -1){
+                    layer.msg(res.data, {icon: 5})
+                }else if(res.status == 1){
+                    $("#nopass"+id).hide();
+                    $("#tr-mv-"+id).hide();
+                    layer.msg("操作成功", {icon: 1})
+                }else {
+                    layer.msg("未知错误", {icon: 5})
+                }
+            }
+        })
+    });
+
+    //拒绝通过
+    $(".add").click(function () {
+        var url = "d.php?mod=mv&code=addMV";
+        layer.open({
+            type: 2,
+            title: "添加视频",
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['1400px', '900px'],
+            content: url
+        })
+    });
+
+//再次回调申请
+    function handleRetry(id){
+        $.ajax({
+            url: 'd.php?mod=mv&code=retryslice&id='+id,
+            type: 'GET',
+            success: function (res) {
+                if(res.status == -1){
+                    layer.msg(res.data, {icon: 5})
+                }else if(res.status == 1){
+                    $("#tr-mv-"+id).hide();
+                    layer.msg(res.data, {icon: 1})
+                }else {
+                    layer.msg("未知错误", {icon: 5})
+                }
+            }
+        })
+    }
+
+
+  // 通过审核
+    function handleApproved(id,type) {
+        $.ajax({
+            url: 'd.php?mod=mv&code=approvedUserUpload&id='+id,
+            type: 'GET',
+            success: function (res) {
+                if(res.status == -1){
+                    layer.msg(res.data, {icon: 5})
+                }else if(res.status == 1){
+                    $("#nopass"+id).hide();
+                    $("#tr-mv-"+id).hide();
+                    layer.msg("操作成功", {icon: 1})
+                }else {
+                    layer.msg("未知错误", {icon: 5})
+                }
+            }
+        })
+    }
+
+    function showImg(url) {
+        layer.open({
+            type: 1,
+            title: false,
+            shadeClose: true,
+            shade: 0.8,
+            area: ['auto', 'auto'],
+            content: "<img src='" + url + "' style='max-height:500px;max-width:800px;' />"
+        });
+    }
+
+
+    function handleEdit(id) {
+        var url = "d.php?mod=mv&code=edit&id=" + id;
+        layerOpen(url, '编辑视频')
+    }
+
+    function layerOpen(url, title) {
+        layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['800px', '800px'],
+            content: url
+        })
+    }
+
+    function getAjax(url, call) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function (res) {
+                if (res.status == 1) {
+                    call(res.data)
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+            }
+        })
+    }
+
+    function postAjax(code, params, call) {
+        var data = {
+            mod: 'av',
+            code: code,
+            FORMHASH: '{$this->formhash}',
+            data: params
+        };
+        $.ajax({
+            url: 'd.php',
+            type: 'POST',
+            data: data,
+            success: function (res) {
+                if (res.status == 1) {
+                    call(res.data)
+                } else {
+                    layer.msg(res.data, {icon: 5})
+                }
+            }
+        })
+    }
+
+    function reload(msg) {
+        parent.layer.msg(msg, {icon: 1,time:2000},function () {
+            window.location.reload()
+        });
+    }
+    function handleShow(id,ishide){
+        var str = ishide=='1'?'显示':'隐藏'
+        url = 'd.php?mod=mv&code=setishide&id=' + id+'&ishide='+ishide
+        layer.confirm('确定要'+str+'选中的视频吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            reload(res.data, 1)
+                        } else {
+                            reload(res.data, 5)
+                        }
+                    }
+                })
+            }
+        )
+    }
+
+    function handleDel(id) {
+        url = 'd.php?mod=mv&code=delete&id=' + id
+        layer.confirm('确定要删除选中的视频吗？', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (res) {
+                        if (res.status == 1) {
+                            $("#tr-mv-"+id).hide();
+                        } else {
+                            layer.msg(res.msg, {icon: 5})
+                        }
+                    }
+                })
+            }
+        )
+    }
+
+    function userinfo(uuid) {
+        var url = "d.php?mod=user&code=index&uuid="+uuid;
+        layer.open({
+            type: 2,
+            title: "用户详情",
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['1400px', '900px'],
+            content: url
+        })
+    }
+</script>
+<?php include __DIR__ . "/../layout/footer.phtml"; ?>

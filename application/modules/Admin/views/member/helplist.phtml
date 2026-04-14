@@ -1,0 +1,97 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>常见问题</h5>
+                        <div class="ibox-tools">
+                            <button class="btn btn-sm btn-primary" type="button" onclick="handleAdd();">增加</button>
+                        </div>
+                    </div>
+                    <div class="ibox-content"> 
+                        <div class="table-responsive">
+                            <div class="row">
+                                <form action="d.php" method="get">
+                                    <input type="hidden" name="mod" value="user">
+                                    <input type="hidden" name="code" value="helplist">
+                                    <div class="col-sm-2">
+                                        <select name="type" class="input-sm form-control input-s-sm inline">
+                                            <option value="0">全部</option>
+                                            <!--<?php foreach ($this->user_help_type as $k=>$v) :?>-->
+                                                <option value="<?=$k;?>"><?=$v;?></option>
+                                            <!--<?php endforeach; ?>-->
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="flag" class="input-sm form-control input-s-sm inline" placeholder="内容" value="<?=$flag;?>">
+                                    </div>
+                                    <div class="col-sm-3"><button type="submit" class="btn btn-sm btn-primary"> 搜索</button> </span></div>
+                                </form>
+                            </div>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>类型</th>
+                                        <th>问题</th>
+                                        <th>答案</th>
+                                        <th>状态</th>
+                                        <th>浏览数</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if($topic):?>
+                                    <!--<?php foreach ($topic as $k=>$v) :?>-->
+                                    <tr>
+                                        <td><?=$v['id'];?></td>
+                                        <td><?=$v['typename'];?></td>
+                                        <td><?=$v['question'];?></td>
+                                        <td><?=$v['answer'];?></td>
+                                        <td><?=$v['statusname'];?></td>
+                                        <td><?=$v['views'];?></td>
+                                        <td><button class="btn btn-xs btn-primary" onclick="handleEdit(<?=$v['id'];?>);">编辑</button></td>
+                                    </tr>
+                                    <!--<?php endforeach; ?>-->
+                                    <?php else:?>
+                                    <tr>
+                                        <td colspan="16">暂无数据</td>
+                                    </tr>
+                                    <?php endif;?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <?=$page_arr['html'];?>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            function handleEdit(id) {
+                var url = "d.php?mod=user&code=helpedit&id=" + id;
+                layerOpen(url, '修改问题');
+            }
+
+            function handleAdd() {
+                var url = "d.php?mod=user&code=helpedit";
+                layerOpen(url, '增加问题');
+            }
+            function layerOpen(url, title) {
+                layer.open({
+                    type: 2,
+                    title: title,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    shade: [0.5],
+                    area: ['800px', '800px'],
+                    content: url
+                })
+            }
+
+            function reload(msg) {
+                parent.layer.msg(msg, {icon: 1})
+                window.location.reload()
+            }
+        </script>
+        <?php include __DIR__ . "/../layout/footer.phtml";?>

@@ -1,0 +1,211 @@
+### json请求 公公配置
+#  "oauth_type": "ios",
+#  "oauth_new_id": "",
+#  "oauth_id": "10D0C0D5-26EE-4DEC-9167-08579CEE16DD"
+# "host": "http://vip.ksapi001.me:8080/114d7daffe70738210cdb08b40e97f75.php",
+POST {{host}}/api/tab/index
+Content-Type: application/json
+
+{
+    "bundle_id": "tips.yc.bs",
+    "version": "5.2.0",
+    "oauth_type": "pwa",
+    "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+###
+POST {{host}}/api/tab/index_aw
+Content-Type: application/json
+
+{
+    "bundle_id": "tips.yc.bs",
+    "version": "5.2.0",
+    "oauth_type": "pwa",
+    "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/tab/category
+Content-Type: application/json
+
+{
+    "bundle_id": "tips.yc.bs",
+    "version": "5.2.0",
+    "oauth_type": "pwa",
+    "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+### json请求 获取视频精选
+POST {{host}}/api/mv/listOfFeature
+Content-Type: application/json
+
+{
+  "page": "1",
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+  "is_aw": 0
+}
+### json请求 获取视频精选
+POST {{host}}/api/mv/listOfFollow
+Content-Type: application/json
+
+{
+  "page": "1",
+  "bundle_id": "tips.yc.bs",
+  "version": "5.2.0",
+  "oauth_type": "pwa",
+  "oauth_id": "841085653484bd0594eaef8dba15c6b8"
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/mv/listOfTab
+Content-Type: application/json
+
+{
+    "page": "1",
+    "oauth_type": "pwa",
+    "oauth_id": "841085653484bd0594eaef8dba15c6b8",
+    "tabId": 20,
+    "is_aw": 0
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/search/index
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "2",
+    "tabId": 1
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/search/mv
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "2",
+    "kwy": "自拍"
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/search/mv
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "1",
+    "kwy": "萝莉"
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/search/user
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "1",
+    "kwy": "萝莉"
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/users/getBaseInfo
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "2",
+    "kwy": "萝莉"
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/users/followed
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "2",
+    "kwy": "萝莉",
+    "uid": 4995056
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/users/fans
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "2",
+    "kwy": "萝莉",
+    "uid": 272115
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/users/videos
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "1",
+    "kwy": "萝莉",
+    "uid": 4995056
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/users/personal
+Content-Type: application/json
+
+{
+    "page": "1",
+    "limit": "1",
+    "nickname": "萝莉"
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/comments/list
+Content-Type: application/json
+
+{
+    "id": "18550",
+    "limit": "1",
+    "comment": "萝莉"
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/mv/index
+Content-Type: application/json
+
+{
+    "id": "18550",
+    "limit": "1",
+    "comment": "萝莉"
+}
+
+### json请求 获取视频精选
+POST {{host}}/api/mv/tags
+Content-Type: application/json
+
+{
+    "id": "18550",
+    "limit": "1",
+    "comment": "萝莉"
+}
+
+
+### json请求 获取视频精选
+POST {{host}}/api/mv/long
+Content-Type: application/json
+
+{
+    "id": "28238",
+    "limit": "1",
+    "comment": "萝莉"
+}

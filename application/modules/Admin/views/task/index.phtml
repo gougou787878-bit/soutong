@@ -1,0 +1,406 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+    <!-- 页面加载loading -->
+    <div class="page-loading">
+        <div class="ball-loader">
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <style>.layui-form.form-dialog .layui-input-block {
+            margin-right: 30px
+        }</style>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">管理</div>
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item">
+
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">任务组</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="where[parent_id]" placeholder="请输入父级ID" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">任务名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="search[name]" placeholder="请输入" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">配置键</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="where[varname]" placeholder="请输入" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">类型</label>
+                                <div class="layui-input-block">
+                                    <?php echo Layui::select('where[type]',
+                                        array_merge(['' => '不限'], TaskModel::TYPE)) ?>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">礼物ID</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="where[gift_id]" placeholder="请输入" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">礼物类型</label>
+                                <div class="layui-input-block">
+                                    <?php echo Layui::select('where[gift_type]',
+                                        merge_array(['' => '请选择'], TaskModel::GIFT_TYPE)) ?>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-block">
+                                    <?php echo Layui::select('where[status]',
+                                        merge_array(['' => '请选择'], TaskModel::STATUS)) ?>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-card-body">
+                        <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                        <script type="text/html" id="toolbar">
+                            <div class="layui-btn-container">
+                                <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                    添加
+                                </button>
+                            </div>
+                        </script>
+                        <script type="text/html" id="operate-toolbar">
+                            <!-- <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>-->
+                            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                               lay-form="user-edit-dialog">
+                                <i class="layui-icon layui-icon-edit"></i>修改</a>
+                            <!--<a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                                <i class="layui-icon layui-icon-delete"></i>删除</a>-->
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="800" data-h="700" layer-dialog="确认,取消"
+            data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>信息</legend>
+        </fieldset>
+        <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">任务名称*：</label>
+                <div class="layui-input-block">
+                    <input lay-verify="required" placeholder="任务名称" name="name"
+                           value="{{=d.name }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">任务图标*：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::uploadPos('img_icon', 'icon', 40, 40, 'live') ?>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">任务小提示*：</label>
+                <div class="layui-input-block">
+                    <input lay-verify="required" placeholder="任务小提示" name="tip" value="{{=d.tip }}" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">唯一键*：</label>
+                <div class="layui-input-block">
+                    <input placeholder="配置简拼" name="varname"
+                           value="{{=d.varname }}" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型*：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::select('type',
+                        TaskModel::TYPE, ['data-value' => "{{=d.type}}"]) ?>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属组ID：</label>
+                <div class="layui-input-block">
+                    <input lay-verify="required" placeholder="所属组ID" name="parent_id"
+                           value="{{=d.parent_id }}" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">奖励钻石*：</label>
+                    <div class="layui-input-inline">
+                        <input lay-verify="required" placeholder="奖励钻石" name="add_diamond"
+                               value="{{=d.add_diamond }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖励经验*：</label>
+                <div class="layui-input-inline">
+                    <input lay-verify="required" placeholder="获得经验值" name="experience"
+                           value="{{=d.experience }}" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖活跃度*：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="获得活跃度" name="active_cnt"
+                           value="{{=d.active_cnt }}" class="layui-input">
+                </div>
+            </div>
+
+            <!--<div class="layui-form-item">
+                <label class="layui-form-label">奖励比例（%）：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="首冲钻石奖励比例（%）" name="diamond_scale"
+                           value="{{=d.diamond_scale }}" class="layui-input">
+                </div>
+            </div>-->
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">礼物类型：</label>
+                    <div class="layui-input-inline">
+                        <?php echo Layui::select('gift_type', TaskModel::GIFT_TYPE, ['data-value' => '{{=d.gift_type }}']) ?>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">礼物ID：</label>
+                    <div class="layui-input-inline">
+                        <input placeholder="礼物ID" name="gift_id"
+                               value="{{=d.gift_id }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序：</label>
+                <div class="layui-input-inline">
+                    <input placeholder="排序" name="sort"
+                           value="{{=d.sort }}" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-inline">
+                    <?php echo Layui::select('status', TaskModel::STATUS, ['data-value' => '{{=d.status }}']) ?>
+                </div>
+
+            </div>
+            <div class="layui-form-item layui-hide">
+                <input type="hidden" name="_pk" value="{{=d.id}}">
+                <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+            </div>
+
+        </form>
+    </script>
+    <script type="text/html" class="data-dialog" id="user-data-dialog" data-w="900"
+            data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>信息</legend>
+        </fieldset>
+        <form class="layui-form" action="" lay-filter="form-save">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">id：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.id }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">父id：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.parent_id }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">任务名称：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.name }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">配置简拼：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.varname }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">1普通任务 2每日任务：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.type }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">奖励钻石：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.add_diamond }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">钻石比例：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.diamond_scale }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">获得经验值：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.experience }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">获得活跃度：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.active_cnt }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">礼物ID：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.gift_id }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">排序：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.sort }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">1显示 0 隐藏 2 删除：</label>
+                    <div class="layui-input-inline">
+                        <input disabled value="{{=d.status }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script>
+        xx.use({
+            url: '<?php echo url_backend("listAjax") ?>',
+            saveUrl: '<?php echo url_backend("save") ?>',
+            delUrl: '<?php echo url_backend("del") ?>',
+            delALlUrl: undefined,
+            uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+            title: '数据表',
+            pk: 'id',
+            cols: [[
+                {field: 'id', width: 60, title: 'ID'}
+                , {
+                    field: 'parent_id', width: 120, title: '组#ID', templet: function (d) {
+
+                        if (d.parent_id == 0) {
+                            return "<span style='color:orangered;font-weight: bold'>任务组#" + d.id + "</span>";
+                        }
+                        return d.parent_id;
+
+                    }
+                }
+                , {field: 'name', width: 200, title: '名称'}
+                , {field: 'varname', width: 150, title: '唯一键'}
+                , {
+                    field: 'type',
+                    title: '类型',
+                    type: 'enum',
+                    value:<?php echo json_encode(TaskModel::TYPE) ?>}
+                , {field: 'add_diamond',  title: '奖钻石'}
+               /* , {field: 'diamond_scale', width: 100, title: '返利 %'}*/
+                , {field: 'experience',  title: '奖经验'}
+                , {field: 'active_cnt',  title: '活跃度'}
+                , {field: 'gift_type',  title: '类型',type:"enum",value:<?php echo json_encode(TaskModel::GIFT_TYPE) ?>}
+                , {field: 'gift_id',  title: '礼物ID',templet:function(d){
+                        if (d.gift_id == 0) {
+                            return "";
+                        }
+                        return "<span style='color:red;font-weight: bold'>"+d.gift_id+"</span>";
+                    }}
+                , {field: 'sort', width: 60, title: '排序'}
+                , {field: 'status', title: '状态', type: "switch", "value": "1|0", edit: true}
+                , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+            ]],
+            "event": {
+                "search": function (ajax, laytpl, where) {
+
+                },
+                /**
+                 * 表格左侧事件
+                 */
+                "toolbar": {
+                    /**
+                     * 事件原型
+                     * @param event  事件
+                     * @param table
+                     * @param ajax  数据请求累
+                     * @param laytpl
+                     * @param layerEle  对象绑定的layer层的元素
+                     * @param form
+                     * @param $
+                     * @param nextFn  callback(html , function(layerIndex){}) 下一步执行
+                     * @private
+                     */
+                    "info": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                        nextFn()
+                    },
+                }
+            }
+        });
+    </script>
+<?php echo \Layui::renderJs() ?>
+<?php importView("fooler.phtml"); ?>

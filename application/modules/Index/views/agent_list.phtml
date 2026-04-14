@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <link type="text/css" rel="stylesheet" href="/static/index/css/layer.css">
+    <link href="/static/index/css/common.css" rel="stylesheet" type="text/css">
+    <title>邀请记录</title>
+    <link href='/static/index/css/agent.css' rel="stylesheet" type="text/css">
+<link type="text/css" rel="stylesheet" href="/static/index/css/detail.css?t=1540544885"/>
+
+<style>
+    .tab_b {
+        top: 55px;
+        height: calc(100% - 55px);
+    }
+
+    .profit_ul_t  {
+
+        border-bottom:1px dotted #9e36fb;
+    }
+
+    .coin {
+
+        text-align: left;
+        padding-left: 20px;
+        color: #0C0C0C;
+        font-weight: bold;
+
+        float: left;
+
+    } .createtime {
+        float: right;
+        padding-right: 20px;
+    }
+    .total{
+        padding-left: 15px;
+        width: 200px;
+        margin: 0px;
+    }
+
+</style>
+</head>
+<body class="detail" style="background-color: #C6C6C6">
+<div class="profit_bg">
+
+
+    <div class="tab_b receive">
+
+        <div class="profit_ul_t">
+            <div class="total">累计邀请：<?= count($list) ?></div>
+            <!--<span class="coin">用户昵称</span>
+            <span class="isvv">是否vip</span>
+            <span class="viplevel">vip 等级</span>
+            <span class="createtime">创建时间</span>-->
+        </div>
+        <div class="profit_ul clear">
+            <ul>
+                <?php foreach ($list as $v):?>
+                    <li>
+                        <div class="coin"><?=$v['nickname']?></div>
+
+                        <div class="createtime"><?=$v['created_at']?></div>
+                    </li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    var uid='<?=$_GET['uid'];?>';
+    var token='<?=$_GET['token'];?>';
+</script>
+<script src="/static/index/js/jquery.js"></script>
+<script src="/static/index/js/layer.js"></script>
+</body>
+</html>

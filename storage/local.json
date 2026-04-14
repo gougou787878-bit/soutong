@@ -1,0 +1,138 @@
+{
+  "img.pwa_cn": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "img.pwa_us": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "img.pwa_perfect": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "img.global": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "video.pwa_cn": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_us": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_cn_short": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_us_short": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_cn_10s": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_us_10s": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_cn_120s": "https://d39jna88gmha0l.cloudfront.net",
+  "video.pwa_us_120s": "https://d39jna88gmha0l.cloudfront.net",
+  "svga.app_cn": "",
+  "svga.app_us": "",
+  "web.oss_cn": "https://obs.cj7633.xyz",
+  "web.oss_us": "https://obs.cj7633.xyz",
+  "book.cn": "https://txt.aaeoimc.com",
+  "book.us": "https://txt.aaeoimc.com",
+  "sns_img.web_cn": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "sns_img.web_us": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "sns_img.pwa_cn": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "sns_img.pwa_us": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "sns_img.app_cn": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "sns_img.app_us": "https://d3bqxdb7h6ug7j.cloudfront.net",
+  "sns_video.web_cn": "https://d39jna88gmha0l.cloudfront.net",
+  "sns_video.web_us": "https://d39jna88gmha0l.cloudfront.net",
+  "sns_video.pwa_cn": "https://d39jna88gmha0l.cloudfront.net",
+  "sns_video.pwa_us": "https://d39jna88gmha0l.cloudfront.net",
+  "sns_video.app_cn": "https://d39jna88gmha0l.cloudfront.net",
+  "sns_video.app_us": "https://d39jna88gmha0l.cloudfront.net",
+
+  "app.down_url": "https://d1cppxnz2bmkwv.cloudfront.net",
+  "img.adm_us": "https://imgpublic.ycomesc.live",
+  "img.upload": "https://new.ycomesc.live/imgUpload.php",
+  "video.adm_us": "https://video.iwanna.tv",
+  "video.adm_check": "https://play.xmyy8.co",
+  "video.upload": "http://examine.xmyy8.co/uploadMp4.php",
+  "video.destroy": "http://examine.xmyy8.co/destroy.php",
+  "video.slice": "http://examine.xmyy8.co/queue.php",
+  "dx": {
+    "web": {
+      "hls_key": "RnOxyCIc5eDPFpJY",
+      "image_key": "",
+      "image_iv": ""
+    },
+    "app": {
+      "hls_key": "INhaDFiNgamplaTE",
+      "data_sync_key": "132f1537f85scxpcm59f7e318b9epa51",
+      "image_key": "",
+      "image_iv": ""
+    },
+    "order": {
+      "url": "http://pay.localhost/payments",
+      "key": "482ea1c9884f968d27700d099e0adfda",
+      "callback_signkey": "482ea1c9884f968d27700d099e0adfda",
+      "channel_url": "https://pay.localhost/channels"
+    },
+    "withdraw": {
+      "url": "http://pay.localhost/exchanges",
+      "key": "c347d65ffda22f707d95b039a9819ad0"
+    },
+    "r2": {
+      "old_url": "https://r2.microservices.vip",
+      "url": "https://r2.microservices.vip/multipart_upload",
+      "key": "d2bf7126723ea8f6005ba141ea3c3e2c",
+      "mp4_url": "https://upload.ycomesc.live",
+      "complete_url": "https://r2.microservices.vip/multipart_complete"
+    },
+    "slice": {
+      "slice_url": "http://examine.xmyy8.co/queue.php",
+      "destroy_url": "http://examine.xmyy8.co/destroy.php",
+      "visit_url": "http://play.xmyy8.co",
+      "key": "132f1537f85scxpcm59f7e318b9epa51"
+    },
+    "novel": {
+      "upload_url": "https://uploadtxt.microservices.vip",
+      "visit_url": "https://txt.microservices.vip",
+      "key": "f5d965df75336270",
+      "iv": "97b60394abc2fbe1"
+    },
+    "upload_mp4": {
+      "mini_url": "https://examine.xmyy8.co/uploadMp4.php",
+      "url": "https://examine.xmyy8.co/uploadMp4.php",
+      "key": "e096db7c006958f226bc469c27237b65"
+    },
+    "upload_img": {
+      "url": "https://new.ycomesc.live/imgUpload.php",
+      "key": "132f1537f85scxpcm59f7e318b9epa51"
+    },
+    "sms": {
+      "url": "http://pay.localhost/sms"
+    },
+    "mail": {
+      "url": "http://pay.localhost/email",
+      "url_new": "http://pay.localhost/email2",
+      "key": "d2bf7126723ea8f6005ba141ea3c3e2c"
+    },
+    "captcha": {
+      "url": "http://pay.localhost/captcha/{app_name}/{aff}",
+      "check_url": "http://pay.localhost/captcha/check"
+    },
+    "aws": {
+      "pair_id": "K2ZGJDNWY2DCNE"
+    },
+    "aws_img": {
+      "pair_id": "K2ZGJDNWY2DCNE",
+      "domain": "https://images.7dgirl.org"
+    },
+    "aws_front": {
+      "pair_id": "K2ZGJDNWY2DCNE",
+      "domain": "https://front.7dgirl.org"
+    },
+    "aws_play": {
+      "pair_id": "K2ZGJDNWY2DCNE",
+      "domain": "https://movie.7dgirl.org"
+    },
+    "ticket": {
+      "url": "https://tickets.hyys.me/api/index/seed",
+      "encrypt_key": "e79465cfbb39ckcusimcuekd3b066atk",
+      "sign_key": "132f1537f85scxpcm59f7e318b9epatk"
+    },
+    "ai1": {
+      "url": "http://ai.ycomesc.live/api/img/getImg",
+      "sign_key": "132f1537f85scxpcm59f7e318b9epatk"
+    },
+    "ai2": {
+      "url": "https://ai-1.yesebo.net/head/getImg",
+      "sign_key": "132f1537f85scxpcm59f7e318b9epatk"
+    },
+    "ai_girl": {
+      "url": "http://3.36.58.224",
+      "pwd": "123456"
+    }
+  },
+  "pwa_site": { },
+  "web_site": { }
+}

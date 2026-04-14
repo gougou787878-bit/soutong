@@ -1,0 +1,65 @@
+<?php include __DIR__ . "/../layout/header.phtml";?>
+<table cellspacing="1" width="100%" align="center" class="tableborder">
+    <tbody>
+    <tr class="header">
+        <td class="altbg1" width="200">
+            关键字排行：
+            <a onclick="showRank('day')" class="btn btn-xs btn-primary">日</a>
+            <a onclick="showRank('week')" class="btn btn-xs btn-info">周</a>
+            <a onclick="showRank('month')" class="btn btn-xs btn-warning">月</a>
+            <a onclick="showAllRank()" class="btn btn-xs btn-danger">总榜</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tableborder">
+    <tr class="header">
+        <td width=120>添加时间</td>
+        <td>用户uuid</td>
+        <td>关键字</td>
+        <td>ip地址</td>
+    </tr>
+    <?php if($topic):?>
+    <!--<?php foreach ($topic as $k=>$v) :?>-->
+    <tr>
+        <td><?=$v['created_at'];?></td>
+        <td><?=$v['uuid'];?></td>
+        <td><?=$v['keywords'];?></td>
+        <td><a href="http://ip.zxinc.org/ipquery/?ip=<?=$v['ip'];?>&action=2" target="_blank"><?=$v['ip'];?></a></td>
+    </tr>
+    <!--<?php endforeach; ?>-->
+    <?php else:?>
+    <tr>
+        <td colspan="15">暂无数据</td>
+    </tr>
+    <?php endif;?>
+</table>
+<br>
+<?=$page_arr['html'];?>
+<br>
+<br>
+<script>
+    function showRank(name) {
+        var url = "d.php?mod=index&code=listUserSearchRank&rank=" + name
+        layerOpen(url, '榜单信息')
+    }
+    
+    function showAllRank() {
+        var url = "d.php?mod=index&code=listUserSearchRank"
+        layerOpen(url, '榜单信息')
+    }
+    
+    function layerOpen(url, title) {
+        parent.layer.open({
+            type: 2,
+            title: title,
+            closeBtn: 1,
+            shadeClose: true,
+            shade: [0.5],
+            area: ['1200px', '500px'],
+            content: url
+        })
+    }
+    </script>
+</body>
+</html>

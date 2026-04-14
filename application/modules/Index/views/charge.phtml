@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="telephone=no" name="format-detection">
+    <link type="text/css" rel="stylesheet" href="/static/index/css/layer.css">
+    <link href="/static/index/css/detail.css" rel="stylesheet" type="text/css">
+    <title>充值记录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        a {
+            text-decoration: none;
+        }
+        .tab_b {
+            top: 65px;
+            height: calc(100% - 65px);
+        }
+        .tab_b, .hide,.send{
+            display:none
+        }
+        .profit_ul ul.charge-list li .con span {
+            font-size: 1rem;
+        }
+        .profit_ul ul.charge-list li .tit span.copy img {
+            width: 1rem;
+            height: 1rem;
+            vertical-align: middle;
+        }
+        .profit_ul ul.charge-list li .tit span.delete {
+            float: right;
+            width: auto;
+            margin-left: .5rem;
+        }
+        .profit_ul ul.charge-list li .tit span.delete img {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+        .profit_ul ul.charge-list li .foot .contact a {
+            padding: .4rem .8rem;
+            border-radius: 1rem;
+            border: 1px solid #f87b7b;
+            font-size: .5rem;
+            color: #f87b7b;
+            text-decoration: none;
+        }
+        .profit_ul ul.charge-list li .tit span a {
+            color: #58b4f4;
+            text-decoration: none;
+            font-size: .8rem;
+        }
+    </style>
+</head>
+<body class="detail">
+<div class="profit_bg">
+    <div class="tab">
+        <ul class="charge-list">
+            <li class="on">
+                代理充值
+            </li>
+            <li>
+                在线充值
+            </li>
+        </ul>
+    </div>
+    <div class="profit_line"></div>
+    <div class="tab_b receive">
+        <div class="profit_ul clear" id="agent">
+            <ul class="charge-list">
+                    <?php foreach ($agentList as $v1):?>
+                    <li>
+                        <div class="tit">
+                            <span class="order">订单编号：<?=$v1['order_id']?></span>
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
+                            <span class="copy" data-code="<?=$v1['order_id']?>">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAVpJREFUeNpijNjyhQENeANxPxCrMpAP/gLxGSBOYkGT4AfilUDMCcT3gfg/mRawArE5EC9Ct0AYiLmAeAkQxzFQBp4AsRHMAm5okDADcRoQ3wFiYxINfArEL9CCiRFkgQc0WPgodPEfIK4G4i5kQZAFM4CYB4g3APFvCiwAObQdFO7IPgFZIA/Ej4A4kEIfLAfiCCAWRbaAiYF64B82QSYSkh03ObYSa8F6aMpippUFckAsAU0MNLGAbMCCR04QiQ0LGgEkR32Gpn2yLNgLxE5YxB8gsUFJUQWIv5JjwSUgVkDiywAxG9QCWHK8BcS/yPVBIRQjW6gLxAZA/HFQRfKApiL0SH9LZPCASuV5QCwNxA+JtaCQBEcrAXECNBlnstAgVC5Ak+8rIP7CAq13qWERJxL7HnIcnINWj48orHBA+eYb1ByUSAZV7vOhljBTYMFDIM5GTwgAAQYAzEs+xNmcURkAAAAASUVORK5CYII=" alt="copy">
+                                <a href="copy://<?=$v1['order_id']?>">复制</a>
+                            </span>
+                        </div>
+                        <div class="con">
+                            <span><?=$v1['order_id'];?></span>
+                            <span><?=$v1['amount']?> 元</span>
+                            <span class="status"><?=$status_name[$v1['status']]?></span>
+                        </div>
+                        <div class="foot">
+                            <span class="time"><?=date('Y-m-d H:i:s',$v1['updated_at'])?></span>
+                        </div>
+                    </li>
+                    <?php endforeach;?>
+            </ul>
+        </div>
+    </div>
+    <div class="tab_b hide send">
+        <div class="profit_ul clear" id="online">
+            <ul class="charge-list">
+                    <?php foreach ($onlineList as $v2):?>
+                    <li>
+                        <div class="tit">
+                            <span class="order">订单编号：<?=$v2['order_id'];?></span>
+                            <span class="copy">
+                                <img src="/static/index/img/copy.png" alt="copy">
+                                <a href="copy://<?=$v2['order_id'];?>">复制</a>
+                            </span>
+                        </div>
+                        <div class="con">
+                            <span><?=$v2['order_id'];?></span>
+                            <span><?=$v2['amount'];?>元</span>
+                            <span class="status"><?=$status_name[$v2['status']]?></span>
+                        </div>
+                        <div class="foot">
+                            <span class="time"><?=date('Y-m-d H:i:s',$v2['created_at']);?></span>
+                        </div>
+                    </li>
+                    <?php endforeach;?>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    var uid="<?=$_REQUEST['uid'];?>";
+    var token="<?=$_REQUEST['token'];?>";
+</script>
+
+<script src="/static/index/js/jquery.js"></script>
+<script src="/static/index/js/layer.js"></script>
+
+<script src="/static/index/js/clipboard.min.js"></script>
+
+<script>
+    $(function(){
+
+        function getlistmore(payType){
+            if(payType == 2){
+                page = agentPage;
+            }else{
+                page = onlinePage;
+            }
+            $.ajax({
+                url:'/index.php?g=appapi&m=charge&a=more',
+                data:{'page':page,'uid':uid,'token':token,'pay_type':payType},
+                type:'post',
+                dataType:'json',
+                success:function(data){
+                    if(data.nums>0){
+                        var nums=data.nums;
+                        var list=data.data;
+                        var html='';
+                        for(var i=0;i<nums;i++){
+                            html+='<li>\n' +
+                                '                        <div class="tit">\n' +
+                                '                            <span class="order">订单编号：'+ list[i].order_id +'</span>\n';
+                                if(payType == 2)
+                                {
+                                    /*html += '<span class="delete" data-id="'+ list[i].id +'">\n' +
+                                        '                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAnCAYAAACMo1E1AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAbZJREFUeNpi/P//P8NgBUwMgxiMOm5YOo4FXeBnTQ0x+tSAuBSIRYlQ+waIu4H4JiGF7C0t+B1HBBAB4qNQmlgQCMTqUIeSH3JEADeowz4D8QQg/kcg2eQDsRAQewPxQmo4jhMUyjjkBKD0QyDuIzLUdIBYCkkvRmoC4u/EOM4MiA8DMRsBS0EWvichINqgGBv4BcTWQHyGUG5lITO6KS01GIkJuWNALAHE3FA+HxBfhLJB6eYaBY7QAuKtULYikvgnIH5HbJp7DcUMaOnkGRA/oMBxyGY9ICY4R2sIejouDxrtbkhi0dB0E4EkBkqjb4E4k56Oc4IWxJ5IYq5ALAjEHmhioALYfSCilXE0zY06btRxo44bddyo47CCv0hs2LgGcp/iH5ocXRy3DIgvAfFaJLHVQHwZiNcgiW2Aii2nSr+VSLAKipHBNihGBoeAWI+W0fodR0uWHCBKSjQT4zhQt+0GlF1DgQNBTacKKPsaNaO1FYgXA7EztPH4mQzH8SIFRis1HbcEiIWh/U4uIOYnM/S+QkNvObUzxEQgng/tdPOQ4TBQaJ8iJdQZR4ddRx1HZwAQYABdsU3Viw6Y6QAAAABJRU5ErkJggg==" alt="delete">\n' +
+                                        '                            </span>';*/
+                                }
+                                html +='<span class="copy">\n' +
+                                '                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAVpJREFUeNpijNjyhQENeANxPxCrMpAP/gLxGSBOYkGT4AfilUDMCcT3gfg/mRawArE5EC9Ct0AYiLmAeAkQxzFQBp4AsRHMAm5okDADcRoQ3wFiYxINfArEL9CCiRFkgQc0WPgodPEfIK4G4i5kQZAFM4CYB4g3APFvCiwAObQdFO7IPgFZIA/Ej4A4kEIfLAfiCCAWRbaAiYF64B82QSYSkh03ObYSa8F6aMpippUFckAsAU0MNLGAbMCCR04QiQ0LGgEkR32Gpn2yLNgLxE5YxB8gsUFJUQWIv5JjwSUgVkDiywAxG9QCWHK8BcS/yPVBIRQjW6gLxAZA/HFQRfKApiL0SH9LZPCASuV5QCwNxA+JtaCQBEcrAXECNBlnstAgVC5Ak+8rIP7CAq13qWERJxL7HnIcnINWj48orHBA+eYb1ByUSAZV7vOhljBTYMFDIM5GTwgAAQYAzEs+xNmcURkAAAAASUVORK5CYII=" alt="">\n' +
+                                '                                <a href="copy://'+ list[i].order_id +'">复制</a>\n' +
+                                '                            </span>\n' +
+                                '                        </div>\n' +
+                                '                        <div class="con">\n' +
+                                '                            <span>'+list[i].type+'</span>\n' +
+                                '                            <span>'+list[i].money+' 元</span>\n' +
+                                '                            <span class="status">'+list[i].status+'</span>\n' +
+                                '                        </div>\n' +
+                                '                        <div class="foot">\n' +
+                                '                            <span class="time">'+list[i].addtime+'</span>\n';
+                            if(payType == 2)
+                            {
+                                /*html +='<span class="contact" data-id="'+ list[i].id +'"><a href="javascript:;">联系商家</a></span>\n';*/
+                            }
+                            html += '</div>\n' +
+                                '                    </li>';
+                        }
+                        if(payType == 2)
+                        {
+                            $("#agent ul").append(html);
+                        }else{
+                            $("#online ul").append(html);
+                        }
+
+                    }
+
+                    if(data.isscroll==1){
+                        if(payType == 2)
+                        {
+                            agentPage++;
+                        }else {
+                            onlinePage++;
+                        }
+                        isscroll=true;
+                    }
+
+                }
+            })
+        }
+
+        $(".tab ul li").on("click", function () {
+            $(this).siblings().removeClass("on");
+            $(this).addClass("on");
+            $(".tab_b").hide().eq($(this).index()).show();
+        }).eq(0).trigger('click');
+        var onlinePage=2,
+            agentPage=2,
+            page;
+        var isscroll=true;
+
+        $("#agent").scroll(function(){
+            var srollPos = $("#agent").scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+            var totalheight = parseFloat($("#agent").height()) + parseFloat(srollPos);
+            if(($(document).height()-65) <= totalheight  && isscroll) {
+                isscroll=false;
+                getlistmore(2)
+            }
+        });
+
+        $("#online").scroll(function(){
+            var srollPos = $("#online").scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+            var totalheight = parseFloat($("#online").height()) + parseFloat(srollPos);
+            if(($(document).height()-65) <= totalheight  && isscroll) {
+                isscroll=false;
+                getlistmore(1)
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

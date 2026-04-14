@@ -1,0 +1,294 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+    <!-- 页面加载loading -->
+    <div class="page-loading">
+        <div class="ball-loader">
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
+
+    <style>.layui-form.form-dialog .layui-input-block {
+            margin-right: 30px
+        }</style>
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">管理</div>
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">post标题</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="search[post_title]" placeholder="请输入" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">置顶</label>
+                                <div class="layui-input-block">
+                                    <?php echo Layui::search('where[post_status]', PostsModel::IS_TOP) ?>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-block">
+                                    <?php echo Layui::search('where[post_status]', PostsModel::STATUE) ?>
+                                </div>
+                            </div>
+                            <!--                            <div class="layui-inline">-->
+                            <!--                                <label class="layui-form-label">post_type</label>-->
+                            <!--                                <div class="layui-input-block">-->
+                            <!--                                    <input type="text" name="search[post_type]" placeholder="请输入" autocomplete="off"-->
+                            <!--                                           class="layui-input">-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <div class="layui-inline">
+                                <label class="layui-form-label">推荐</label>
+                                <div class="layui-input-block">
+                                    <?php echo Layui::search('where[recommended]', PostsModel::RECOMMENDED) ?>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-card-body">
+                        <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                        <script type="text/html" id="toolbar">
+                            <div class="layui-btn-container">
+                                <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                    添加
+                                </button>
+                                <button class="layui-btn layui-btn-sm" lay-event="delSelect" data-pk="id">删除所选</button>
+                            </div>
+                        </script>
+                        <script type="text/html" id="operate-toolbar">
+                            <a class="layui-btn layui-btn-xs" lay-event="info" lay-form="user-data-dialog">信息</a>
+                            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"
+                               lay-form="user-edit-dialog">
+                                <i class="layui-icon layui-icon-edit"></i>修改</a>
+                            <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                                <i class="layui-icon layui-icon-delete"></i>删除</a>
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" layer-dialog="确认,取消"
+            data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>信息</legend>
+        </fieldset>
+        <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题：</label>
+                <div class="layui-input-block">
+                    <input placeholder="post标题" name="post_title" value="{{=d.post_title }}" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">评论状态：</label>
+                    <div class="layui-input-inline">
+                        <?php echo Layui::select('comment_status', PostsModel::COMMENT_STATUS,
+                            ['data-value' => '{{=d.comment_status}}']) ?>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">置顶：</label>
+                    <div class="layui-input-inline">
+                        <?php echo Layui::select('istop', PostsModel::IS_TOP, ['data-value' => '{{=d.istop}}']) ?>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">orderno：</label>
+                    <div class="layui-input-inline">
+                        <input placeholder="orderno" name="orderno"
+                               value="{{=d.orderno }}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">type：</label>
+                    <div class="layui-input-inline">
+                        <input placeholder="type" name="type"
+                               value="{{=d.type }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">父级id：</label>
+                    <div class="layui-input-inline">
+                        <input placeholder="post的父级post id,表示post层级关系" name="post_parent"
+                               value="{{=d.post_parent }}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">mime/type：</label>
+                    <div class="layui-input-inline">
+                        <input placeholder="post_mime_type" name="post_mime_type" value="{{=d.post_mime_type }}" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">post_type：</label>
+                    <div class="layui-input-inline">
+
+                        <input placeholder="post_type" name="post_type"
+                               value="{{=d.post_type }}" class="layui-input">
+
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态：</label>
+                    <div class="layui-input-inline">
+                        <?php echo Layui::select('post_status', PostsModel::STATUE,
+                            ['data-value' => '{{=d.post_status}}']) ?>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">推荐：</label>
+                    <div class="layui-input-inline">
+                        <?php echo Layui::select('recommended', PostsModel::RECOMMENDED,
+                            ['data-value' => '{{=d.recommended}}']) ?>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">post摘要：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::textarea('post_excerpt', '{{=d.post_excerpt }}', ['placeholder' => "post摘要"]) ?>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">seo keywords：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::textarea('post_keywords', '{{=d.post_keywords }}',
+                        ['placeholder' => "seo keywords"]) ?>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">post的扩展字段：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::textarea('smeta', '{{=d.smeta }}',
+                        ['placeholder' => "post的扩展字段，保存相关扩展属性，如缩略图；格式为json"]) ?>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">post内容：</label>
+                <div class="layui-input-block">
+                    <?php echo Layui::textarea('post_content', '{{=d.post_content }}',
+                        ['placeholder' => "post内容", 'class' => 'layedit', 'id' => 'post_content']) ?>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-hide">
+                <input type="hidden" name="_pk" value="{{=d.id}}">
+                <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+            </div>
+
+        </form>
+    </script>
+
+
+    <script>
+        xx.use({
+            url: '<?php echo url_backend("listAjax") ?>',
+            saveUrl: '<?php echo url_backend("save") ?>',
+            delUrl: '<?php echo url_backend("del") ?>',
+            delALlUrl: '<?php echo url_backend("delAll") ?>',
+            uploadUrl: undefined,
+            title: '数据表',
+            pk: 'id',
+            cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'id'}
+                , {field: 'post_title', title: '标题'}
+                //, {field: 'comment_count', title: 'comment_count'}
+                , {
+                    field: 'comment_status',
+                    title: '评论状态',
+                    type: 'enum',
+                    'value':<?php echo json_encode(PostsModel::COMMENT_STATUS)?>}
+                , {
+                    field: 'istop', title: '置顶',
+                    type: 'enum',
+                    'value':<?php echo json_encode(PostsModel::IS_TOP)?>}
+                , {
+                    field: 'post_status', title: '状态',
+                    type: 'enum',
+                    'value':<?php echo json_encode(PostsModel::STATUE)?>}
+                , {
+                    field: 'recommended', title: '推荐',
+                    'value':<?php echo json_encode(PostsModel::RECOMMENDED)?>}
+                , {field: 'orderno', title: 'orderno'}
+                // , {field: 'post_author', title: '发表者id'}
+                //, {field: 'post_content', title: 'post内容'}
+                //, {field: 'post_content_filtered', title: 'post_content_filtered'}
+                // , {field: 'post_date', title: '创建日期'}
+                , {field: 'post_excerpt', title: '摘要'}
+                , {field: 'post_hits', title: '点击数'}
+                //, {field: 'post_keywords', title: 'seo keywords'}
+                , {field: 'post_like', title: '赞数'}
+                // , {field: 'post_mime_type', title: 'post_mime_type'}
+                , {field: 'post_modified', title: '更新时间'}
+                // , {field: 'post_parent', title: 'post的父级post id,表示post层级关系'}
+                // , {field: 'post_source', title: '转载文章的来源'}
+                //, {field: 'post_type', title: 'post_type'}
+                //, {field: 'smeta', title: 'post的扩展字段，保存相关扩展属性，如缩略图；格式为json'}
+                //, {field: 'type', title: 'type'}
+                , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+            ]],
+            'event':{
+                'operate':{
+                    // "edit":function (obj, table, HTTPUtil, laytpl, layerEle, form, $, nextFn) {
+                    //     nextFn();
+                    //     //layedit.build('post_content');
+                    // }
+                }
+            }
+        });
+
+        // layui.use('layedit', function(){
+        //     layedit = layui.layedit;
+        // });
+    </script>
+<?php echo Layui::renderJs() ?>
+<?php importView("fooler.phtml"); ?>

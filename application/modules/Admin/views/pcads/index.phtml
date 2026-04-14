@@ -1,0 +1,256 @@
+<?php importView("header.phtml"); ?>
+    <body>
+
+<!-- 页面加载loading -->
+<div class="page-loading">
+    <div class="ball-loader">
+        <span></span><span></span><span></span><span></span>
+    </div>
+</div>
+
+<style>.layui-form.form-dialog .layui-input-block {
+        margin-right: 30px
+    }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header"><span style="color:palevioletred;font-weight: bold">广告信息管理中心,排序按降序排列</span></div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">位置</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[position]',
+                                    merge_array(['' => '全选'], PcAdsModel::POSITION)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]',
+                                    merge_array(['' => '全选'], PcAdsModel::STATUS)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">类型</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[type]',
+                                    merge_array(['' => '全选'], PcAdsModel::ADS_TYPE)) ?>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">
+                                添加
+                            </button>
+                            <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新缓存</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog">
+                            <i class="layui-icon layui-icon-edit"></i>修改</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" data-pk="{{=d.id}}" lay-event="del">
+                            <i class="layui-icon layui-icon-delete"></i>删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="900" data-h="700" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend style="color: palevioletred">广告信息</legend>
+    </fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">广告标题：</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" placeholder="广告标题" name="title"
+                       value="{{=d.title }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">位置：</label>
+            <div class="layui-input-inline">
+                <?php echo Layui::select('position', PcAdsModel::POSITION, ['data-value' => '{{=d.position}}']) ?>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('type', PcAdsModel::ADS_TYPE, ['data-value' => '{{=d.type}}']) ?>
+            </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">图标：</label>
+            <div class="layui-input-block">
+
+
+                <img src="{{d.img_url_full }}" id="img-img_url" width="50" height="50">
+                <button type="button" class="but-upload-img layui-btn" data-json="{position:'ads'}"
+                        data-img="#img-img_url" data-input="#input-img_url"><i class="layui-icon">&#xe67c;</i>上传
+                </button>
+                <input type="hidden" name="img_url" id="input-img_url" value="{{=d.img_url }}">
+            </div>
+
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">跳转地址：</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" placeholder="跳转地址" name="url"
+                       value="{{=d.url }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('status', PcAdsModel::STATUS, ['data-value' => '{{=d.status}}']) ?>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">过期时间：</label>
+            <div class="layui-input-block">
+              <input lay-verify="required" placeholder="过期时间 eg:2022-10-10 | 2022-10-10 23:40:01" name="expired_date"
+                       value="{{=d.expired_date }}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">视频m3u8：</label>
+            <div class="layui-input-block">
+                <input  placeholder="视频m3u8地址 如果有的话" name="mv_m3u8"
+                        value="{{=d.mv_m3u8 }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label">描述：</label>
+            <div class="layui-input-block">
+                <input  placeholder="描述" name="description"
+                        value="{{=d.description }}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button class="layui-btn submit" lay-submit="" lay-filter="save"></button>
+        </div>
+
+    </form>
+</script>
+<?php echo \Layui::renderJs() ?>
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        delUrl: '<?php echo url_backend("del") ?>',
+        delALlUrl: '<?php echo url_backend("delAll") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '数据表',
+        pk: 'id',
+        cols: [[
+
+            {field: 'id', title: 'id', width: 60}
+            , {field: 'title', title: '标题', width: 130}
+            , {field: 'expired_date', title: '过期',sort:true,templet:function (d){
+                    if(d.is_expired){
+                        return "<span style='color: red;font-weight: bold'>"+d.expired_date+"</span>"
+                    }
+                    return "<span style='color: green'>"+d.expired_date+"</span>"
+                }, width: 150}
+            //, {field: 'channel', title: '渠道'}
+            //, {field: 'mv_m3u8', title: '视频m3u8'}
+            //, {field: 'description', title: '广告词'}
+            , {
+                field: 'img_url', width: 120, title: '图片', align: 'center', templet: function (d) {
+                    if (d.img_url_full) {
+                        return '<div onclick="show_img(\'' + d.img_url_full + '\')" ><img width="50" src="' + d.img_url_full + '" /></div>';
+                    }
+                    return '';
+                }
+            }
+            ,{
+                field: 'type',
+                width: 150,
+                title: '类型',
+                'type': 'enum',
+                'value':<?php echo json_encode(AdsModel::ADS_TYPE)?>}
+            //, {field: 'img_type', title: '1:上传的图片;2:网络图片'}
+            , {
+                field: 'url', title: '地址', templet: function (d) {
+                    return '<a style="color:green;font-weight: bold" target="_blank" title="' + d.url + '" href="' + d.url + '" >' + d.url + '</a>';
+                }
+            }
+            , {
+                field: 'position',
+                width: 150,
+                title: '广告位置',
+                'type': 'enum',
+                'value':<?php echo json_encode(PcAdsModel::POSITION)?>}
+            //, {field: 'ios_url', title: 'ios下载地址'}
+            //, {field: 'android_url', title: 'andeoid下载地址'}
+
+            //, {field: 'apply_type', title: '应用场景：1.专题策划 2. 直播间广告 3.直播间广告2， 4.启动页 5 首页活动广告'}
+            //, {field: 'value', title: '目标ID,分类id|系列id|标签id|视频id'}
+            //, {field: 'status', title: '状态', edit:true,'type': 'enum', 'value':<?php echo json_encode(AdsModel::STATUS)?>}
+            , {field: 'status', title: '状态', type: "switch", "value": "1|0", edit: true, width: 120}
+            //, {field: 'created_at', title: '创建时间'}
+            , {field: 'show_user', title: '排序',sort:true,edit:true}
+            , {field: 'click_number', title: '点击',sort:true,edit:true}
+            , {fixed: 'right', width: 200, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            "toolbar": {
+                "refresh": function (event, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    layer.confirm('刷新缓存?', function (index) {
+                        layer.close(index);
+                        ajax.post("<?php echo url_backend('refresh')?>")
+                            .then(function (json) {
+                                if (json.code) {
+                                    Util.msgErr(json.msg);
+                                } else {
+                                    Util.msgOk(json.msg, Util.reload);
+                                }
+                            })
+                    });
+                },
+            }
+        }
+    });
+</script>
+<?php importView("fooler.phtml"); ?>
