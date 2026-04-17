@@ -20,9 +20,6 @@
  * @property int $coins_amount
  * @property int $coins_random_min 金币随机最小值
  * @property int $coins_random_max 金币随机最大值
- * @property int $ai_face_times AI换脸次数
- * @property int $ai_face_times_min AI换脸随机最小次数（ai_face_times=-1时使用）
- * @property int $ai_face_times_max AI换脸随机最大次数（ai_face_times=-1时使用）
  * @property int $vip_days
  * @property int|null $vip_product_id
  * @property array|null $vip_random_product_ids VIP随机产品ID数组（空/NULL=全部）
@@ -46,7 +43,6 @@ class MarketingLotteryPrizeModel extends EloquentModel
         'win_probability', 'weight',
         'total_stock', 'issued_count',
         'per_user_cap', 'coins_amount', 'coins_random_min', 'coins_random_max',
-        'ai_face_times', 'ai_face_times_min', 'ai_face_times_max',
         'vip_days', 'vip_product_id', 'vip_random_product_ids', 'extra',
         'created_at', 'updated_at',
     ];
@@ -111,9 +107,6 @@ class MarketingLotteryPrizeModel extends EloquentModel
         'coins_amount' => 'integer',
         'coins_random_min' => 'integer',
         'coins_random_max' => 'integer',
-        'ai_face_times' => 'integer',
-        'ai_face_times_min' => 'integer',
-        'ai_face_times_max' => 'integer',
         'vip_days' => 'integer',
         'vip_product_id' => 'integer',
         'vip_random_product_ids' => 'array',
@@ -143,14 +136,12 @@ class MarketingLotteryPrizeModel extends EloquentModel
     const PRIZE_COINS  = 'coins';
     const PRIZE_VIP    = 'vip';
     const PRIZE_PHYSICAL = 'physical';
-    const PRIZE_AI_FACE  = 'ai_face';
     const PRIZE_OTHER    = 'other';
     const PRIZE_TYPE_TIPS = [
         self::PRIZE_THANKS => '谢谢参与',
         self::PRIZE_COINS  => '金币',
         self::PRIZE_VIP    => 'VIP',
         self::PRIZE_PHYSICAL => '实物',
-        self::PRIZE_AI_FACE  => 'AI换脸',
         self::PRIZE_OTHER  => '其它',
     ];
 

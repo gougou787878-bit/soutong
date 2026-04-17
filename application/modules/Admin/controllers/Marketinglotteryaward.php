@@ -121,9 +121,6 @@ class MarketinglotteryawardController extends BackendBaseController
                 $post['coins_random_min'] = 0;
                 $post['coins_random_max'] = 0;
             }
-            $post['ai_face_times'] = 0;
-            $post['ai_face_times_min'] = 0;
-            $post['ai_face_times_max'] = 0;
             $post['vip_days'] = 0;
             $post['vip_product_id'] = null;
             $post['vip_random_product_ids'] = null;
@@ -189,40 +186,11 @@ class MarketinglotteryawardController extends BackendBaseController
             $post['coins_amount'] = 0;
             $post['coins_random_min'] = 0;
             $post['coins_random_max'] = 0;
-            $post['ai_face_times'] = 0;
-            $post['ai_face_times_min'] = 0;
-            $post['ai_face_times_max'] = 0;
             if (!$hasProd) {
                 $post['vip_product_id'] = null;
             }
         } elseif ($type === MarketingLotteryPrizeModel::PRIZE_PHYSICAL) {
             // 实物：用 name / prize_desc / 图片 + 库存字段即可
-            $post['coins_amount'] = 0;
-            $post['coins_random_min'] = 0;
-            $post['coins_random_max'] = 0;
-            $post['ai_face_times'] = 0;
-            $post['ai_face_times_min'] = 0;
-            $post['ai_face_times_max'] = 0;
-            $post['vip_days'] = 0;
-            $post['vip_product_id'] = null;
-            $post['vip_random_product_ids'] = null;
-        } elseif ($type === MarketingLotteryPrizeModel::PRIZE_AI_FACE) {
-            $mode = (string) ($post['ai_face_mode'] ?? '');
-            if ($mode === 'random') {
-                $post['ai_face_times'] = -1;
-                $mn = (int) ($post['ai_face_times_min'] ?? 0);
-                $mx = (int) ($post['ai_face_times_max'] ?? 0);
-                test_assert($mn > 0 && $mx > 0, 'AI换脸随机范围必须填写最小/最大值');
-                test_assert($mn <= $mx, 'AI换脸随机范围最小值不能大于最大值');
-                $post['ai_face_times'] = -1;
-                $post['ai_face_times_min'] = $mn;
-                $post['ai_face_times_max'] = $mx;
-            } else {
-                $post['ai_face_times'] = (int) ($post['ai_face_times'] ?? 0);
-                test_assert($post['ai_face_times'] > 0, 'AI换脸奖项必须填写换脸次数（>0）或选择随机');
-                $post['ai_face_times_min'] = 0;
-                $post['ai_face_times_max'] = 0;
-            }
             $post['coins_amount'] = 0;
             $post['coins_random_min'] = 0;
             $post['coins_random_max'] = 0;
@@ -236,9 +204,6 @@ class MarketinglotteryawardController extends BackendBaseController
             $post['vip_days'] = 0;
             $post['vip_product_id'] = null;
             $post['vip_random_product_ids'] = null;
-            $post['ai_face_times'] = 0;
-            $post['ai_face_times_min'] = 0;
-            $post['ai_face_times_max'] = 0;
             $post['is_win'] = MarketingLotteryPrizeModel::IS_WIN_NO;
         } else {
             // other：不强制，避免影响扩展（但仍建议不要混填）
@@ -391,9 +356,6 @@ class MarketinglotteryawardController extends BackendBaseController
             $row['vip_grant_type'] = $vipGrantType;
             $row['vip_grant_type_str'] = $vipGrantTypeStr;
             $row['vip_random_product_ids_str'] = $vipRandomIdsStr;
-            $row['ai_face_times'] = (int) ($item->getAttribute('ai_face_times') ?? 0);
-            $row['ai_face_times_min'] = (int) ($item->getAttribute('ai_face_times_min') ?? 0);
-            $row['ai_face_times_max'] = (int) ($item->getAttribute('ai_face_times_max') ?? 0);
             $row['extra'] = $item->extra; // cast=array|null；前端模板会 stringify
             return $row;
         };

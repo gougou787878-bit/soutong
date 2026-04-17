@@ -223,7 +223,7 @@ class MarketingLotteryService
             ];
             $prizeSnap = $this->buildPrizeSnapshot($lockedPrize);
 
-            // 默认：立即成功（金币/VIP/AI换脸/谢谢参与），实物走待处理
+            // 默认：立即成功（金币/VIP/谢谢参与），实物走待处理
             $redeemStatus = \MarketingLotteryRedemptionModel::STATUS_SUCCESS;
             $remark = '';
 
@@ -248,11 +248,13 @@ class MarketingLotteryService
                 // 固定/随机：最终选一个上架 VIP 产品
                 $product = $this->resolveVipProductForPrize($lockedPrize);
                 test_assert($product, 'VIP产品不存在或未上架');
-                $periodAt = ((int) $product->valid_date) * 86400 + max((int) $member->expired_at, time());
+                $nowTs = time();
+                $currentVipLevel = (int) $member->expired_at > $nowTs ? (int) $member->vip_level : 0;
+                $periodAt = ((int) $product->valid_date) * 86400 + max((int) $member->expired_at, $nowTs);
                 $ok = \MemberModel::useWritePdo()->where('uid', $uid)->update([
                     'expired_at' => $periodAt,
-                    'vip_level' => max((int) $product->vip_level, (int) $member->vip_level),
-                    'order_at' => time(),
+                    'vip_level' => max((int) $product->vip_level, $currentVipLevel),
+                    'order_at' => $nowTs,
                 ]);
                 test_assert($ok, '发放失败');
                 if ((int) ($product->free_day ?? 0) > 0) {
@@ -262,18 +264,6 @@ class MarketingLotteryService
                 $grant['vip_product_id'] = (int) $product->id;
                 $prizeSnap['vip_product_id'] = (int) $product->id;
                 $prizeSnap['vip_product_name'] = (string) $product->pname;
-            } elseif ($lockedPrize->prize_type === \MarketingLotteryPrizeModel::PRIZE_AI_FACE) {
-                $times = (int) ($lockedPrize->ai_face_times ?? 0);
-                if ($times === -1) {
-                    $mn = (int) ($lockedPrize->ai_face_times_min ?? 0);
-                    $mx = (int) ($lockedPrize->ai_face_times_max ?? 0);
-                    $times = $mx > 0 ? rand($mn, $mx) : 0;
-                }
-                test_assert($times > 0, '奖项配置异常');
-                \MemberAiFreeModel::setRecord($member->aff, $times);
-                $remark = "发放AI换脸次数{$times}";
-                $grant['ai_face_times'] = $times;
-                $prizeSnap['ai_face_times'] = $times;
             } elseif ($lockedPrize->prize_type === \MarketingLotteryPrizeModel::PRIZE_PHYSICAL) {
                 $redeemStatus = \MarketingLotteryRedemptionModel::STATUS_PENDING;
                 $remark = '实物奖品待发放';
@@ -356,10 +346,18 @@ class MarketingLotteryService
             if ((int) ($p->is_win ?? 1) !== \MarketingLotteryPrizeModel::IS_WIN_YES) {
                 return true;
             }
+            if ((int) $p->total_stock !== -1 && (int) $p->issued_count >= (int) $p->total_stock) {
+                return false;
+            }
             $wonCount = \MarketingLotteryRedemptionModel::query()
                 ->where('uid', $uid)
                 ->where('activity_id', $activityId)
                 ->where('prize_id', (int) $p->id)
+                ->whereIn('status', [
+                    \MarketingLotteryRedemptionModel::STATUS_PENDING,
+                    \MarketingLotteryRedemptionModel::STATUS_PROCESSING,
+                    \MarketingLotteryRedemptionModel::STATUS_SUCCESS,
+                ])
                 ->count();
 
             return $wonCount < $cap;

@@ -190,34 +190,6 @@ importView("header.phtml");
             </div>
         </div>
 
-        <div class="layui-form-item" id="mlp-ai-face-mode-wrap" style="display:none">
-            <label class="layui-form-label">换脸发放</label>
-            <div class="layui-input-block">
-                <input type="radio" name="ai_face_mode" value="fixed" title="固定" checked>
-                <input type="radio" name="ai_face_mode" value="random" title="随机">
-            </div>
-        </div>
-        <div class="layui-form-item" id="mlp-ai-face-fixed-wrap" style="display:none">
-            <label class="layui-form-label">换脸次数</label>
-            <div class="layui-input-block">
-                <input type="number" name="ai_face_times" value="{{= (d.ai_face_times === 0 || d.ai_face_times) ? d.ai_face_times : 0 }}" class="layui-input" placeholder="固定次数（>0）">
-            </div>
-        </div>
-        <div class="layui-form-item" id="mlp-ai-face-random-wrap" style="display:none">
-            <label class="layui-form-label">随机范围</label>
-            <div class="layui-input-block">
-                <div class="layui-row layui-col-space10">
-                    <div class="layui-col-xs6">
-                        <input type="number" name="ai_face_times_min" value="" class="layui-input" placeholder="最小值">
-                    </div>
-                    <div class="layui-col-xs6">
-                        <input type="number" name="ai_face_times_max" value="" class="layui-input" placeholder="最大值">
-                    </div>
-                </div>
-                <div class="layui-word-aux" style="margin-top:6px">随机：ai_face_times 保存为 -1；范围保存到表字段 ai_face_times_min / ai_face_times_max。</div>
-            </div>
-        </div>
-
         <!-- 落库字段：直接使用数据库字段名（不再用隐藏字段） -->
         <input type="hidden" name="vip_days" value="{{=d.vip_days}}">
         <input type="hidden" name="vip_random_product_ids" value="{{= (d.vip_random_product_ids && typeof d.vip_random_product_ids === 'object') ? JSON.stringify(d.vip_random_product_ids) : (d.vip_random_product_ids || '') }}">
@@ -280,10 +252,8 @@ importView("header.phtml");
             function togglePrizeSections(prizeType) {
                 var isCoins = prizeType === 'coins';
                 var isVip = prizeType === 'vip';
-                var isAiFace = prizeType === 'ai_face';
                 $('#mlp-coins-mode-wrap,#mlp-coins-fixed-wrap,#mlp-coins-random-wrap').toggle(isCoins);
                 $('#mlp-vip-mode-wrap,#mlp-vip-fixed-wrap,#mlp-vip-random-wrap').toggle(isVip);
-                $('#mlp-ai-face-mode-wrap,#mlp-ai-face-fixed-wrap,#mlp-ai-face-random-wrap').toggle(isAiFace);
             }
             function syncModeVisibility() {
                 var ct = $('select[name="prize_type"]').val() || '';
@@ -294,14 +264,10 @@ importView("header.phtml");
                 var vm = $('input[name="vip_mode"]:checked').val() || 'fixed';
                 $('#mlp-vip-fixed-wrap').toggle(ct === 'vip' && vm === 'fixed');
                 $('#mlp-vip-random-wrap').toggle(ct === 'vip' && vm === 'random');
-                var am = $('input[name="ai_face_mode"]:checked').val() || 'fixed';
-                $('#mlp-ai-face-fixed-wrap').toggle(ct === 'ai_face' && am === 'fixed');
-                $('#mlp-ai-face-random-wrap').toggle(ct === 'ai_face' && am === 'random');
             }
             function refillVipProducts(level, selectedId, row) {
                 var $p = $('#mlp-vip-product-id');
                 $p.empty().append($('<option/>').val('').text('请选择VIP产品'));
-                // 固定 VIP：直接展示「全部上架 VIP 产品」，不依赖 vip_level 筛选（避免无 level 时下拉为空）
                 if (level && VIP_PRODUCTS_BY_LEVEL[level]) {
                     var map = VIP_PRODUCTS_BY_LEVEL[level];
                     for (var id in map) {
@@ -369,25 +335,6 @@ importView("header.phtml");
                     refillVipRandomProducts([]);
                 }
 
-                // ai_face 模式回显
-                if (String(row.prize_type) === 'ai_face') {
-                    var isRandomAi = (parseInt(row.ai_face_times, 10) === -1);
-                    $('input[name="ai_face_mode"][value="' + (isRandomAi ? 'random' : 'fixed') + '"]').prop('checked', true);
-                    if (isRandomAi) {
-                        $('input[name="ai_face_times_min"]').val(row.ai_face_times_min != null ? row.ai_face_times_min : '');
-                        $('input[name="ai_face_times_max"]').val(row.ai_face_times_max != null ? row.ai_face_times_max : '');
-                        $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val('');
-                    } else {
-                        $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val(row.ai_face_times != null ? row.ai_face_times : '');
-                        $('input[name="ai_face_times_min"]').val('');
-                        $('input[name="ai_face_times_max"]').val('');
-                    }
-                } else {
-                    $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val('');
-                    $('input[name="ai_face_times_min"]').val('');
-                    $('input[name="ai_face_times_max"]').val('');
-                }
-
                 form.render();
                 syncModeVisibility();
             };
@@ -437,7 +384,6 @@ importView("header.phtml");
                     field.coins_amount = 0;
                     field.coins_random_min = 0;
                     field.coins_random_max = 0;
-                    field.ai_face_times = 0;
                     field.vip_days = 0;
                     if (vm === 'random') {
                         field.vip_product_id = '';
@@ -450,41 +396,11 @@ importView("header.phtml");
 
                     $('input[name="vip_days"]').val('0');
                     $('input[name="vip_random_product_ids"]').val(field.vip_random_product_ids || '');
-                } else if (prizeType === 'ai_face') {
-                    field.coins_amount = 0;
-                    field.coins_random_min = 0;
-                    field.coins_random_max = 0;
-                    field.vip_days = 0;
-                    field.vip_product_id = '';
-                    field.vip_random_product_ids = '';
-                    var am = $('input[name="ai_face_mode"]:checked').val() || 'fixed';
-                    field.ai_face_mode = am;
-                    if (am === 'random') {
-                        field.ai_face_times = -1;
-                        var mn2 = $('input[name="ai_face_times_min"]').val();
-                        var mx2 = $('input[name="ai_face_times_max"]').val();
-                        field.ai_face_times_min = mn2 !== '' ? parseInt(mn2, 10) : 0;
-                        field.ai_face_times_max = mx2 !== '' ? parseInt(mx2, 10) : 0;
-                    } else {
-                        var fixed2 = $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val();
-                        field.ai_face_times = fixed2 !== '' ? parseInt(fixed2, 10) : 0;
-                        field.ai_face_times_min = 0;
-                        field.ai_face_times_max = 0;
-                    }
-
-                    $('input[name="vip_days"]').val('0');
-                    $('input[name="vip_random_product_ids"]').val('');
                 } else {
                     field.coins_random_min = 0;
                     field.coins_random_max = 0;
-                    field.ai_face_times = 0;
-                    field.ai_face_times_min = 0;
-                    field.ai_face_times_max = 0;
                     field.vip_random_product_ids = '';
 
-                    $('input[name="ai_face_times"]').val('0');
-                    $('input[name="ai_face_times_min"]').val('0');
-                    $('input[name="ai_face_times_max"]').val('0');
                     $('input[name="vip_random_product_ids"]').val('');
                 }
 
@@ -565,9 +481,6 @@ importView("header.phtml");
             {field: 'vip_grant_type_str', title: '发放类型', width: 80},
             {field: 'vip_product_str', title: 'VIP产品', width: 160},
             {field: 'vip_random_product_ids_str', title: '随机IDs', width: 180},
-            {field: 'ai_face_times', title: 'ai_face_times', hide: true, width: 1},
-            {field: 'ai_face_times_min', title: 'ai_face_times_min', hide: true, width: 1},
-            {field: 'ai_face_times_max', title: 'ai_face_times_max', hide: true, width: 1},
             {field: 'extra', title: 'extra', hide: true, width: 1},
             {field: 'created_at', title: '创建时间', width: 165},
             {fixed: 'right', width: 100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}

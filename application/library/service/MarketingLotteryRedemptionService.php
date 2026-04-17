@@ -274,7 +274,6 @@ class MarketingLotteryRedemptionService
             'prize_image_full' => url_ads($prizeImage),
             'grant_coins' => (int) ($grant['coins'] ?? 0),
             'grant_vip_product_id' => isset($grant['vip_product_id']) ? (int) $grant['vip_product_id'] : null,
-            'grant_ai_face_times' => (int) ($grant['ai_face_times'] ?? 0),
             'status' => $status,
             'status_str' => \MarketingLotteryRedemptionModel::STATUS_TIPS[$status] ?? (string) $status,
             'remark' => (string) ($r->remark ?? ''),
