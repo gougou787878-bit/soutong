@@ -72,6 +72,7 @@ class MarketingDailySignService
             $cycleDays = max(1, (int) $activity->cycle_days);
             $dailyCoins = max(0, (int) $activity->daily_coins);
             $bonusVipDays = max(0, (int) $activity->bonus_vip_days);
+            $bonusVipLevel = $this->normalizeBonusVipLevel((int) ($activity->bonus_vip_level ?: \MemberModel::VIP_LEVEL_MOON));
             $isBonus = ($bonusVipDays > 0 && $continuousDay % $cycleDays === 0) ? 1 : 0;
 
             if ($dailyCoins > 0) {
@@ -84,12 +85,17 @@ class MarketingDailySignService
             }
 
             if ($isBonus) {
+                $now = time();
                 $seconds = $bonusVipDays * 86400;
-                $periodAt = max((int) $member->expired_at, time()) + $seconds;
+                $memberExpiredAt = (int) $member->expired_at;
+                $periodAt = max($memberExpiredAt, $now) + $seconds;
+                $vipLevel = $memberExpiredAt > $now
+                    ? max((int) $member->vip_level, $bonusVipLevel)
+                    : $bonusVipLevel;
                 $ok = \MemberModel::useWritePdo()->where('uid', $uid)->update([
                     'expired_at' => $periodAt,
-                    'vip_level' => max((int) $member->vip_level, \MemberModel::VIP_LEVEL_MOON),
-                    'order_at' => time(),
+                    'vip_level' => $vipLevel,
+                    'order_at' => $now,
                 ]);
                 test_assert($ok, '发放会员失败');
             }
@@ -131,7 +137,18 @@ class MarketingDailySignService
             'daily_coins' => (int) $activity->daily_coins,
             'cycle_days' => (int) $activity->cycle_days,
             'bonus_vip_days' => (int) $activity->bonus_vip_days,
+            'bonus_vip_level' => $this->normalizeBonusVipLevel((int) ($activity->bonus_vip_level ?: \MemberModel::VIP_LEVEL_MOON)),
+            'bonus_vip_level_str' => \MemberModel::USER_VIP_TYPE[
+                $this->normalizeBonusVipLevel((int) ($activity->bonus_vip_level ?: \MemberModel::VIP_LEVEL_MOON))
+            ] ?? '',
             'rule_text' => (string) ($activity->rule_text ?? ''),
         ];
+    }
+
+    private function normalizeBonusVipLevel(int $level): int
+    {
+        return isset(\MemberModel::USER_VIP_TYPE[$level]) && $level > \MemberModel::VIP_LEVEL_NO
+            ? $level
+            : \MemberModel::VIP_LEVEL_MOON;
     }
 }

@@ -8,7 +8,7 @@ class MarketingDailySignActivityModel extends EloquentModel
 
     protected $fillable = [
         'name', 'status', 'start_at', 'end_at',
-        'daily_coins', 'cycle_days', 'bonus_vip_days', 'rule_text',
+        'daily_coins', 'cycle_days', 'bonus_vip_days', 'bonus_vip_level', 'rule_text',
         'created_at', 'updated_at',
     ];
 
@@ -19,6 +19,7 @@ class MarketingDailySignActivityModel extends EloquentModel
         'daily_coins' => 'integer',
         'cycle_days' => 'integer',
         'bonus_vip_days' => 'integer',
+        'bonus_vip_level' => 'integer',
     ];
 
     const STATUS_OFF = 0;

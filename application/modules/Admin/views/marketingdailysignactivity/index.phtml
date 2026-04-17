@@ -1,4 +1,8 @@
-<?php importView("header.phtml"); ?>
+<?php
+$vipLevelTips = MemberModel::USER_VIP_TYPE;
+unset($vipLevelTips[MemberModel::VIP_LEVEL_NO]);
+importView("header.phtml");
+?>
 <body>
 <div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
 <style>.layui-form.form-dialog .layui-input-block { margin-right: 30px; }</style>
@@ -98,6 +102,13 @@
                 <div class="layui-word-aux" style="margin-top:6px">奖励会叠加到用户当前会员到期时间；未开会员则从当前时间开始加。</div>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">无会员等级</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('bonus_vip_level', $vipLevelTips, ['data-value' => '{{=d.bonus_vip_level || ' . MemberModel::VIP_LEVEL_MOON . ' }}']) ?>
+                <div class="layui-word-aux" style="margin-top:6px">无会员或会员已过期用户，连续签到奖励按这里配置的等级发放；当前会员未过期时保留更高等级。</div>
+            </div>
+        </div>
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">活动规则</label>
             <div class="layui-input-block">
@@ -126,6 +137,7 @@
             {field: 'daily_coins', title: '每日金币', width: 100},
             {field: 'cycle_days', title: '连续天数', width: 100},
             {field: 'bonus_vip_days', title: '会员天数', width: 100},
+            {field: 'bonus_vip_level_str', title: '无会员等级', width: 110},
             {field: 'created_at', title: '创建时间', width: 170},
             {fixed: 'right', width: 100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
         ]],

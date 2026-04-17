@@ -8,6 +8,8 @@ class MarketingdailysignactivityController extends BackendBaseController
             $row = $item->toArray();
             $row['status'] = (int) $item->status;
             $row['status_str'] = MarketingDailySignActivityModel::STATUS_TIPS[(int) $item->status] ?? '';
+            $row['bonus_vip_level'] = (int) ($item->bonus_vip_level ?: MemberModel::VIP_LEVEL_MOON);
+            $row['bonus_vip_level_str'] = MemberModel::USER_VIP_TYPE[$row['bonus_vip_level']] ?? '';
             return $row;
         };
     }
@@ -45,5 +47,13 @@ class MarketingdailysignactivityController extends BackendBaseController
     public function setbonus_vip_days($value): int
     {
         return max(0, (int) $value);
+    }
+
+    public function setbonus_vip_level($value): int
+    {
+        $level = (int) $value;
+        return isset(MemberModel::USER_VIP_TYPE[$level]) && $level > MemberModel::VIP_LEVEL_NO
+            ? $level
+            : MemberModel::VIP_LEVEL_MOON;
     }
 }
