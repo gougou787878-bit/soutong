@@ -1,0 +1,607 @@
+<?php
+$activities = MarketingLotteryActivityModel::query()->orderByDesc('id')->pluck('name', 'id')->toArray();
+importView("header.phtml");
+?>
+<body>
+<div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
+<style>.layui-form.form-dialog .layui-input-block { margin-right: 30px; }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">抽奖奖项</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">活动ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[activity_id]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[name]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">添加</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="920" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 12px;"><legend>奖项</legend></fieldset>
+    <form class="layui-form form-dialog" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('activity_id', merge_array(['' => '请选择活动'], $activities), ['lay-verify' => 'required', 'data-value' => '{{=d.activity_id}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖项名称</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" name="name" value="{{=d.name || '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">奖项说明</label>
+            <div class="layui-input-block">
+                <textarea name="prize_desc" class="layui-textarea">{{=d.prize_desc || '' }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖项图</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadPos('prize_image_full', 'prize_image', 80, 80, 'ads') ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖项icon</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadPos('prize_icon_full', 'prize_icon', 48, 48, 'ads') ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">奖项类型</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('prize_type', MarketingLotteryPrizeModel::PRIZE_TYPE_TIPS, ['data-value' => '{{=d.prize_type}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否中奖</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('is_win', MarketingLotteryPrizeModel::IS_WIN_TIPS, ['data-value' => '{{= (d.is_win === 0 || d.is_win === 1) ? d.is_win : 1 }}']) ?>
+                <div class="layui-word-aux" style="margin-top:6px">「谢谢参与」保存时自动为「非中奖」。</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('status', MarketingLotteryPrizeModel::STATUS_TIPS, ['data-value' => '{{=d.status}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="number" name="sort_order" value="{{=d.sort_order}}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中奖概率</label>
+            <div class="layui-input-block">
+                <?php
+                // 勿用 {{=d.win_probability}}：laytpl 的 escape 为 String(v||"")，0 会变成空
+                $probDv = "{{ typeof d.win_probability !== 'undefined' && d.win_probability !== null ? d.win_probability : 0 }}";
+                ?>
+                <input type="number" name="win_probability" value="<?php echo $probDv ?>" min="0" max="100" class="layui-input" placeholder="0-100">
+                <div class="layui-word-aux" style="margin-top:6px">同一活动下各奖项概率建议合计为 100（具体以抽奖算法为准）。</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">发放份数</label>
+            <div class="layui-input-block">
+                <?php
+                // 0 需要正常展示；不能用 {{=d.total_stock}}（0 会被当成空）
+                $stockDv = "{{ typeof d.total_stock !== 'undefined' && d.total_stock !== null ? d.total_stock : -1 }}";
+                ?>
+                <input type="number" name="total_stock" value="<?php echo $stockDv ?>" class="layui-input" placeholder="-1不限">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">每人最多中几次</label>
+            <div class="layui-input-block">
+                <input type="number" name="per_user_cap" value="{{=d.per_user_cap}}" class="layui-input" placeholder="0不限">
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-coins-mode-wrap" style="display:none">
+            <label class="layui-form-label">金币发放</label>
+            <div class="layui-input-block">
+                <input type="radio" name="coins_mode" value="fixed" title="固定" checked>
+                <input type="radio" name="coins_mode" value="random" title="随机">
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-coins-fixed-wrap" style="display:none">
+            <label class="layui-form-label">金币数量</label>
+            <div class="layui-input-block">
+                <input type="number" name="coins_amount" value="{{=d.coins_amount}}" class="layui-input" placeholder="固定金币数量（>0）">
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-coins-random-wrap" style="display:none">
+            <label class="layui-form-label">随机范围</label>
+            <div class="layui-input-block">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-xs6">
+                        <input type="number" name="coins_random_min" value="{{=d.coins_random_min || 0}}" class="layui-input" placeholder="最小值">
+                    </div>
+                    <div class="layui-col-xs6">
+                        <input type="number" name="coins_random_max" value="{{=d.coins_random_max || 0}}" class="layui-input" placeholder="最大值">
+                    </div>
+                </div>
+                <div class="layui-word-aux" style="margin-top:6px">随机：coins_amount 保存为 -1；范围保存到表字段 coins_random_min / coins_random_max。</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" id="mlp-vip-mode-wrap" style="display:none">
+            <label class="layui-form-label">VIP发放</label>
+            <div class="layui-input-block">
+                <input type="radio" name="vip_mode" value="fixed" title="固定" checked>
+                <input type="radio" name="vip_mode" value="random" title="随机">
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-vip-fixed-wrap" style="display:none">
+            <label class="layui-form-label">VIP产品</label>
+            <div class="layui-input-block">
+                <select name="vip_product_id" id="mlp-vip-product-id" lay-filter="mlp_vip_product" lay-search>
+                    <option value="">请选择VIP产品</option>
+                </select>
+                <div class="layui-word-aux" style="margin-top:6px">固定 VIP：请选择 1 个上架 VIP 产品。</div>
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-vip-random-wrap" style="display:none">
+            <label class="layui-form-label">随机产品</label>
+            <div class="layui-input-block">
+                <select multiple name="vip_random_product_ids[]" id="mlp-vip-random-products" lay-ignore style="width:100%;min-height:120px">
+                </select>
+                <div class="layui-word-aux" style="margin-top:6px">随机 VIP：不选默认=全部上架 VIP 产品；保存到表字段 vip_random_product_ids（数组）。</div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" id="mlp-ai-face-mode-wrap" style="display:none">
+            <label class="layui-form-label">换脸发放</label>
+            <div class="layui-input-block">
+                <input type="radio" name="ai_face_mode" value="fixed" title="固定" checked>
+                <input type="radio" name="ai_face_mode" value="random" title="随机">
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-ai-face-fixed-wrap" style="display:none">
+            <label class="layui-form-label">换脸次数</label>
+            <div class="layui-input-block">
+                <input type="number" name="ai_face_times" value="{{= (d.ai_face_times === 0 || d.ai_face_times) ? d.ai_face_times : 0 }}" class="layui-input" placeholder="固定次数（>0）">
+            </div>
+        </div>
+        <div class="layui-form-item" id="mlp-ai-face-random-wrap" style="display:none">
+            <label class="layui-form-label">随机范围</label>
+            <div class="layui-input-block">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-xs6">
+                        <input type="number" name="ai_face_times_min" value="" class="layui-input" placeholder="最小值">
+                    </div>
+                    <div class="layui-col-xs6">
+                        <input type="number" name="ai_face_times_max" value="" class="layui-input" placeholder="最大值">
+                    </div>
+                </div>
+                <div class="layui-word-aux" style="margin-top:6px">随机：ai_face_times 保存为 -1；范围保存到表字段 ai_face_times_min / ai_face_times_max。</div>
+            </div>
+        </div>
+
+        <!-- 落库字段：直接使用数据库字段名（不再用隐藏字段） -->
+        <input type="hidden" name="vip_days" value="{{=d.vip_days}}">
+        <input type="hidden" name="vip_random_product_ids" value="{{= (d.vip_random_product_ids && typeof d.vip_random_product_ids === 'object') ? JSON.stringify(d.vip_random_product_ids) : (d.vip_random_product_ids || '') }}">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">其它参数JSON</label>
+            <div class="layui-input-block">
+                <textarea name="extra" class="layui-textarea">{{= typeof d.extra === 'object' ? JSON.stringify(d.extra) : (d.extra || '') }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button type="button" class="layui-btn submit" lay-submit lay-filter="save"></button>
+        </div>
+    </form>
+</script>
+
+<script>
+    (function () {
+        layui.use(['form', 'jquery'], function () {
+            var form = layui.form, $ = layui.jquery;
+            var VIP_PRODUCTS_BY_LEVEL = <?php echo isset($vip_products_by_level_json) ? $vip_products_by_level_json : '{}'; ?>;
+            function decodeExtra(row) {
+                var ex = row && row.extra;
+                if (!ex) return {};
+                if (typeof ex === 'object') return ex;
+                if (typeof ex === 'string') {
+                    try { return JSON.parse(ex); } catch (e) { return {}; }
+                }
+                return {};
+            }
+            function flattenVipProducts() {
+                var out = [];
+                for (var level in VIP_PRODUCTS_BY_LEVEL) {
+                    if (!Object.prototype.hasOwnProperty.call(VIP_PRODUCTS_BY_LEVEL, level)) continue;
+                    var map = VIP_PRODUCTS_BY_LEVEL[level] || {};
+                    for (var id in map) {
+                        if (!Object.prototype.hasOwnProperty.call(map, id)) continue;
+                        out.push({id: String(id), name: map[id], level: String(level)});
+                    }
+                }
+                return out;
+            }
+            function refillVipRandomProducts(selectedIds) {
+                selectedIds = selectedIds || [];
+                var set = {};
+                for (var i = 0; i < selectedIds.length; i++) set[String(selectedIds[i])] = true;
+                var $sel = $('#mlp-vip-random-products');
+                $sel.empty();
+                var all = flattenVipProducts();
+                all.sort(function (a, b) { return (a.level + ':' + a.id).localeCompare(b.level + ':' + b.id); });
+                for (var j = 0; j < all.length; j++) {
+                    var it = all[j];
+                    var opt = document.createElement('option');
+                    opt.value = it.id;
+                    opt.text = (it.level ? ('[' + it.level + '] ') : '') + it.name + ' #' + it.id;
+                    if (set[it.id]) opt.selected = true;
+                    $sel.append(opt);
+                }
+            }
+            function togglePrizeSections(prizeType) {
+                var isCoins = prizeType === 'coins';
+                var isVip = prizeType === 'vip';
+                var isAiFace = prizeType === 'ai_face';
+                $('#mlp-coins-mode-wrap,#mlp-coins-fixed-wrap,#mlp-coins-random-wrap').toggle(isCoins);
+                $('#mlp-vip-mode-wrap,#mlp-vip-fixed-wrap,#mlp-vip-random-wrap').toggle(isVip);
+                $('#mlp-ai-face-mode-wrap,#mlp-ai-face-fixed-wrap,#mlp-ai-face-random-wrap').toggle(isAiFace);
+            }
+            function syncModeVisibility() {
+                var ct = $('select[name="prize_type"]').val() || '';
+                togglePrizeSections(ct);
+                var cm = $('input[name="coins_mode"]:checked').val() || 'fixed';
+                $('#mlp-coins-fixed-wrap').toggle(ct === 'coins' && cm === 'fixed');
+                $('#mlp-coins-random-wrap').toggle(ct === 'coins' && cm === 'random');
+                var vm = $('input[name="vip_mode"]:checked').val() || 'fixed';
+                $('#mlp-vip-fixed-wrap').toggle(ct === 'vip' && vm === 'fixed');
+                $('#mlp-vip-random-wrap').toggle(ct === 'vip' && vm === 'random');
+                var am = $('input[name="ai_face_mode"]:checked').val() || 'fixed';
+                $('#mlp-ai-face-fixed-wrap').toggle(ct === 'ai_face' && am === 'fixed');
+                $('#mlp-ai-face-random-wrap').toggle(ct === 'ai_face' && am === 'random');
+            }
+            function refillVipProducts(level, selectedId, row) {
+                var $p = $('#mlp-vip-product-id');
+                $p.empty().append($('<option/>').val('').text('请选择VIP产品'));
+                // 固定 VIP：直接展示「全部上架 VIP 产品」，不依赖 vip_level 筛选（避免无 level 时下拉为空）
+                if (level && VIP_PRODUCTS_BY_LEVEL[level]) {
+                    var map = VIP_PRODUCTS_BY_LEVEL[level];
+                    for (var id in map) {
+                        if (!Object.prototype.hasOwnProperty.call(map, id)) {
+                            continue;
+                        }
+                        $p.append($('<option/>').val(id).text(map[id]));
+                    }
+                } else {
+                    var all = flattenVipProducts();
+                    all.sort(function (a, b) { return (a.level + ':' + a.id).localeCompare(b.level + ':' + b.id); });
+                    for (var k = 0; k < all.length; k++) {
+                        var it = all[k];
+                        $p.append($('<option/>').val(it.id).text(it.name));
+                    }
+                }
+                if (selectedId) {
+                    var sid = String(selectedId);
+                    var exists = false;
+                    $p.find('option').each(function () {
+                        if ($(this).val() === sid) {
+                            exists = true;
+                            return false;
+                        }
+                    });
+                    if (!exists) {
+                        var label = (row && row.vip_product_str) ? row.vip_product_str : ('历史/下架 #' + sid);
+                        $p.append($('<option/>').val(sid).text(label));
+                    }
+                    $p.val(sid);
+                }
+            }
+            window.__mlpAwardVipBind = function (row) {
+                row = row || {};
+                var level = (row.vip_level === 0 || row.vip_level) ? String(row.vip_level) : '';
+                // 固定 VIP 下拉：展示全部上架 VIP 产品（无需选择 vip_level）
+                refillVipProducts(level, row.vip_product_id || '', row);
+
+                var ex = decodeExtra(row);
+                // coins 模式回显
+                if (String(row.prize_type) === 'coins') {
+                    var isRandomCoins = (parseInt(row.coins_amount, 10) === -1);
+                    $('input[name="coins_mode"][value="' + (isRandomCoins ? 'random' : 'fixed') + '"]').prop('checked', true);
+                    if (isRandomCoins) {
+                        $('#mlp-coins-random-wrap input[name="coins_random_min"]').val(row.coins_random_min != null ? row.coins_random_min : 0);
+                        $('#mlp-coins-random-wrap input[name="coins_random_max"]').val(row.coins_random_max != null ? row.coins_random_max : 0);
+                        $('#mlp-coins-fixed-wrap input[name="coins_amount"]').val('');
+                    } else {
+                        $('#mlp-coins-fixed-wrap input[name="coins_amount"]').val(row.coins_amount != null ? row.coins_amount : '');
+                        $('#mlp-coins-random-wrap input[name="coins_random_min"]').val(0);
+                        $('#mlp-coins-random-wrap input[name="coins_random_max"]').val(0);
+                    }
+                }
+
+                // vip 模式回显
+                if (String(row.prize_type) === 'vip') {
+                    var rp = row.vip_random_product_ids;
+                    var parsed = [];
+                    if (Array.isArray(rp)) parsed = rp;
+                    else if (typeof rp === 'string' && rp) { try { parsed = JSON.parse(rp) || []; } catch (e) { parsed = []; } }
+                    var isRandomVip = Array.isArray(parsed);
+                    $('input[name="vip_mode"][value="' + (isRandomVip ? 'random' : 'fixed') + '"]').prop('checked', true);
+                    refillVipRandomProducts(isRandomVip ? parsed : []);
+                } else {
+                    refillVipRandomProducts([]);
+                }
+
+                // ai_face 模式回显
+                if (String(row.prize_type) === 'ai_face') {
+                    var isRandomAi = (parseInt(row.ai_face_times, 10) === -1);
+                    $('input[name="ai_face_mode"][value="' + (isRandomAi ? 'random' : 'fixed') + '"]').prop('checked', true);
+                    if (isRandomAi) {
+                        $('input[name="ai_face_times_min"]').val(row.ai_face_times_min != null ? row.ai_face_times_min : '');
+                        $('input[name="ai_face_times_max"]').val(row.ai_face_times_max != null ? row.ai_face_times_max : '');
+                        $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val('');
+                    } else {
+                        $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val(row.ai_face_times != null ? row.ai_face_times : '');
+                        $('input[name="ai_face_times_min"]').val('');
+                        $('input[name="ai_face_times_max"]').val('');
+                    }
+                } else {
+                    $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val('');
+                    $('input[name="ai_face_times_min"]').val('');
+                    $('input[name="ai_face_times_max"]').val('');
+                }
+
+                form.render();
+                syncModeVisibility();
+            };
+            // 新增弹窗默认初始化一次（避免首次进入模式区块不显示）
+            setTimeout(function () {
+                if (window.__mlpAwardVipBind) {
+                    window.__mlpAwardVipBind({});
+                }
+            }, 0);
+            // prize_type 切换交互
+            form.on('select', function () { setTimeout(syncModeVisibility, 0); });
+            form.on('radio', function () { setTimeout(syncModeVisibility, 0); });
+
+            // 保存前组装落库字段
+            form.on('submit(save)', function (data) {
+                var field = data.field || {};
+                var prizeType = field.prize_type || '';
+                var extra = {};
+                if (field.extra) {
+                    try { extra = JSON.parse(field.extra); } catch (e) { extra = {}; }
+                }
+
+                if (prizeType === 'coins') {
+                    var cm = $('input[name="coins_mode"]:checked').val() || 'fixed';
+                    field.coins_mode = cm;
+                    if (cm === 'random') {
+                        // 随机：coins_amount 用 -1，范围直接用数据库字段 coins_random_min/max
+                        field.coins_amount = -1;
+                        var mn = $('#mlp-coins-random-wrap input[name="coins_random_min"]').val();
+                        var mx = $('#mlp-coins-random-wrap input[name="coins_random_max"]').val();
+                        field.coins_random_min = mn !== '' ? parseInt(mn, 10) : 0;
+                        field.coins_random_max = mx !== '' ? parseInt(mx, 10) : 0;
+                    } else {
+                        var fixed = $('#mlp-coins-fixed-wrap input[name="coins_amount"]').val();
+                        field.coins_amount = fixed !== '' ? parseInt(fixed, 10) : 0;
+                        field.coins_random_min = 0;
+                        field.coins_random_max = 0;
+                    }
+                    field.vip_days = 0;
+                    field.vip_product_id = '';
+                    field.vip_random_product_ids = '';
+                    $('input[name="vip_days"]').val('0');
+                    $('input[name="vip_random_product_ids"]').val('');
+                } else if (prizeType === 'vip') {
+                    var vm = $('input[name="vip_mode"]:checked').val() || 'fixed';
+                    field.vip_mode = vm;
+                    field.coins_amount = 0;
+                    field.coins_random_min = 0;
+                    field.coins_random_max = 0;
+                    field.ai_face_times = 0;
+                    field.vip_days = 0;
+                    if (vm === 'random') {
+                        field.vip_product_id = '';
+                        var ids = [];
+                        $('#mlp-vip-random-products option:selected').each(function () { ids.push(parseInt($(this).val(), 10)); });
+                        field.vip_random_product_ids = JSON.stringify(ids); // 空数组=全部
+                    } else {
+                        field.vip_random_product_ids = '';
+                    }
+
+                    $('input[name="vip_days"]').val('0');
+                    $('input[name="vip_random_product_ids"]').val(field.vip_random_product_ids || '');
+                } else if (prizeType === 'ai_face') {
+                    field.coins_amount = 0;
+                    field.coins_random_min = 0;
+                    field.coins_random_max = 0;
+                    field.vip_days = 0;
+                    field.vip_product_id = '';
+                    field.vip_random_product_ids = '';
+                    var am = $('input[name="ai_face_mode"]:checked').val() || 'fixed';
+                    field.ai_face_mode = am;
+                    if (am === 'random') {
+                        field.ai_face_times = -1;
+                        var mn2 = $('input[name="ai_face_times_min"]').val();
+                        var mx2 = $('input[name="ai_face_times_max"]').val();
+                        field.ai_face_times_min = mn2 !== '' ? parseInt(mn2, 10) : 0;
+                        field.ai_face_times_max = mx2 !== '' ? parseInt(mx2, 10) : 0;
+                    } else {
+                        var fixed2 = $('#mlp-ai-face-fixed-wrap input[name="ai_face_times"]').val();
+                        field.ai_face_times = fixed2 !== '' ? parseInt(fixed2, 10) : 0;
+                        field.ai_face_times_min = 0;
+                        field.ai_face_times_max = 0;
+                    }
+
+                    $('input[name="vip_days"]').val('0');
+                    $('input[name="vip_random_product_ids"]').val('');
+                } else {
+                    field.coins_random_min = 0;
+                    field.coins_random_max = 0;
+                    field.ai_face_times = 0;
+                    field.ai_face_times_min = 0;
+                    field.ai_face_times_max = 0;
+                    field.vip_random_product_ids = '';
+
+                    $('input[name="ai_face_times"]').val('0');
+                    $('input[name="ai_face_times_min"]').val('0');
+                    $('input[name="ai_face_times_max"]').val('0');
+                    $('input[name="vip_random_product_ids"]').val('');
+                }
+
+                field.extra = JSON.stringify(extra);
+                $('textarea[name="extra"]').val(field.extra);
+                data.field = field;
+                return true;
+            });
+
+            form.on('select(mlp_vip_level)', function (data) {
+                refillVipProducts(data.value || '', '', {});
+                form.render('select');
+            });
+        });
+    })();
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '抽奖奖项',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id', width: 70},
+            {field: 'activity_name', title: '活动', width: 160},
+            {field: 'activity_id', title: 'activity_id', hide: true, width: 1},
+            {field: 'name', title: '名称', width: 140},
+            {
+                field: 'prize_image_full', title: '奖项图', width: 88, templet: function (d) {
+                    if (d.prize_image) {
+                        return '<img src="' + d.prize_image_full + '" style="width:56px;height:56px;object-fit:cover;cursor:pointer" onclick="show_img(\'' + d.prize_image_full + '\')">';
+                    }
+                    return '--';
+                }
+            },
+            {
+                field: 'prize_icon_full', title: 'icon', width: 64, templet: function (d) {
+                    if (d.prize_icon) {
+                        return '<img src="' + d.prize_icon_full + '" style="width:40px;height:40px;object-fit:cover;cursor:pointer" onclick="show_img(\'' + d.prize_icon_full + '\')">';
+                    }
+                    return '--';
+                }
+            },
+            {field: 'prize_type_str', title: '类型', width: 90},
+            {field: 'is_win_str', title: '中奖', width: 72},
+            {field: 'is_win', title: 'is_win', hide: true, width: 1},
+            // 隐藏列：保证行缓存含编辑弹窗依赖的原始字段（保存后 obj.update 合并不会丢键）
+            {field: 'prize_desc', title: 'prize_desc', hide: true, width: 1},
+            {field: 'prize_image', title: 'prize_image', hide: true, width: 1},
+            {field: 'prize_icon', title: 'prize_icon', hide: true, width: 1},
+            {field: 'prize_type', title: 'prize_type', hide: true, width: 1},
+            {field: 'status', title: 'status', hide: true, width: 1},
+            {field: 'status_str', title: '状态', width: 70},
+            {field: 'sort_order', title: '排序', width: 70},
+            {field: 'win_probability', title: '概率%', width: 72},
+            {field: 'total_stock', title: '总份', width: 70},
+            {field: 'issued_count', title: '已发', width: 70},
+            {field: 'per_user_cap', title: '每人cap', width: 80},
+            {
+                field: 'coins_amount', title: '金币', width: 90, templet: function (d) {
+                    var v = parseInt(d.coins_amount, 10);
+                    if (v === -1) {
+                        var mn = (d.coins_random_min === 0 || d.coins_random_min) ? d.coins_random_min : '';
+                        var mx = (d.coins_random_max === 0 || d.coins_random_max) ? d.coins_random_max : '';
+                        if (mn !== '' && mx !== '') {
+                            return mn + '/' + mx;
+                        }
+                        return '--';
+                    }
+                    return (d.coins_amount === 0 || d.coins_amount) ? d.coins_amount : '--';
+                }
+            },
+            {field: 'coins_random_min', title: 'coins_random_min', hide: true, width: 1},
+            {field: 'coins_random_max', title: 'coins_random_max', hide: true, width: 1},
+            {field: 'vip_days', title: 'VIP天', width: 70},
+            {field: 'vip_product_id', title: 'vip_product_id', hide: true, width: 1},
+            {field: 'vip_random_product_ids', title: 'vip_random_product_ids', hide: true, width: 1},
+            {field: 'vip_level_label', title: 'VIP类型', width: 90},
+            {field: 'vip_grant_type_str', title: '发放类型', width: 80},
+            {field: 'vip_product_str', title: 'VIP产品', width: 160},
+            {field: 'vip_random_product_ids_str', title: '随机IDs', width: 180},
+            {field: 'ai_face_times', title: 'ai_face_times', hide: true, width: 1},
+            {field: 'ai_face_times_min', title: 'ai_face_times_min', hide: true, width: 1},
+            {field: 'ai_face_times_max', title: 'ai_face_times_max', hide: true, width: 1},
+            {field: 'extra', title: 'extra', hide: true, width: 1},
+            {field: 'created_at', title: '创建时间', width: 165},
+            {fixed: 'right', width: 100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            toolbar: {
+                addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn();
+                    setTimeout(function () {
+                        if (window.__mlpAwardVipBind) {
+                            window.__mlpAwardVipBind({});
+                        }
+                    }, 150);
+                }
+            },
+            operate: {
+                edit: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn();
+                    setTimeout(function () {
+                        if (window.__mlpAwardVipBind) {
+                            window.__mlpAwardVipBind(obj.data || {});
+                        }
+                    }, 150);
+                }
+            }
+        }
+    });
+
+    // 在 layer success 里 form.render 之后同步下拉框选中值（否则 layui 可能重置为第一项）
+    Util.on('render', function (form, obj, $) {
+        if (!obj || !obj.data) {
+            return;
+        }
+        Util.renderSelect(obj.data, $, form);
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

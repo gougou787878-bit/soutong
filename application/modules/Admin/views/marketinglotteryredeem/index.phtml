@@ -1,0 +1,145 @@
+<?php
+$activities = MarketingLotteryActivityModel::query()->orderByDesc('id')->pluck('name', 'id')->toArray();
+importView("header.phtml");
+?>
+<body>
+<div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
+<style>.layui-form.form-dialog .layui-input-block { margin-right: 30px; }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">抽奖兑奖管理</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">机会id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[play_id]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">活动</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[activity_id]', merge_array(['' => '全部'], $activities)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户uid</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uid]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], MarketingLotteryRedemptionModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search"><i class="layui-icon layui-icon-search layuiadmin-button-btn"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="920" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 12px;"><legend>兑奖记录</legend></fieldset>
+    <form class="layui-form form-dialog" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">抽奖机会id</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="number" name="play_id" value="{{=d.play_id || '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户uid</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" type="number" name="uid" value="{{=d.uid || '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('activity_id', merge_array(['' => '请选择活动'], $activities), ['lay-verify' => 'required', 'data-value' => '{{=d.activity_id}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">中奖奖项id</label>
+            <div class="layui-input-block">
+                <input type="number" name="prize_id" value="{{=d.prize_id != null ? d.prize_id : '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">兑奖状态</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('status', MarketingLotteryRedemptionModel::STATUS_TIPS, ['data-value' => '{{=d.status}}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作管理员uid</label>
+            <div class="layui-input-block">
+                <input type="number" name="admin_uid" value="{{=d.admin_uid != null ? d.admin_uid : '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="remark" class="layui-textarea">{{=d.remark || '' }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">发放参数快照JSON</label>
+            <div class="layui-input-block">
+                <textarea name="grant_snapshot" class="layui-textarea">{{= typeof d.grant_snapshot === 'object' ? JSON.stringify(d.grant_snapshot) : (d.grant_snapshot || '') }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">奖项快照JSON</label>
+            <div class="layui-input-block">
+                <textarea name="prize_snapshot" class="layui-textarea">{{= typeof d.prize_snapshot === 'object' ? JSON.stringify(d.prize_snapshot) : (d.prize_snapshot || '') }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button type="button" class="layui-btn submit" lay-submit lay-filter="save"></button>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        toolbar: false,
+        title: '抽奖兑奖',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id', width: 70},
+            {field: 'play_id', title: '机会id', width: 85},
+            {field: 'uid', title: '用户', width: 90},
+            {field: 'activity_id', title: '活动ID', width: 85},
+            {field: 'activity_name', title: '活动', width: 140},
+            {field: 'prize_id', title: '奖项id', width: 80},
+            {field: 'prize_name', title: '奖项', width: 140},
+            {field: 'status_str', title: '状态', width: 80},
+            {field: 'admin_uid', title: '管理员', width: 90},
+            {field: 'created_at', title: '创建', width: 165},
+            {field: 'updated_at', title: '更新', width: 165}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

@@ -1,0 +1,293 @@
+<?php importView("header.phtml"); ?>
+<body>
+<div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
+<style>.layui-form.form-dialog .layui-input-block { margin-right: 30px; }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">抽奖活动</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[name]" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], MarketingLotteryActivityModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">触发情景</label>
+                            <div class="layui-input-block">
+                                <?php
+                                $triggerWhere = ['' => '全部', MarketinglotteryactivityController::LIST_FILTER_TRIGGER_NONE => '无'];
+                                foreach (MarketingLotteryActivityModel::TRIGGER_SCENARIO_TIPS as $k => $v) {
+                                    if ($k !== '') {
+                                        $triggerWhere[$k] = $v;
+                                    }
+                                }
+                                echo Layui::select('where[trigger_scenario]', $triggerWhere);
+                                ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">添加</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="920" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 12px;"><legend>活动信息</legend></fieldset>
+    <form class="layui-form form-dialog" action="" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" name="name" value="{{=d.name || '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <?php
+                // 勿用 {{=d.status}}：laytpl 的 escape 为 String(v||"")，status=0 会变成空
+                $statusDv = '{{ typeof d.status !== "undefined" && d.status !== null ? d.status : "" }}';
+                echo Layui::select('status', MarketingLotteryActivityModel::STATUS_TIPS, [
+                    'lay-ignore' => '',
+                    'class' => 'layui-input',
+                    'data-value' => $statusDv,
+                ])
+                ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动类型</label>
+            <div class="layui-input-block">
+                <?php
+                $typeDv = '{{ typeof d.activity_type !== "undefined" && d.activity_type !== null ? d.activity_type : "" }}';
+                echo Layui::select('activity_type', MarketingLotteryActivityModel::ACTIVITY_TYPE_TIPS, [
+                    'lay-ignore' => '',
+                    'class' => 'layui-input',
+                    'data-value' => $typeDv,
+                ])
+                ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">触发情景</label>
+            <div class="layui-input-block">
+                <?php
+                $triggerDv = '{{ typeof d.trigger_scenario !== "undefined" && d.trigger_scenario !== null ? d.trigger_scenario : "" }}';
+                echo Layui::select('trigger_scenario', MarketingLotteryActivityModel::TRIGGER_SCENARIO_TIPS, [
+                    'lay-ignore' => '',
+                    'class' => 'layui-input',
+                    'data-value' => $triggerDv,
+                ])
+                ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-block">
+                <input name="start_at" value="{{=d.start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-block">
+                <input name="end_at" value="{{=d.end_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">每人每日上限</label>
+            <div class="layui-input-block">
+                <input type="number" name="daily_limit" value="{{=d.daily_limit}}" class="layui-input" placeholder="0不限">
+                <div class="layui-word-aux" style="margin-top:6px">单用户每个自然日最多可获得多少次抽奖机会（发放侧校验），0 表示不限制。</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动每日上限</label>
+            <div class="layui-input-block">
+                <input type="number" name="daily_send_limit" value="{{=d.daily_send_limit || 0}}" class="layui-input" placeholder="0不限（全站）">
+                <div class="layui-word-aux" style="margin-top:6px">全站该活动每天最多发放多少次机会，0 不限。</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">每人活动期上限</label>
+            <div class="layui-input-block">
+                <input type="number" name="per_user_limit" value="{{=d.per_user_limit}}" class="layui-input" placeholder="0不限">
+                <div class="layui-word-aux" style="margin-top:6px">单用户在活动期内累计最多可获得次数，0 不限。</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">总次数限制</label>
+            <div class="layui-input-block">
+                <input type="number" name="total_limit" value="{{=d.total_limit}}" class="layui-input" placeholder="0不限">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">领取后有效天数</label>
+            <div class="layui-input-block">
+                <input type="number" name="receive_valid_days" value="{{=d.receive_valid_days || 0}}" class="layui-input" placeholder="0不限制">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动图</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadPos('activity_image_full', 'activity_image', 80, 80, 'ads') ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">活动icon</label>
+            <div class="layui-input-block">
+                <?php echo Layui::uploadPos('icon_full', 'icon', 48, 48, 'ads') ?>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">活动说明</label>
+            <div class="layui-input-block">
+                <textarea name="intro" class="layui-textarea" placeholder="活动说明">{{=d.intro || '' }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">活动规则</label>
+            <div class="layui-input-block">
+                <textarea name="rule_text" class="layui-textarea" placeholder="活动规则">{{=d.rule_text || '' }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">触发抽奖配置</label>
+            <div class="layui-input-block">
+                <textarea name="config" class="layui-textarea" placeholder="{}">{{= typeof d.config === 'object' ? JSON.stringify(d.config) : (d.config || '') }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">其他配置</label>
+            <div class="layui-input-block">
+                <textarea name="extra_config" class="layui-textarea" placeholder="{}">{{= typeof d.extra_config === 'object' ? JSON.stringify(d.extra_config) : (d.extra_config || '') }}</textarea>
+                <div class="layui-word-aux" style="margin-top:6px">JSON 格式，与「触发抽奖配置」独立，供活动扩展参数使用。</div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button type="button" class="layui-btn submit" lay-submit lay-filter="save"></button>
+        </div>
+    </form>
+</script>
+
+<script>
+    function normalizeMarketingLotteryRow(d) {
+        d = d || {};
+        if (!('status' in d) && d.status_str) {
+            if (d.status_str === '上架') {
+                d.status = 1;
+            } else if (d.status_str === '下架') {
+                d.status = 0;
+            }
+        }
+        if (!('trigger_scenario' in d) && d.trigger_str !== undefined && d.trigger_str !== null) {
+            var tsMap = {'支付成功后': 'pay_success', '无': ''};
+            if (Object.prototype.hasOwnProperty.call(tsMap, d.trigger_str)) {
+                d.trigger_scenario = tsMap[d.trigger_str];
+            }
+        }
+        return d;
+    }
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        uploadUrl: '<?php echo url_backend("upload/upload") ?>',
+        title: '抽奖活动',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'id', width: 80},
+            {field: 'name', title: '名称', width: 160},
+            {
+                field: 'activity_image_full', title: '活动图', width: 88, templet: function (d) {
+                    if (d.activity_image) {
+                        return '<img src="' + d.activity_image_full + '" style="width:56px;height:56px;object-fit:cover;cursor:pointer" onclick="show_img(\'' + d.activity_image_full + '\')">';
+                    }
+                    return '--';
+                }
+            },
+            {
+                field: 'icon_full', title: 'icon', width: 64, templet: function (d) {
+                    if (d.icon) {
+                        return '<img src="' + d.icon_full + '" style="width:40px;height:40px;object-fit:cover;cursor:pointer" onclick="show_img(\'' + d.icon_full + '\')">';
+                    }
+                    return '--';
+                }
+            },
+            {field: 'type_str', title: '类型', width: 90},
+            {field: 'trigger_str', title: '触发情景', width: 110},
+            {field: 'status_str', title: '状态', width: 70},
+            // 隐藏列：保证行缓存含原始值，编辑弹窗 laytpl 能读到 status / trigger_scenario（与 listAjax 返回字段一致）
+            {field: 'status', title: 'status', hide: true, width: 1},
+            {field: 'trigger_scenario', title: 'trigger_scenario', hide: true, width: 1},
+            {field: 'start_at', title: '开始', width: 160},
+            {field: 'end_at', title: '结束', width: 160},
+            {field: 'daily_limit', title: '每人/日', width: 80},
+            {field: 'daily_send_limit', title: '活动/日', width: 80},
+            {field: 'per_user_limit', title: '每人/期', width: 80},
+            {field: 'total_limit', title: '总限', width: 70},
+            {field: 'receive_valid_days', title: '有效天数', width: 90},
+            {field: 'creator_name', title: '创建人', width: 110},
+            {field: 'creator_uid', title: 'creator_uid', hide: true, width: 1},
+            {field: 'created_at', title: '创建时间', width: 165},
+            {field: 'updated_at', title: '更新时间', width: 165},
+            {fixed: 'right', width: 100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            toolbar: {
+                addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    obj.data = normalizeMarketingLotteryRow(obj.data);
+                    nextFn();
+                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                }
+            },
+            operate: {
+                edit: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    obj.data = normalizeMarketingLotteryRow(obj.data);
+                    nextFn();
+                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                }
+            }
+        }
+    });
+    // 必须在 layer success 里 form.render 之后再同步下拉，否则会再次被 layui 重置成第一项（下架/无）
+    Util.on('render', function (form, obj, $) {
+        if (!obj || !obj.data) {
+            return;
+        }
+        Util.renderSelect(obj.data, $, form);
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>
