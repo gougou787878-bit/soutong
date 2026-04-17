@@ -1,0 +1,85 @@
+<?php
+$activities = MarketingDailySignActivityModel::query()->orderByDesc('id')->pluck('name', 'id')->toArray();
+importView("header.phtml");
+?>
+<body>
+<div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">每日签到记录</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">活动</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[activity_id]', merge_array(['' => '全部'], $activities)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户UID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[uid]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">签到日期</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[sign_date]" class="layui-input x-date">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">额外奖励</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[is_bonus]', ['' => '全部', 1 => '是', 0 => '否']) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['laydate'], function () {
+        layui.laydate.render({elem: '.x-date', type: 'date'});
+    });
+
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        toolbar: false,
+        title: '每日签到记录',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'ID', width: 80},
+            {field: 'activity_id', title: '活动ID', width: 90},
+            {field: 'uid', title: '用户UID', width: 100},
+            {field: 'nickname', title: '昵称', minWidth: 120},
+            {field: 'username', title: '账号', minWidth: 120},
+            {field: 'sign_date', title: '签到日期', width: 120},
+            {field: 'continuous_day', title: '连续天数', width: 100},
+            {field: 'daily_coins', title: '金币', width: 90},
+            {field: 'is_bonus_str', title: '额外奖励', width: 100},
+            {field: 'bonus_vip_days', title: '会员天数', width: 100},
+            {field: 'remark', title: '备注', minWidth: 180},
+            {field: 'created_at', title: '创建时间', width: 170}
+        ]]
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>

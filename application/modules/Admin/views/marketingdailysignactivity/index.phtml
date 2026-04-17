@@ -1,0 +1,146 @@
+<?php importView("header.phtml"); ?>
+<body>
+<div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
+<style>.layui-form.form-dialog .layui-input-block { margin-right: 30px; }</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">每日签到活动</div>
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">ID</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="where[id]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search[name]" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <?php echo Layui::select('where[status]', merge_array(['' => '全部'], MarketingDailySignActivityModel::STATUS_TIPS)) ?>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="search">
+                                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="gridTab" lay-filter="table-toolbar"></table>
+                    <script type="text/html" id="toolbar">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="addUser" lay-form="user-edit-dialog">添加</button>
+                        </div>
+                    </script>
+                    <script type="text/html" id="operate-toolbar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" lay-form="user-edit-dialog"><i class="layui-icon layui-icon-edit"></i>修改</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" class="data-dialog" id="user-edit-dialog" data-w="860" layer-dialog="确认,取消"
+        data-option="{title:false,closeBtn:false,shadeClose:true,anim:3,offset:'rt',full:false}">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 12px;"><legend>签到活动</legend></fieldset>
+    <form class="layui-form form-dialog" lay-filter="form-save">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input lay-verify="required" name="name" value="{{=d.name || '' }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <?php echo Layui::select('status', MarketingDailySignActivityModel::STATUS_TIPS, ['data-value' => '{{ typeof d.status !== "undefined" ? d.status : 1 }}']) ?>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            <div class="layui-input-block">
+                <input name="start_at" value="{{=d.start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">结束时间</label>
+            <div class="layui-input-block">
+                <input name="end_at" value="{{=d.end_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">每日金币</label>
+            <div class="layui-input-block">
+                <input type="number" name="daily_coins" value="{{=d.daily_coins || 10 }}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">连续天数</label>
+            <div class="layui-input-block">
+                <input type="number" name="cycle_days" value="{{=d.cycle_days || 7 }}" class="layui-input">
+                <div class="layui-word-aux" style="margin-top:6px">连续达到这个天数时发放额外会员，默认 7 天。</div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员天数</label>
+            <div class="layui-input-block">
+                <input type="number" name="bonus_vip_days" value="{{=d.bonus_vip_days || 7 }}" class="layui-input">
+                <div class="layui-word-aux" style="margin-top:6px">奖励会叠加到用户当前会员到期时间；未开会员则从当前时间开始加。</div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">活动规则</label>
+            <div class="layui-input-block">
+                <textarea name="rule_text" class="layui-textarea">{{=d.rule_text || '' }}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="hidden" name="_pk" value="{{=d.id}}">
+            <button type="button" class="layui-btn submit" lay-submit lay-filter="save"></button>
+        </div>
+    </form>
+</script>
+
+<script>
+    xx.use({
+        url: '<?php echo url_backend("listAjax") ?>',
+        saveUrl: '<?php echo url_backend("save") ?>',
+        title: '每日签到活动',
+        pk: 'id',
+        cols: [[
+            {field: 'id', title: 'ID', width: 80},
+            {field: 'name', title: '名称', minWidth: 160},
+            {field: 'status_str', title: '状态', width: 90},
+            {field: 'start_at', title: '开始时间', width: 170},
+            {field: 'end_at', title: '结束时间', width: 170},
+            {field: 'daily_coins', title: '每日金币', width: 100},
+            {field: 'cycle_days', title: '连续天数', width: 100},
+            {field: 'bonus_vip_days', title: '会员天数', width: 100},
+            {field: 'created_at', title: '创建时间', width: 170},
+            {fixed: 'right', width: 100, title: '操作', align: 'center', toolbar: '#operate-toolbar'}
+        ]],
+        event: {
+            operate: {
+                addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn();
+                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                },
+                edit: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
+                    nextFn();
+                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                }
+            }
+        }
+    });
+</script>
+<?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>
