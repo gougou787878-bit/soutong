@@ -73,7 +73,10 @@ importView("header.phtml");
         <div class="layui-form-item">
             <label class="layui-form-label">开始时间</label>
             <div class="layui-input-block">
-                <input name="start_at" value="{{=d.start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+                <input name="show_start_at" value="{{=d.show_start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+                <div class="layui-word-aux" style="margin-top:6px">预热开始时间：到这个时间后前端可以展示活动；留空表示不提前展示，按活动开始时间展示。</div>
+                <input name="start_at" value="{{=d.start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss" style="margin-top:8px">
+                <div class="layui-word-aux" style="margin-top:6px">活动开始时间：到这个时间后签到才发金币和连续奖励；预热期签到只记连续天数，不发奖励。</div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -123,6 +126,12 @@ importView("header.phtml");
 </script>
 
 <script>
+    function renderDateTimePicker($) {
+        $('.x-date-time').each(function () {
+            layui.laydate.render({elem: this, type: 'datetime'});
+        });
+    }
+
     xx.use({
         url: '<?php echo url_backend("listAjax") ?>',
         saveUrl: '<?php echo url_backend("save") ?>',
@@ -132,6 +141,7 @@ importView("header.phtml");
             {field: 'id', title: 'ID', width: 80},
             {field: 'name', title: '名称', minWidth: 160},
             {field: 'status_str', title: '状态', width: 90},
+            {field: 'show_start_at', title: '预热开始', width: 170},
             {field: 'start_at', title: '开始时间', width: 170},
             {field: 'end_at', title: '结束时间', width: 170},
             {field: 'daily_coins', title: '每日金币', width: 100},
@@ -145,11 +155,11 @@ importView("header.phtml");
             operate: {
                 addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
                     nextFn();
-                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                    renderDateTimePicker($);
                 },
                 edit: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
                     nextFn();
-                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                    renderDateTimePicker($);
                 }
             }
         }

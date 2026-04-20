@@ -52,6 +52,24 @@ class MarketinglotteryactivityController extends BackendBaseController
 
     public function indexAction()
     {
+        $products = ProductModel::query()
+            ->where('type', ProductModel::TYPE_VIP)
+            ->orderBy('status', 'desc')
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get(['id', 'pname', 'price', 'promo_price', 'status'])
+            ->map(function (ProductModel $item) {
+                return [
+                    'id' => (int) $item->id,
+                    'name' => (string) $item->pname,
+                    'price' => round(((int) $item->price) / 100, 2),
+                    'promo_price' => round(((int) $item->promo_price) / 100, 2),
+                    'status' => (int) $item->status,
+                ];
+            })
+            ->values()
+            ->all();
+        $this->assign('vipProducts', $products);
         $this->display();
     }
 

@@ -10,6 +10,7 @@ use Illuminate\Database\QueryException;
  * activity.config 可选 JSON 字段：
  * - min_amount (number): 最小支付金额（元），不满足则不发放
  * - amount_stat_type (string|int): 计数方式
+ *   - product_tier: 按商品 ID 配置赠送次数（products: {"商品ID": 次数}）
  *   - multiple: 按倍数计数（floor(pay / min_amount) 条）
  *   - once: 一次计数（pay >= min_amount 则 1 条）
  * - step_amount (number): 当 amount_stat_type=multiple 时，按此金额（元）计算倍数=发放次数；不配置则发放 1 次
@@ -26,7 +27,11 @@ class MarketingLotteryPaySuccessService
 
     private const AMOUNT_STAT_ONCE = 'once';
 
+    private const AMOUNT_STAT_PRODUCT_TIER = 'product_tier';
+
     private const CONFIG_STEP_AMOUNT = 'step_amount';
+
+    private const CONFIG_PRODUCTS = 'products';
 
     public function GrantPlaysForPaySuccess(array $payload): void
     {
@@ -151,7 +156,7 @@ class MarketingLotteryPaySuccessService
                 if (!is_array($cfg)) {
                     $cfg = [];
                 }
-                $desiredPlays = $this->ComputeDesiredPlays($cfg, $payYuan);
+                $desiredPlays = $this->ComputeDesiredPlays($cfg, $payYuan, $payload);
                 if ($desiredPlays <= 0) {
                     $this->DebugLog($payload, 'skip_not_meet_min_amount', [
                         'activity_id' => (int) $locked->id,
@@ -236,8 +241,13 @@ class MarketingLotteryPaySuccessService
         }
     }
 
-    private function ComputeDesiredPlays(array $cfg, float $payYuan): int
+    private function ComputeDesiredPlays(array $cfg, float $payYuan, array $payload): int
     {
+        $statType = $this->NormalizeAmountStatType($cfg[self::CONFIG_AMOUNT_STAT_TYPE] ?? null);
+        if ($statType === self::AMOUNT_STAT_PRODUCT_TIER) {
+            return $this->ComputeProductTierPlays($cfg, $payload);
+        }
+
         $minAmount = $this->ParsePositiveFloat($cfg[self::CONFIG_MIN_AMOUNT] ?? null);
         if ($minAmount <= 0) {
             return 0;
@@ -246,7 +256,6 @@ class MarketingLotteryPaySuccessService
             return 0;
         }
 
-        $statType = $this->NormalizeAmountStatType($cfg[self::CONFIG_AMOUNT_STAT_TYPE] ?? null);
         if ($statType === self::AMOUNT_STAT_MULTIPLE) {
             $step = $this->ParsePositiveFloat($cfg[self::CONFIG_STEP_AMOUNT] ?? null);
             if ($step <= 0) {
@@ -260,6 +269,28 @@ class MarketingLotteryPaySuccessService
         return 1;
     }
 
+    private function ComputeProductTierPlays(array $cfg, array $payload): int
+    {
+        $productId = (string) ($payload['product_id'] ?? '');
+        if ($productId === '') {
+            return 0;
+        }
+
+        $products = $cfg[self::CONFIG_PRODUCTS] ?? [];
+        if (!is_array($products) || empty($products)) {
+            return 0;
+        }
+
+        $plays = 0;
+        if (array_key_exists($productId, $products)) {
+            $plays = (int) $products[$productId];
+        } elseif (array_key_exists((int) $productId, $products)) {
+            $plays = (int) $products[(int) $productId];
+        }
+
+        return max(0, min(200, $plays));
+    }
+
     private function NormalizeAmountStatType($raw): string
     {
         if (!is_string($raw)) {
@@ -271,6 +302,9 @@ class MarketingLotteryPaySuccessService
         }
         if ($s === 'multiple' || $s === 'multi' || $s === 'times' || $s === 'accumulate') {
             return self::AMOUNT_STAT_MULTIPLE;
+        }
+        if ($s === 'product_tier' || $s === 'product' || $s === 'products') {
+            return self::AMOUNT_STAT_PRODUCT_TIER;
         }
         return self::AMOUNT_STAT_ONCE;
     }

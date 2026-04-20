@@ -7,7 +7,7 @@ class MarketingDailySignActivityModel extends EloquentModel
     public $timestamps = true;
 
     protected $fillable = [
-        'name', 'status', 'start_at', 'end_at',
+        'name', 'status', 'show_start_at', 'start_at', 'end_at',
         'daily_coins', 'cycle_days', 'bonus_vip_days', 'bonus_vip_level', 'rule_text',
         'created_at', 'updated_at',
     ];
@@ -34,6 +34,11 @@ class MarketingDailySignActivityModel extends EloquentModel
         $this->attributes['start_at'] = ($value === '' || $value === null) ? null : $value;
     }
 
+    public function setShowStartAtAttribute($value): void
+    {
+        $this->attributes['show_start_at'] = ($value === '' || $value === null) ? null : $value;
+    }
+
     public function setEndAtAttribute($value): void
     {
         $this->attributes['end_at'] = ($value === '' || $value === null) ? null : $value;
@@ -45,7 +50,14 @@ class MarketingDailySignActivityModel extends EloquentModel
         return static::query()
             ->where('status', self::STATUS_ON)
             ->where(function ($q) use ($now) {
-                $q->whereNull('start_at')->orWhere('start_at', '<=', $now);
+                $q->where(function ($sub) use ($now) {
+                    $sub->whereNotNull('show_start_at')->where('show_start_at', '<=', $now);
+                })->orWhere(function ($sub) use ($now) {
+                    $sub->whereNull('show_start_at')
+                        ->where(function ($inner) use ($now) {
+                            $inner->whereNull('start_at')->orWhere('start_at', '<=', $now);
+                        });
+                });
             })
             ->where(function ($q) use ($now) {
                 $q->whereNull('end_at')->orWhere('end_at', '>=', $now);

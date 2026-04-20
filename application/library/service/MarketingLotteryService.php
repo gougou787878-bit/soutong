@@ -84,8 +84,11 @@ class MarketingLotteryService
             'name' => (string) $act->name,
             'status' => (int) $act->status,
             'status_str' => \MarketingLotteryActivityModel::STATUS_TIPS[$act->status] ?? '',
+            'show_start_at' => $act->show_start_at ?: $act->start_at,
             'start_at' => $act->start_at,
             'end_at' => $act->end_at,
+            'is_warm_up' => $this->isWarmUp($act) ? 1 : 0,
+            'activity_started' => $this->isActivityStarted($act) ? 1 : 0,
             'activity_image' => (string) ($act->activity_image ?? ''),
             'activity_image_full' => url_ads($act->activity_image ?? ''),
             'icon' => (string) ($act->icon ?? ''),
@@ -310,6 +313,18 @@ class MarketingLotteryService
                 ],
             ];
         });
+    }
+
+    private function isWarmUp(\MarketingLotteryActivityModel $activity): bool
+    {
+        $now = date('Y-m-d H:i:s');
+        return $activity->start_at !== null && $activity->start_at !== '' && $activity->start_at > $now;
+    }
+
+    private function isActivityStarted(\MarketingLotteryActivityModel $activity): bool
+    {
+        $now = date('Y-m-d H:i:s');
+        return $activity->start_at === null || $activity->start_at === '' || $activity->start_at <= $now;
     }
 
     private function buildPrizeSnapshot(\MarketingLotteryPrizeModel $p): array

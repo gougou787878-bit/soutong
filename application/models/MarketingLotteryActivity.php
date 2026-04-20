@@ -7,6 +7,7 @@
  * @property string $name
  * @property int $status
  * @property int|null $creator_uid
+ * @property string|null $show_start_at
  * @property string|null $start_at
  * @property string|null $end_at
  * @property int $daily_limit 每人每日上限（获得抽奖次数），0 不限
@@ -34,7 +35,7 @@ class MarketingLotteryActivityModel extends EloquentModel
     public $timestamps = true;
 
     protected $fillable = [
-        'name', 'status', 'creator_uid', 'start_at', 'end_at',
+        'name', 'status', 'creator_uid', 'show_start_at', 'start_at', 'end_at',
         'daily_limit', 'daily_send_limit', 'per_user_limit', 'total_limit',
         'receive_valid_days',
         'activity_image', 'rule_text', 'config', 'extra_config', 'icon', 'intro', 'activity_type', 'trigger_scenario',
@@ -85,6 +86,11 @@ class MarketingLotteryActivityModel extends EloquentModel
     public function setStartAtAttribute($value): void
     {
         $this->attributes['start_at'] = ($value === '' || $value === null) ? null : $value;
+    }
+
+    public function setShowStartAtAttribute($value): void
+    {
+        $this->attributes['show_start_at'] = ($value === '' || $value === null) ? null : $value;
     }
 
     public function setEndAtAttribute($value): void

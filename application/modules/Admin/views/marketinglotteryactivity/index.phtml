@@ -1,7 +1,16 @@
 <?php importView("header.phtml"); ?>
 <body>
 <div class="page-loading"><div class="ball-loader"><span></span><span></span><span></span><span></span></div></div>
-<style>.layui-form.form-dialog .layui-input-block { margin-right: 30px; }</style>
+<style>
+    .layui-form.form-dialog .layui-input-block { margin-right: 30px; }
+    .ml-trigger-config { border: 1px solid #e6e6e6; padding: 12px 12px 4px; }
+    .ml-trigger-config .layui-form-label { width: 96px; }
+    .ml-trigger-config .layui-input-block { margin-left: 126px; margin-right: 0; }
+    .ml-product-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+    .ml-product-row select { flex: 1; }
+    .ml-product-row input { width: 120px; }
+    .ml-product-row .layui-btn { flex: 0 0 auto; }
+</style>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -117,7 +126,10 @@
         <div class="layui-form-item">
             <label class="layui-form-label">开始时间</label>
             <div class="layui-input-block">
-                <input name="start_at" value="{{=d.start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+                <input name="show_start_at" value="{{=d.show_start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss">
+                <div class="layui-word-aux" style="margin-top:6px">预热开始时间：到这个时间后前端可以展示活动；留空表示不提前展示，按活动开始时间展示。</div>
+                <input name="start_at" value="{{=d.start_at || '' }}" class="layui-input x-date-time" placeholder="YYYY-MM-DD HH:mm:ss" style="margin-top:8px">
+                <div class="layui-word-aux" style="margin-top:6px">活动开始时间：到这个时间后才能抽奖和支付赠送抽奖机会。</div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -186,16 +198,52 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">触发抽奖配置</label>
             <div class="layui-input-block">
-                <textarea name="config" class="layui-textarea" placeholder="{}">{{= typeof d.config === 'object' ? JSON.stringify(d.config) : (d.config || '') }}</textarea>
+                <input type="hidden" name="config" class="ml-config-json" value="{{= typeof d.config === 'object' ? JSON.stringify(d.config) : (d.config || '') }}">
+                <div class="ml-trigger-config">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">赠送规则</label>
+                        <div class="layui-input-block">
+                            <select class="layui-input ml-grant-rule" lay-ignore>
+                                <option value="product_tier">按商品套餐赠送</option>
+                                <option value="multiple">按支付金额倍数赠送</option>
+                                <option value="once">满足金额赠送一次</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="ml-amount-config">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">最低金额</label>
+                            <div class="layui-input-block">
+                                <input type="number" min="0" step="0.01" class="layui-input ml-min-amount" placeholder="例如 100">
+                            </div>
+                        </div>
+                        <div class="layui-form-item ml-step-row">
+                            <label class="layui-form-label">每满金额</label>
+                            <div class="layui-input-block">
+                                <input type="number" min="0" step="0.01" class="layui-input ml-step-amount" placeholder="例如 100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-product-config">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">商品赠送</label>
+                            <div class="layui-input-block">
+                                <div class="ml-product-rows"></div>
+                                <button type="button" class="layui-btn layui-btn-sm ml-add-product">添加商品</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">配置预览</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea ml-config-preview" readonly placeholder="保存时自动生成 JSON"></textarea>
+                            <div class="layui-word-aux" style="margin-top:6px">运营选择商品和次数即可，系统会自动保存为活动配置。</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">其他配置</label>
-            <div class="layui-input-block">
-                <textarea name="extra_config" class="layui-textarea" placeholder="{}">{{= typeof d.extra_config === 'object' ? JSON.stringify(d.extra_config) : (d.extra_config || '') }}</textarea>
-                <div class="layui-word-aux" style="margin-top:6px">JSON 格式，与「触发抽奖配置」独立，供活动扩展参数使用。</div>
-            </div>
-        </div>
+        <input type="hidden" name="extra_config" value="">
         <div class="layui-form-item layui-hide">
             <input type="hidden" name="_pk" value="{{=d.id}}">
             <button type="button" class="layui-btn submit" lay-submit lay-filter="save"></button>
@@ -204,6 +252,155 @@
 </script>
 
 <script>
+    var MARKETING_LOTTERY_PRODUCTS = <?php echo json_encode($vipProducts ?? [], JSON_UNESCAPED_UNICODE); ?>;
+
+    function mlEscapeHtml(value) {
+        return String(value === undefined || value === null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function mlParseJsonConfig(raw) {
+        if (typeof raw === 'object' && raw !== null) {
+            return raw;
+        }
+        raw = String(raw || '').replace(/&quot;/g, '"').trim();
+        if (!raw) {
+            return {};
+        }
+        try {
+            return JSON.parse(raw);
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function mlProductText(item) {
+        var price = Number(item.promo_price || item.price || 0);
+        var status = Number(item.status) === 1 ? '' : '（下架）';
+        return '#' + item.id + ' ' + item.name + ' ¥' + price + status;
+    }
+
+    function mlProductOptions(selectedId) {
+        var html = '<option value="">请选择商品</option>';
+        selectedId = String(selectedId || '');
+        for (var i = 0; i < MARKETING_LOTTERY_PRODUCTS.length; i++) {
+            var item = MARKETING_LOTTERY_PRODUCTS[i];
+            var id = String(item.id);
+            html += '<option value="' + mlEscapeHtml(id) + '"' + (id === selectedId ? ' selected' : '') + '>' + mlEscapeHtml(mlProductText(item)) + '</option>';
+        }
+        if (selectedId && html.indexOf('value="' + mlEscapeHtml(selectedId) + '"') === -1) {
+            html += '<option value="' + mlEscapeHtml(selectedId) + '" selected>#' + mlEscapeHtml(selectedId) + '（历史商品）</option>';
+        }
+        return html;
+    }
+
+    function mlAddProductRow($, $box, productId, plays) {
+        var html = '<div class="ml-product-row">'
+            + '<select class="layui-input ml-product-id" lay-ignore>' + mlProductOptions(productId) + '</select>'
+            + '<input type="number" min="0" max="200" class="layui-input ml-product-plays" placeholder="赠送次数" value="' + mlEscapeHtml(plays || '') + '">'
+            + '<button type="button" class="layui-btn layui-btn-primary layui-btn-sm ml-remove-product">删除</button>'
+            + '</div>';
+        $box.append(html);
+    }
+
+    function mlCollectConfig($root) {
+        var rule = $root.find('.ml-grant-rule').val() || 'product_tier';
+        var cfg = {amount_stat_type: rule};
+        if (rule === 'product_tier') {
+            cfg.products = {};
+            $root.find('.ml-product-row').each(function () {
+                var $row = layui.$(this);
+                var productId = String($row.find('.ml-product-id').val() || '').trim();
+                var plays = parseInt($row.find('.ml-product-plays').val(), 10);
+                if (productId && plays > 0) {
+                    cfg.products[productId] = Math.min(200, plays);
+                }
+            });
+        } else {
+            cfg.min_amount = parseFloat($root.find('.ml-min-amount').val()) || 0;
+            if (rule === 'multiple') {
+                cfg.step_amount = parseFloat($root.find('.ml-step-amount').val()) || 0;
+            }
+        }
+        var json = JSON.stringify(cfg);
+        $root.find('.ml-config-json').val(json);
+        $root.find('.ml-config-preview').val(JSON.stringify(cfg, null, 2));
+        return json;
+    }
+
+    function mlRefreshConfigUi($root) {
+        var rule = $root.find('.ml-grant-rule').val() || 'product_tier';
+        $root.find('.ml-product-config').toggle(rule === 'product_tier');
+        $root.find('.ml-amount-config').toggle(rule !== 'product_tier');
+        $root.find('.ml-step-row').toggle(rule === 'multiple');
+        mlCollectConfig($root);
+    }
+
+    function mlHydrateConfig($, $root, rawConfig) {
+        var cfg = mlParseJsonConfig(rawConfig);
+        var rule = cfg.amount_stat_type || 'product_tier';
+        if (rule === 'product' || rule === 'products') {
+            rule = 'product_tier';
+        }
+        if (rule !== 'product_tier' && rule !== 'multiple' && rule !== 'once') {
+            rule = 'once';
+        }
+        $root.find('.ml-grant-rule').val(rule);
+        $root.find('.ml-min-amount').val(cfg.min_amount || '');
+        $root.find('.ml-step-amount').val(cfg.step_amount || '');
+
+        var $box = $root.find('.ml-product-rows').empty();
+        var products = cfg.products || {};
+        var hasProduct = false;
+        for (var productId in products) {
+            if (Object.prototype.hasOwnProperty.call(products, productId)) {
+                hasProduct = true;
+                mlAddProductRow($, $box, productId, products[productId]);
+            }
+        }
+        if (!hasProduct) {
+            mlAddProductRow($, $box, '', '');
+        }
+        mlRefreshConfigUi($root);
+    }
+
+    function mlBindConfigEvents($, $root) {
+        $root.off('change.mlConfig input.mlConfig click.mlConfig');
+        $root.on('change.mlConfig', '.ml-grant-rule', function () {
+            mlRefreshConfigUi($root);
+        });
+        $root.on('change.mlConfig input.mlConfig', '.ml-min-amount,.ml-step-amount,.ml-product-id,.ml-product-plays', function () {
+            mlCollectConfig($root);
+        });
+        $root.on('click.mlConfig', '.ml-add-product', function () {
+            mlAddProductRow($, $root.find('.ml-product-rows'), '', '');
+            mlCollectConfig($root);
+        });
+        $root.on('click.mlConfig', '.ml-remove-product', function () {
+            layui.$(this).closest('.ml-product-row').remove();
+            if ($root.find('.ml-product-row').length === 0) {
+                mlAddProductRow($, $root.find('.ml-product-rows'), '', '');
+            }
+            mlCollectConfig($root);
+        });
+    }
+
+    layui.use(['form'], function () {
+        layui.form.on('submit(save)', function (data) {
+            mlCollectConfig(layui.$(data.form));
+        });
+    });
+
+    function renderDateTimePicker($) {
+        $('.x-date-time').each(function () {
+            layui.laydate.render({elem: this, type: 'datetime'});
+        });
+    }
+
     function normalizeMarketingLotteryRow(d) {
         d = d || {};
         if (!('status' in d) && d.status_str) {
@@ -252,6 +449,7 @@
             // 隐藏列：保证行缓存含原始值，编辑弹窗 laytpl 能读到 status / trigger_scenario（与 listAjax 返回字段一致）
             {field: 'status', title: 'status', hide: true, width: 1},
             {field: 'trigger_scenario', title: 'trigger_scenario', hide: true, width: 1},
+            {field: 'show_start_at', title: '预热开始', width: 160},
             {field: 'start_at', title: '开始', width: 160},
             {field: 'end_at', title: '结束', width: 160},
             {field: 'daily_limit', title: '每人/日', width: 80},
@@ -270,14 +468,14 @@
                 addUser: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
                     obj.data = normalizeMarketingLotteryRow(obj.data);
                     nextFn();
-                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                    renderDateTimePicker($);
                 }
             },
             operate: {
                 edit: function (obj, table, ajax, laytpl, layerEle, form, $, nextFn) {
                     obj.data = normalizeMarketingLotteryRow(obj.data);
                     nextFn();
-                    layui.laydate.render({elem: '.x-date-time', type: 'datetime'});
+                    renderDateTimePicker($);
                 }
             }
         }
@@ -288,6 +486,9 @@
             return;
         }
         Util.renderSelect(obj.data, $, form);
+        var $root = $('.form-dialog');
+        mlHydrateConfig($, $root, obj.data.config);
+        mlBindConfigEvents($, $root);
     });
 </script>
 <?php echo \Layui::renderJs() ?><?php importView("fooler.phtml"); ?>
