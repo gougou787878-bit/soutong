@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use service\AppCenterService;
 use service\AppReportService;
 use service\EventTrackerService;
+use service\MarketingLotteryTriggerDispatcher;
 use Yaf\Exception;
 
 // 定义常量，方便修改和维护
@@ -271,6 +272,7 @@ class LibMember
 
         if (!empty($this->userData)) {
             if (isset($this->userData['uid']) && $this->userData['uid'] > 0) {
+                $this->triggerMarketingLoginOncePerDay();
 
                 // 更新session, 并且修改redis hash key
                 $updatedSession = $this->updateSession();
@@ -292,6 +294,38 @@ class LibMember
      * 获取用户
      * @return array
      */
+    protected function triggerMarketingLoginOncePerDay(): void
+    {
+        try {
+            $uid = (int) ($this->userData['uid'] ?? 0);
+            if ($uid <= 0) {
+                return;
+            }
+            if ((int) ($this->userData['is_reg'] ?? 0) !== 1) {
+                return;
+            }
+            if (trim((string) ($this->userData['username'] ?? '')) === '') {
+                return;
+            }
+
+            $tomorrow = strtotime(date('Y-m-d 00:00:00', strtotime('+1 day')));
+            $ttl = max(1, $tomorrow - TIMESTAMP);
+            $key = 'marketing_lottery:user_login:' . $uid . ':' . date('Ymd');
+            if (!redis()->setnx($key, 1)) {
+                return;
+            }
+            redis()->expire($key, $ttl);
+
+            MarketingLotteryTriggerDispatcher::trigger('user_login', [
+                'uid' => $uid,
+                'uuid' => (string) ($this->userData['uuid'] ?? ''),
+                'trigger_from' => 'member_fetch',
+            ]);
+        } catch (\Throwable $e) {
+            errLog('LibMember::triggerMarketingLoginOncePerDay: ' . $e->getMessage());
+        }
+    }
+
     function GetMember()
     {
         /** @var MemberModel $user */

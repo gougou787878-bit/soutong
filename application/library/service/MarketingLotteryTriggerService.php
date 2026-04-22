@@ -20,6 +20,10 @@ class MarketingLotteryTriggerService
     public function trigger(array $payload): void
     {
         $trigger = (string) ($payload['trigger'] ?? '');
+        if ($trigger === 'user_login') {
+            $this->triggerUserLogin($payload);
+            return;
+        }
         if ($trigger !== 'pay_success') {
             $this->triggerCondition($payload);
             return;
@@ -63,6 +67,66 @@ class MarketingLotteryTriggerService
 
         foreach ($activities as $activity) {
             $this->GrantForOneActivity($activity, $payload, $orderId, $uid, $payYuan, $triggerFrom);
+        }
+    }
+
+    private function triggerUserLogin(array $payload): void
+    {
+        $uid = (int) ($payload['uid'] ?? 0);
+        if ($uid <= 0) {
+            return;
+        }
+        if (!isset($payload['trace_id']) || !is_string($payload['trace_id']) || $payload['trace_id'] === '') {
+            $payload['trace_id'] = 'ml_user_login:' . date('YmdHis') . ':' . substr(bin2hex(random_bytes(8)), 0, 16);
+        }
+
+        $now = date('Y-m-d H:i:s');
+        $activities = \MarketingLotteryActivityModel::query()
+            ->where('status', \MarketingLotteryActivityModel::STATUS_ON)
+            ->where(function ($q) use ($now) {
+                $q->whereNull('start_at')->orWhere('start_at', '<=', $now);
+            })
+            ->where(function ($q) use ($now) {
+                $q->whereNull('end_at')->orWhere('end_at', '>=', $now);
+            })
+            ->orderBy('id')
+            ->get();
+
+        $createdDay = date('Y-m-d');
+        foreach ($activities as $activity) {
+            \DB::transaction(function () use ($activity, $uid, $payload, $createdDay): void {
+                $locked = \MarketingLotteryActivityModel::query()
+                    ->whereKey($activity->id)
+                    ->lockForUpdate()
+                    ->first();
+                if ($locked === null || (int) $locked->status !== \MarketingLotteryActivityModel::STATUS_ON) {
+                    return;
+                }
+
+                $quota = min(
+                    1,
+                    $this->ComputeUserDailyRemaining($locked, $uid, $createdDay),
+                    $this->ComputeUserTotalRemaining($locked, $uid),
+                    $this->ComputeActivityDailyRemaining($locked, $createdDay),
+                    $this->ComputeActivityTotalRemaining($locked)
+                );
+                if ($quota <= 0) {
+                    return;
+                }
+
+                $sourceOrderId = 'user_login:' . (int) $locked->id . ':' . $uid . ':' . $createdDay;
+                $this->CreatePlays(
+                    $locked,
+                    $uid,
+                    $quota,
+                    $sourceOrderId,
+                    $createdDay,
+                    $this->ComputeExpireAt((int) ($locked->receive_valid_days ?? 0)),
+                    'user_login',
+                    (string) ($payload['trigger_from'] ?? $payload['trigger'] ?? ''),
+                    $payload
+                );
+            });
         }
     }
 
