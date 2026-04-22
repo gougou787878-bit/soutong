@@ -10,6 +10,14 @@
     .ml-product-row select { flex: 1; }
     .ml-product-row input { width: 120px; }
     .ml-product-row .layui-btn { flex: 0 0 auto; }
+    .ml-rule-checks { display: flex; flex-wrap: wrap; gap: 10px; min-height: 38px; align-items: center; }
+    .ml-rule-check { border: 1px solid #d2d2d2; padding: 8px 28px 8px 12px; cursor: pointer; white-space: nowrap; user-select: none; background: #fff; position: relative; }
+    .ml-rule-check.active { border-color: #009688; color: #009688; background: #e8f8f5; font-weight: 600; }
+    .ml-rule-check.active:after { content: "OK"; position: absolute; right: 7px; top: 50%; transform: translateY(-50%); color: #009688; font-size: 11px; font-weight: 700; }
+    .ml-condition-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+    .ml-condition-row .ml-condition-name { width: 200px; background: #fafafa; border: 1px solid #e6e6e6; padding: 10px 12px; box-sizing: border-box; }
+    .ml-condition-row input { width: 130px; }
+    .ml-condition-row .ml-condition-unit { color: #666; min-width: 78px; }
 </style>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
@@ -203,11 +211,13 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">赠送规则</label>
                         <div class="layui-input-block">
-                            <select class="layui-input ml-grant-rule" lay-ignore>
-                                <option value="product_tier">按商品套餐赠送</option>
-                                <option value="multiple">按支付金额倍数赠送</option>
-                                <option value="once">满足金额赠送一次</option>
-                            </select>
+                            <div class="ml-rule-checks">
+                                <span class="ml-rule-check active" data-rule="product_tier">按商品套餐赠送</span>
+                                <span class="ml-rule-check" data-rule="multiple">按支付金额倍数赠送</span>
+                                <span class="ml-rule-check" data-rule="once">满足金额赠送一次</span>
+                                <span class="ml-rule-check" data-rule="condition_group">条件达成赠送</span>
+                            </div>
+                            <div class="layui-word-aux" style="margin-top:6px">可同时勾选多个规则；满足已勾选规则会叠加发放抽奖次数。</div>
                         </div>
                     </div>
                     <div class="ml-amount-config">
@@ -230,6 +240,36 @@
                             <div class="layui-input-block">
                                 <div class="ml-product-rows"></div>
                                 <button type="button" class="layui-btn layui-btn-sm ml-add-product">添加商品</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-condition-config">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">条件列表</label>
+                            <div class="layui-input-block">
+                                <div class="ml-condition-rows">
+                                    <div class="ml-condition-row">
+                                        <div class="ml-condition-name">连续签到达到</div>
+                                        <input type="number" min="0" step="1" class="layui-input ml-condition-sign-days" placeholder="例如 3">
+                                        <span class="ml-condition-unit">天</span>
+                                    </div>
+                                    <div class="ml-condition-row">
+                                        <div class="ml-condition-name">累计充值满</div>
+                                        <input type="number" min="0" step="0.01" class="layui-input ml-condition-recharge-amount" placeholder="例如 10">
+                                        <span class="ml-condition-unit">元</span>
+                                    </div>
+                                    <div class="ml-condition-row">
+                                        <div class="ml-condition-name">被邀请人赠送</div>
+                                        <input type="number" min="0" max="200" step="1" class="layui-input ml-invitee-plays" placeholder="例如 1">
+                                        <span class="ml-condition-unit">次</span>
+                                    </div>
+                                    <div class="ml-condition-row">
+                                        <div class="ml-condition-name">邀请人赠送</div>
+                                        <input type="number" min="0" max="200" step="1" class="layui-input ml-inviter-plays" placeholder="例如 1">
+                                        <span class="ml-condition-unit">次</span>
+                                    </div>
+                                </div>
+                                <div class="layui-word-aux" style="margin-top:6px">被邀请人需为近 2 个月注册，且满足连续签到天数或累计充值金额任一条件；邀请人最多统计 10 个有效被邀请人。</div>
                             </div>
                         </div>
                     </div>
@@ -307,24 +347,65 @@
         $box.append(html);
     }
 
+    function mlSelectedGrantRules($root) {
+        var rules = [];
+        var allowed = {product_tier: true, multiple: true, once: true, condition_group: true};
+        $root.find('.ml-rule-check.active').each(function () {
+            var val = layui.$(this).data('rule');
+            if (allowed[val] && rules.indexOf(val) === -1) {
+                rules.push(val);
+            }
+        });
+        return rules.length ? rules : ['product_tier'];
+    }
+
+    function mlHasGrantRule(rules, rule) {
+        return rules.indexOf(rule) !== -1;
+    }
+
     function mlCollectConfig($root) {
-        var rule = $root.find('.ml-grant-rule').val() || 'product_tier';
-        var cfg = {amount_stat_type: rule};
-        if (rule === 'product_tier') {
-            cfg.products = {};
+        var rules = mlSelectedGrantRules($root);
+        var cfg = {grant_modes: rules, rules: {}};
+        if (mlHasGrantRule(rules, 'product_tier')) {
+            var productRule = {products: {}};
             $root.find('.ml-product-row').each(function () {
                 var $row = layui.$(this);
                 var productId = String($row.find('.ml-product-id').val() || '').trim();
                 var plays = parseInt($row.find('.ml-product-plays').val(), 10);
                 if (productId && plays > 0) {
-                    cfg.products[productId] = Math.min(200, plays);
+                    productRule.products[productId] = Math.min(200, plays);
                 }
             });
-        } else {
-            cfg.min_amount = parseFloat($root.find('.ml-min-amount').val()) || 0;
-            if (rule === 'multiple') {
-                cfg.step_amount = parseFloat($root.find('.ml-step-amount').val()) || 0;
+            cfg.rules.product_tier = productRule;
+        }
+        if (mlHasGrantRule(rules, 'once') || mlHasGrantRule(rules, 'multiple')) {
+            var minAmount = parseFloat($root.find('.ml-min-amount').val()) || 0;
+            if (mlHasGrantRule(rules, 'once')) {
+                cfg.rules.once = {min_amount: minAmount};
             }
+            if (mlHasGrantRule(rules, 'multiple')) {
+                cfg.rules.multiple = {
+                    min_amount: minAmount,
+                    step_amount: parseFloat($root.find('.ml-step-amount').val()) || 0
+                };
+            }
+        }
+        if (mlHasGrantRule(rules, 'condition_group')) {
+            var conditionCfg = {
+                condition_logic: 'or',
+                invitee_plays: Math.max(0, Math.min(200, parseInt($root.find('.ml-invitee-plays').val(), 10) || 0)),
+                inviter_plays: Math.max(0, Math.min(200, parseInt($root.find('.ml-inviter-plays').val(), 10) || 0)),
+                conditions: []
+            };
+            var signDays = parseInt($root.find('.ml-condition-sign-days').val(), 10) || 0;
+            var rechargeAmount = parseFloat($root.find('.ml-condition-recharge-amount').val()) || 0;
+            if (signDays > 0) {
+                conditionCfg.conditions.push({type: 'continuous_sign', days: signDays});
+            }
+            if (rechargeAmount > 0) {
+                conditionCfg.conditions.push({type: 'recharge_total', amount: rechargeAmount, scope: 'activity'});
+            }
+            cfg.rules.condition_group = conditionCfg;
         }
         var json = JSON.stringify(cfg);
         $root.find('.ml-config-json').val(json);
@@ -333,28 +414,47 @@
     }
 
     function mlRefreshConfigUi($root) {
-        var rule = $root.find('.ml-grant-rule').val() || 'product_tier';
-        $root.find('.ml-product-config').toggle(rule === 'product_tier');
-        $root.find('.ml-amount-config').toggle(rule !== 'product_tier');
-        $root.find('.ml-step-row').toggle(rule === 'multiple');
+        var rules = mlSelectedGrantRules($root);
+        $root.find('.ml-product-config').toggle(mlHasGrantRule(rules, 'product_tier'));
+        $root.find('.ml-amount-config').toggle(mlHasGrantRule(rules, 'once') || mlHasGrantRule(rules, 'multiple'));
+        $root.find('.ml-condition-config').toggle(mlHasGrantRule(rules, 'condition_group'));
+        $root.find('.ml-step-row').toggle(mlHasGrantRule(rules, 'multiple'));
         mlCollectConfig($root);
     }
 
     function mlHydrateConfig($, $root, rawConfig) {
         var cfg = mlParseJsonConfig(rawConfig);
-        var rule = cfg.amount_stat_type || 'product_tier';
-        if (rule === 'product' || rule === 'products') {
-            rule = 'product_tier';
+        var rules = cfg.grant_modes || [];
+        var ruleCfgs = cfg.rules || {};
+        if (!Array.isArray(rules) || !rules.length) {
+            var legacyRule = cfg.amount_stat_type || 'product_tier';
+            if (legacyRule === 'product' || legacyRule === 'products') {
+                legacyRule = 'product_tier';
+            }
+            rules = [legacyRule];
+            ruleCfgs = {};
+            ruleCfgs[legacyRule] = cfg;
         }
-        if (rule !== 'product_tier' && rule !== 'multiple' && rule !== 'once') {
-            rule = 'once';
+        var allowedRules = {product_tier: true, multiple: true, once: true, condition_group: true};
+        rules = rules.filter(function (item, idx) {
+            return allowedRules[item] && rules.indexOf(item) === idx;
+        });
+        if (!rules.length) {
+            rules = ['product_tier'];
         }
-        $root.find('.ml-grant-rule').val(rule);
-        $root.find('.ml-min-amount').val(cfg.min_amount || '');
-        $root.find('.ml-step-amount').val(cfg.step_amount || '');
+        $root.find('.ml-rule-check').removeClass('active');
+        for (var rj = 0; rj < rules.length; rj++) {
+            $root.find('.ml-rule-check[data-rule="' + rules[rj] + '"]').addClass('active');
+        }
+        var amountCfg = ruleCfgs.multiple || ruleCfgs.once || {};
+        $root.find('.ml-min-amount').val(amountCfg.min_amount || '');
+        $root.find('.ml-step-amount').val((ruleCfgs.multiple && ruleCfgs.multiple.step_amount) || '');
+        var conditionCfg = ruleCfgs.condition_group || {};
+        $root.find('.ml-invitee-plays').val(conditionCfg.invitee_plays || 1);
+        $root.find('.ml-inviter-plays').val(conditionCfg.inviter_plays || 1);
 
         var $box = $root.find('.ml-product-rows').empty();
-        var products = cfg.products || {};
+        var products = (ruleCfgs.product_tier && ruleCfgs.product_tier.products) || {};
         var hasProduct = false;
         for (var productId in products) {
             if (Object.prototype.hasOwnProperty.call(products, productId)) {
@@ -365,15 +465,30 @@
         if (!hasProduct) {
             mlAddProductRow($, $box, '', '');
         }
+        var conditions = conditionCfg.conditions || [];
+        $root.find('.ml-condition-sign-days').val('');
+        $root.find('.ml-condition-recharge-amount').val('');
+        for (var i = 0; i < conditions.length; i++) {
+            if (conditions[i].type === 'continuous_sign') {
+                $root.find('.ml-condition-sign-days').val(conditions[i].days || '');
+            } else if (conditions[i].type === 'recharge_total') {
+                $root.find('.ml-condition-recharge-amount').val(conditions[i].amount || '');
+            }
+        }
         mlRefreshConfigUi($root);
     }
 
     function mlBindConfigEvents($, $root) {
         $root.off('change.mlConfig input.mlConfig click.mlConfig');
-        $root.on('change.mlConfig', '.ml-grant-rule', function () {
+        $root.on('click.mlConfig', '.ml-rule-check', function () {
+            var $item = layui.$(this);
+            $item.toggleClass('active');
+            if ($root.find('.ml-rule-check.active').length === 0) {
+                $item.addClass('active');
+            }
             mlRefreshConfigUi($root);
         });
-        $root.on('change.mlConfig input.mlConfig', '.ml-min-amount,.ml-step-amount,.ml-product-id,.ml-product-plays', function () {
+        $root.on('change.mlConfig input.mlConfig', '.ml-min-amount,.ml-step-amount,.ml-product-id,.ml-product-plays,.ml-invitee-plays,.ml-inviter-plays,.ml-condition-sign-days,.ml-condition-recharge-amount', function () {
             mlCollectConfig($root);
         });
         $root.on('click.mlConfig', '.ml-add-product', function () {
@@ -389,9 +504,58 @@
         });
     }
 
+    function mlValidateConfig($root) {
+        var rules = mlSelectedGrantRules($root);
+        if (mlHasGrantRule(rules, 'product_tier')) {
+            var hasProduct = false;
+            $root.find('.ml-product-row').each(function () {
+                var $row = layui.$(this);
+                var productId = String($row.find('.ml-product-id').val() || '').trim();
+                var plays = parseInt($row.find('.ml-product-plays').val(), 10) || 0;
+                if (productId && plays > 0) {
+                    hasProduct = true;
+                }
+            });
+            if (!hasProduct) {
+                return '已勾选“按商品套餐赠送”，请至少选择一个商品并填写赠送次数';
+            }
+        }
+        if (mlHasGrantRule(rules, 'once') || mlHasGrantRule(rules, 'multiple')) {
+            var minAmount = parseFloat($root.find('.ml-min-amount').val()) || 0;
+            if (minAmount <= 0) {
+                return '已勾选金额赠送规则，请填写最低金额';
+            }
+        }
+        if (mlHasGrantRule(rules, 'multiple')) {
+            var stepAmount = parseFloat($root.find('.ml-step-amount').val()) || 0;
+            if (stepAmount <= 0) {
+                return '已勾选“按支付金额倍数赠送”，请填写每满金额';
+            }
+        }
+        if (mlHasGrantRule(rules, 'condition_group')) {
+            var signDays = parseInt($root.find('.ml-condition-sign-days').val(), 10) || 0;
+            var rechargeAmount = parseFloat($root.find('.ml-condition-recharge-amount').val()) || 0;
+            var inviteePlays = parseInt($root.find('.ml-invitee-plays').val(), 10) || 0;
+            var inviterPlays = parseInt($root.find('.ml-inviter-plays').val(), 10) || 0;
+            if (signDays <= 0 && rechargeAmount <= 0) {
+                return '已勾选“条件达成赠送”，请填写连续签到天数或累计充值金额';
+            }
+            if (inviteePlays <= 0 && inviterPlays <= 0) {
+                return '已勾选“条件达成赠送”，请填写邀请人或被邀请人赠送次数';
+            }
+        }
+        return '';
+    }
+
     layui.use(['form'], function () {
         layui.form.on('submit(save)', function (data) {
-            mlCollectConfig(layui.$(data.form));
+            var $form = layui.$(data.form);
+            var err = mlValidateConfig($form);
+            if (err) {
+                layui.layer.msg(err, {icon: 2});
+                return false;
+            }
+            mlCollectConfig($form);
         });
     });
 

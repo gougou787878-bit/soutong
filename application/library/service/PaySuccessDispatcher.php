@@ -71,7 +71,9 @@ class PaySuccessDispatcher
     public static function consume(array $payload): void
     {
         try {
-            (new MarketingLotteryPaySuccessService())->GrantPlaysForPaySuccess($payload);
+            $payload['trigger'] = 'pay_success';
+            $payload['trigger_from'] = $payload['trigger_from'] ?? ($payload['source'] ?? 'pay_success');
+            (new MarketingLotteryTriggerService())->trigger($payload);
         } catch (\Throwable $e) {
             errLog('PaySuccessDispatcher::consume: ' . $e->getMessage() . ' payload=' . json_encode($payload, JSON_UNESCAPED_UNICODE));
         }

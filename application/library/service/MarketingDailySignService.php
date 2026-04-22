@@ -114,6 +114,16 @@ class MarketingDailySignService
 
             \MemberModel::clearFor($member);
 
+            try {
+                (new MarketingLotteryTriggerService())->trigger([
+                    'trigger' => 'daily_sign',
+                    'uid' => $uid,
+                    'uuid' => (string) ($member->uuid ?? ''),
+                ]);
+            } catch (\Throwable $e) {
+                errLog('MarketingDailySignService::trigger: ' . $e->getMessage());
+            }
+
             return [
                 'activity' => $this->formatActivity($activity),
                 'sign' => [

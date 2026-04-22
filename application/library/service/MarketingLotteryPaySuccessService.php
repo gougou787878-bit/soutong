@@ -35,6 +35,11 @@ class MarketingLotteryPaySuccessService
 
     public function GrantPlaysForPaySuccess(array $payload): void
     {
+        $payload['trigger'] = 'pay_success';
+        $payload['trigger_from'] = $payload['trigger_from'] ?? ($payload['source'] ?? 'pay_success');
+        (new MarketingLotteryTriggerService())->trigger($payload);
+        return;
+
         $traceId = (string) ($payload['trace_id'] ?? '');
         if ($traceId === '') {
             $traceId = 'ml_pay_success:' . date('YmdHis') . ':' . substr(bin2hex(random_bytes(8)), 0, 16);

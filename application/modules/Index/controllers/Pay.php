@@ -4,7 +4,7 @@ use service\AppCenterService;
 use service\AppReportService;
 use service\EventTrackerService;
 use service\GameService;
-use service\PaySuccessDispatcher;
+use service\MarketingLotteryTriggerDispatcher;
 use service\ProxyService;
 use service\QingMingService;
 
@@ -197,7 +197,7 @@ class PayController extends SiteController
             }
             if ($updateMember && $resultOrder) {
                 \DB::commit();
-                PaySuccessDispatcher::enqueueForPaySuccess('notify', $data, $order, $product->toArray(), $memberInfo);
+                MarketingLotteryTriggerDispatcher::triggerPaySuccess('notify', $data, $order, $product->toArray(), $memberInfo);
                 MemberModel::clearFor($memberInfo);
                 OrdersModel::clearFor($memberInfo);
                 //上报 只vip 类型单子
@@ -346,7 +346,7 @@ class PayController extends SiteController
 
                 }
                 \DB::commit();
-                PaySuccessDispatcher::enqueueForPaySuccess('notify_new_vip', $data, $order, $product, $memberInfo);
+                MarketingLotteryTriggerDispatcher::triggerPaySuccess('notify_new_vip', $data, $order, $product, $memberInfo);
                 //全新代理模式 1级 简单直接 非渠道用户
                 if (($memberInfo->invited_by && empty($memberInfo->build_id) && $isActiveProduct === false)
                     || ($memberInfo->invited_by && $memberInfo->build_id && !isChannel($memberInfo->build_id) && $isActiveProduct === false)
@@ -409,7 +409,7 @@ class PayController extends SiteController
                     'recharge', $memberInfo->uid, null, $toSend, $product['id'], 0, "充值金币"
                 );
                 \DB::commit();
-                PaySuccessDispatcher::enqueueForPaySuccess('notify_new_gold', $data, $order, $product, $memberInfo);
+                MarketingLotteryTriggerDispatcher::triggerPaySuccess('notify_new_gold', $data, $order, $product, $memberInfo);
 
             } catch (Throwable $exception) {
                 \DB::rollBack();
@@ -649,7 +649,7 @@ class PayController extends SiteController
 
             MemberModel::clearFor($member);
             OrdersModel::clearFor($member);
-            PaySuccessDispatcher::enqueueForPaySuccess('game_agent', $data, $order, $product ? $product->toArray() : null, $memberModel);
+            MarketingLotteryTriggerDispatcher::triggerPaySuccess('game_agent', $data, $order, $product ? $product->toArray() : null, $memberModel);
             die("success");
         }
         errLog("createAgentOrderFailed:" . var_export($order, 1));
@@ -674,7 +674,7 @@ class PayController extends SiteController
                     (new GameService())->transfer($memberInfo->aff,$data['pay_money'],'add','支付充值#order_id:'.$data['order_id'],null,$order['expired_at']);
                 }
                 if($memberInfo){
-                    PaySuccessDispatcher::enqueueForPaySuccess('game_product', $data, $order, null, $memberInfo);
+                    MarketingLotteryTriggerDispatcher::triggerPaySuccess('game_product', $data, $order, null, $memberInfo);
                 }
                 die("success");
             }
