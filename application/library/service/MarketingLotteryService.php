@@ -243,7 +243,8 @@ class MarketingLotteryService
                     'coins_total' => DB::raw("coins_total+{$coins}"),
                 ]);
                 test_assert($ok, '发放失败');
-                \UsersCoinrecordModel::addIncome('lottery', $uid, null, $coins, (int) $lockedPrize->id, 0, "营销抽奖中奖，奖励{$coins}金币");
+                \UsersCoinrecordModel::addIncome('lottery', $uid, $uid, $coins, (int) $lockedPrize->id, 0, "营销抽奖中奖，奖励{$coins}金币");
+                \MemberModel::clearFor($member);
                 $remark = "发放金币{$coins}";
                 $grant['coins'] = $coins;
                 $prizeSnap['coins'] = $coins;
@@ -263,6 +264,7 @@ class MarketingLotteryService
                 if ((int) ($product->free_day ?? 0) > 0) {
                     \FreeMemberModel::createInit($uid, (int) $product->free_day, (int) $product->free_day_type);
                 }
+                \MemberModel::clearFor($member);
                 $remark = "发放VIP产品#{$product->id}";
                 $grant['vip_product_id'] = (int) $product->id;
                 $prizeSnap['vip_product_id'] = (int) $product->id;
